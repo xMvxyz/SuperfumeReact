@@ -3,14 +3,12 @@ import { Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Home from './pages/Home'
-
-// Páginas placeholder (se agregarán más a medida que migremos)
-const Shop = () => <div style={{padding:20}}>Página de tienda (por migrar)</div>
-const ShopSingle = () => <div style={{padding:20}}>Detalle de producto (por migrar)</div>
-const Cart = () => <div style={{padding:20}}>Carrito (por migrar)</div>
-const About = () => <div style={{padding:20}}>About (por migrar)</div>
-const Contact = () => <div style={{padding:20}}>Contact (por migrar)</div>
-const Login = () => <div style={{padding:20}}>Login (por migrar)</div>
+import Shop from './pages/Shop'
+import ShopSingle from './pages/ShopSingle'
+import Cart from './pages/Cart'
+import About from './pages/About'
+import Contact from './pages/Contact'
+import Login from './pages/Login'
 
 export default function App(){
   return (
