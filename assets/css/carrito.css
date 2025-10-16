@@ -1,0 +1,145 @@
+/* ====== Colores ====== */
+:root {
+  --bg-dark: #0a1a2f;      /* Fondo principal */
+  --bg-light: #142c46;     /* Contenedor */
+  --btn-primary: #1e4f91;  /* Botón principal */
+  --btn-hover: #2563ad;
+  --btn-active: #184377;
+  --text-light: #ffffff;
+  --text-muted: #cfd8e3;
+  --border-color: #2c4d72;
+}
+
+/* ====== General ====== */
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg-dark);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  color: var(--text-light);
+}
+
+.cart-container {
+  background: var(--bg-light);
+  border-radius: 12px;
+  width: 400px;
+  padding: 20px;
+  margin-top: 40px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.cart-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: var(--text-light);
+}
+
+/* ====== Items ====== */
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.cart-item img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.item-info {
+  flex: 1;
+  margin-left: 15px;
+}
+
+.item-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  color: var(--text-light);
+}
+
+.item-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.quantity button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-light);
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.quantity button:hover {
+  background: var(--btn-hover);
+}
+
+.quantity span {
+  margin: 0 8px;
+  font-weight: bold;
+}
+
+.item-total {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ====== Subtotal ====== */
+.subtotal {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+}
+
+/* ====== Botón principal ====== */
+.cart-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.btn-primary {
+  background: var(--btn-primary);
+  color: var(--text-light);
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--btn-hover);
+}
+
+.btn-primary:active {
+  background: var(--btn-active);
+}
