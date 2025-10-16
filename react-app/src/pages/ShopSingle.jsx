@@ -1,4 +1,5 @@
 import React from 'react'
+import Carousel from '../components/Carousel'
 import { Link } from 'react-router-dom'
 
 export default function ShopSingle(){
@@ -10,6 +11,11 @@ export default function ShopSingle(){
             <div className="col-lg-5 mt-5">
               <div className="card mb-3">
                 <img className="card-img img-fluid" src="/img/producto_01.jpg" alt="Imagen Producto" id="product-detail" />
+              </div>
+
+              {/* Carousel compartido para la vista de producto */}
+              <div style={{position:'relative', marginBottom: '1rem'}}>
+                <Carousel images={["/img/producto_01.jpg","/img/producto_02.jpg","/img/producto_03.jpg"]} maxHeight={300} />
               </div>
 
               <div className="row">
