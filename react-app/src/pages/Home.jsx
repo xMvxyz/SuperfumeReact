@@ -6,8 +6,7 @@ import Carousel from '../components/Carousel'
 export default function Home(){
   return (
     <div>
-  {/* Carrusel agregado arriba del hero */}
-  <Carousel images={["/img/JPGaultier_hombre.jpg","/img/chanel_mujer.jpg","/img/perfume_arabe.jpg"]} />
+  
 
       <section className="hero-section">
         <div className="container">
@@ -20,6 +19,9 @@ export default function Home(){
           </div>
         </div>
       </section>
+
+  {/* Carrusel agregado arriba del hero */}
+  <Carousel images={["/img/Carrusel_01.png","/img/test_carrusel.png","/img/carrusel_03.png"]} />
 
       <section className="products-section" style={{paddingTop:40}}>
         <div className="container">
