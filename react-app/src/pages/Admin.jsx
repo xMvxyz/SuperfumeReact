@@ -201,7 +201,6 @@ export default function Admin(){
                   <img src={p.image} alt={p.title} style={{width:120, height:120, objectFit:'cover', borderRadius:4}} />
                 </div>
 
-                {/* Detalles en el centro (centrado entre imagen y opciones) */}
                 <div className="details-col" style={{flex:1, display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', textAlign:'center'}}>
                   {editingId === p.id ? (
                     <div style={{display:'flex', gap:12, alignItems:'center', flexWrap:'wrap'}}>

@@ -97,7 +97,7 @@ export default function Login(){
             </div>
 
             <div style={{display:'flex', gap:8}}>
-              <button className="btn btn-primary-custom btn-lg" type="submit" disabled={loading} style={{flex:1, color:'white'}}>
+              <button className="btn btn-sm btn-outline-info me-2" type="submit" disabled={loading} style={{flex:1, color:'#1d242d'}}>
                 {loading ? 'Ingresando...' : 'Entrar'}
               </button>
               <button type="button" className="btn btn-outline-secondary btn-lg" onClick={()=>navigate('/register')} disabled={loading} style={{flex:1}}>Registrarse</button>

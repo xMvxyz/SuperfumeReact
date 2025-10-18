@@ -14,9 +14,8 @@ const SAMPLE_PRODUCTS = [
 ]
 
 export default function Shop(){
-  // helper: merge admin list into SAMPLE_PRODUCTS
   const mergeWithSamples = (adminList)=>{
-    // return a shallow copy of SAMPLE_PRODUCTS if adminList invalid or empty
+
     if(!Array.isArray(adminList) || adminList.length === 0) return SAMPLE_PRODUCTS.slice()
     const merged = SAMPLE_PRODUCTS.slice()
     adminList.forEach(a => {
@@ -47,7 +46,6 @@ export default function Shop(){
           const parsed = JSON.parse(e.newValue)
           setProducts(mergeWithSamples(parsed))
         }catch(err){
-          // if parse fails, keep current products
         }
       }
     }
@@ -103,16 +101,16 @@ export default function Shop(){
             <h5 style={{color:'#1d242d'}}>Categorías</h5>
             <div className="mb-3">
               <div className="d-flex" role="group" aria-label="Género" style={{gap:8}}>
-                <button type="button" className={"btn flex-fill text-white " + (gender==='Todos' ? 'btn-primary' : 'btn-outline-primary')} onClick={()=>setGender('Todos')}>Todos</button>
-                <button type="button" className={"btn flex-fill text-white " + (gender==='Hombre' ? 'btn-primary' : 'btn-outline-primary')} onClick={()=>setGender('Hombre')}>Hombre</button>
-                <button type="button" className={"btn flex-fill text-white " + (gender==='Mujer' ? 'btn-primary' : 'btn-outline-primary')} onClick={()=>setGender('Mujer')}>Mujer</button>
+                <button type="button" className={"btn btn-sm me-2 " + (gender==='Todos' ? 'btn-info text-white' : 'btn-outline-info')} style={{flex:1}} onClick={()=>setGender('Todos')}>Todos</button>
+                <button type="button" className={"btn btn-sm me-2 " + (gender==='Hombre' ? 'btn-info text-white' : 'btn-outline-info')} style={{flex:1}} onClick={()=>setGender('Hombre')}>Hombre</button>
+                <button type="button" className={"btn btn-sm me-2 " + (gender==='Mujer' ? 'btn-info text-white' : 'btn-outline-info')} style={{flex:1}} onClick={()=>setGender('Mujer')}>Mujer</button>
               </div>
             </div>
             <div>
               <label className="form-label">Marca</label>
               <div className="d-flex flex-wrap" style={{gap:8}}>
                 {brands.map(b=> (
-                  <button key={b} type="button" className={"btn btn-sm text-white " + (brand===b ? 'btn-primary' : 'btn-outline-primary')} onClick={()=>setBrand(b)}>{b}</button>
+                  <button key={b} type="button" className={"btn btn-sm me-2 " + (brand===b ? 'btn-info text-white' : 'btn-outline-info')} onClick={()=>setBrand(b)}>{b}</button>
                 ))}
               </div>
             </div>
@@ -126,7 +124,7 @@ export default function Shop(){
             </div>
             <div style={{display:'flex', gap:8, alignItems:'center'}}>
               <label className="me-2">Ordenar</label>
-              <select className="form-select" style={{width:180}} value={sortBy} onChange={e=>setSortBy(e.target.value)}>
+              <select className="form-select form-control-sm" style={{width:180, borderColor:'#17a2b8', color:'#17a2b8'}} value={sortBy} onChange={e=>setSortBy(e.target.value)}>
                 <option value="featured">Destacados</option>
                 <option value="price-asc">Precio ↑</option>
                 <option value="price-desc">Precio ↓</option>
@@ -149,8 +147,8 @@ export default function Shop(){
                     <div className="d-flex justify-content-between align-items-center">
                       <div style={{fontWeight:700}}>${p.price.toLocaleString()}</div>
                       <div>
-                        <Link to={`/product/${p.id}`} className="btn btn-sm btn-primary me-2">Ver</Link>
-                        <button className="btn btn-sm btn-outline-secondary">Añadir</button>
+                        <Link to={`/product/${p.id}`} className="btn btn-sm btn-outline-info me-2">Ver</Link>
+                        <button className="btn btn-sm btn-outline-info me-2">Añadir</button>
                       </div>
                     </div>
                   </div>
