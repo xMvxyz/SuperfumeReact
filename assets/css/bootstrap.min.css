@@ -211,6 +211,7 @@ body {
     color: var(--bs-body-color);
     text-align: var(--bs-body-text-align);
     background-color: var(--bs-body-bg);
+    text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent
 }
@@ -471,8 +472,9 @@ caption {
 }
 
 th {
+    text-align: -webkit-match-parent;
+    text-align: match-parent;
     text-align: inherit;
-    text-align: -webkit-match-parent
 }
 
 tbody,
@@ -534,7 +536,8 @@ select:disabled {
 [type=reset],
 [type=submit],
 button {
-    -webkit-appearance: button
+    -webkit-appearance: button;
+    appearance: button
 }
 
 [type=button]:not(:disabled),
@@ -595,6 +598,7 @@ legend+* {
 
 [type=search] {
     -webkit-appearance: textfield;
+    appearance: textfield;
     outline-offset: -2px
 }
 
@@ -608,12 +612,14 @@ legend+* {
 
 ::-webkit-file-upload-button {
     font: inherit;
-    -webkit-appearance: button
+    -webkit-appearance: button;
+    appearance: button
 }
 
 ::file-selector-button {
     font: inherit;
-    -webkit-appearance: button
+    -webkit-appearance: button;
+    appearance: button
 }
 
 output {
@@ -2758,7 +2764,6 @@ textarea.form-control-lg {
     background-size: contain;
     border: none;
     -webkit-print-color-adjust: exact;
-    color-adjust: exact;
     print-color-adjust: exact
 }
 

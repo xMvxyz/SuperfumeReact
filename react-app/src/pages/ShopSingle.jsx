@@ -9,36 +9,16 @@ export default function ShopSingle(){
         <div className="container pb-5">
           <div className="row">
             <div className="col-lg-5 mt-5">
-              <div className="card mb-3">
-                <img className="card-img img-fluid" src="/img/producto_01.jpg" alt="Imagen Producto" id="product-detail" />
-              </div>
 
-              {/* Carousel compartido para la vista de producto */}
+
               <div style={{position:'relative', marginBottom: '1rem'}}>
-                <Carousel images={["/img/producto_01.jpg","/img/producto_02.jpg","/img/producto_03.jpg"]} maxHeight={300} />
+                <Carousel images={["/img/producto_01.jpg","/img/producto_02.jpg","/img/producto_03.jpg"]} maxHeight={500} />
               </div>
-
-              <div className="row">
-                <div className="col-1 align-self-center">
-                  <a href="#multi-item-example" role="button" data-bs-slide="prev"><i className="text-dark fas fa-chevron-left" /> <span className="sr-only">Anterior</span></a>
-                </div>
-
-                <div id="multi-item-example" className="col-10 carousel slide carousel-multi-item" data-bs-ride="carousel">
-                  <div className="carousel-inner product-links-wap" role="listbox">
-                    <div className="carousel-item active">
-                      <div className="row">
+                  <div className="row">
                         <div className="col-4"><a href="#"><img className="card-img img-fluid" src="/img/producto_01.jpg" alt="thumb1" /></a></div>
                         <div className="col-4"><a href="#"><img className="card-img img-fluid" src="/img/producto_02.jpg" alt="thumb2" /></a></div>
                         <div className="col-4"><a href="#"><img className="card-img img-fluid" src="/img/producto_03.jpg" alt="thumb3" /></a></div>
-                      </div>
-                    </div>
                   </div>
-                </div>
-
-                <div className="col-1 align-self-center">
-                  <a href="#multi-item-example" role="button" data-bs-slide="next"><i className="text-dark fas fa-chevron-right" /> <span className="sr-only">Siguiente</span></a>
-                </div>
-              </div>
             </div>
 
             <div className="col-lg-7 mt-5">
@@ -97,32 +77,160 @@ export default function ShopSingle(){
       </section>
 
       <section className="py-5">
-        <div className="container">
-          <div className="row text-left p-2 pb-3"><h4>Productos Relacionados</h4></div>
-
-          <div id="carousel-related-product">
-            <div className="p-2 pb-3">
-              <div className="product-wap card rounded-0">
-                <div className="card rounded-0">
-                  <img className="card-img rounded-0 img-fluid" src="/img/tienda_05.jpg" alt="rel1" />
-                  <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                    <ul className="list-unstyled">
-                      <li><Link className="btn btn-success text-white" to="/product/5"><i className="far fa-heart" /></Link></li>
-                      <li><Link className="btn btn-success text-white mt-2" to="/product/5"><i className="far fa-eye" /></Link></li>
-                      <li><Link className="btn btn-success text-white mt-2" to="/product/5"><i className="fas fa-cart-plus" /></Link></li>
-                    </ul>
+          <div className="container">
+            <div className="row text-left p-2 pb-3"><h4>Productos Relacionados</h4></div>
+              <section className="py-5">
+                <div className="container row">
+                  <div className="col-12 col-md-3 mb-4">
+                    <div className="product-wap card rounded-0">
+                      <div className="card rounded-0">
+                        <img className="card-img rounded-0 img-fluid" src="/img/tienda_05.jpg" />
+                        <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                          <ul className="list-unstyled">
+                            <li><a className="btn btn-success text-white" href="shop-single.html"><i className="far fa-heart" /></a></li>
+                            <li><a className="btn btn-success text-white mt-2" href="shop-single.html"><i className="far fa-eye" /></a></li>
+                            <li><a className="btn btn-success text-white mt-2" href="shop-single.html"><i className="fas fa-cart-plus" /></a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="card-body">
+                        <a href="shop-single.html" className="h3 text-decoration-none">Hugo Boss Bottled Infinite</a>
+                        <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                          <li>Bottled Infinite Edp 100ml</li>
+                          <li className="pt-2">
+                            <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                          </li>
+                        </ul>
+                        <ul className="list-unstyled d-flex justify-content-center mb-1">
+                          <li>
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-muted fa fa-star" />
+                            <i className="text-muted fa fa-star" />
+                          </li>
+                        </ul>
+                        <p className="text-center mb-0">$81.990</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="card-body">
-                  <Link to="/product/5" className="h3 text-decoration-none">Hugo Boss Bottled Infinite</Link>
-                  <p className="text-center mb-0">$81.990</p>
-                </div>
-              </div>
+                  <div className="col-12 col-md-3 mb-4">
+                    <div className="product-wap card rounded-0">
+                      <div className="card rounded-0">
+                        <img className="card-img rounded-0 img-fluid" src="/img/tienda_06.jpg" />
+                        <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                          <ul className="list-unstyled">
+                            <li><a className="btn btn-success text-white" href="shop-single.html"><i className="far fa-heart" /></a></li>
+                            <li><a className="btn btn-success text-white mt-2" href="shop-single.html"><i className="far fa-eye" /></a></li>
+                            <li><a className="btn btn-success text-white mt-2" href="shop-single.html"><i className="fas fa-cart-plus" /></a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="card-body">
+                        <a href="shop-single.html" className="h3 text-decoration-none">Stronger With You Intensely</a>
+                        <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                          <li>Stronger With You  EDP 100ML</li>
+                          <li className="pt-2">
+                            <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                          </li>
+                        </ul>
+                        <ul className="list-unstyled d-flex justify-content-center mb-1">
+                          <li>
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                          </li>
+                        </ul>
+                        <p className="text-center mb-0">$150.990</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-3 mb-4">
+                    <div className="product-wap card rounded-0">
+                      <div className="card rounded-0">
+                        <img className="card-img rounded-0 img-fluid" src="/img/tienda_09.jpg" />
+                        <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                          <ul className="list-unstyled">
+                            <li><a className="btn btn-success text-white" href="shop-single.html"><i className="far fa-heart" /></a></li>
+                            <li><a className="btn btn-success text-white mt-2" href="shop-single.html"><i className="far fa-eye" /></a></li>
+                            <li><a className="btn btn-success text-white mt-2" href="shop-single.html"><i className="fas fa-cart-plus" /></a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="card-body">
+                        <a href="shop-single.html" className="h3 text-decoration-none">Le Beau Jean Paul Gaultier</a>
+                        <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                          <li>Le Beau Jean Paul Gaultier 125ML EDP Intense</li>
+                          <li className="pt-2">
+                            <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                          </li>
+                        </ul>
+                        <ul className="list-unstyled d-flex justify-content-center mb-1">
+                          <li>
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                          </li>
+                        </ul>
+                        <p className="text-center mb-0">$199.990</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-3 mb-4">
+                    <div className="product-wap card rounded-0">
+                      <div className="card rounded-0">
+                        <img className="card-img rounded-0 img-fluid" src="/img/tienda_07.jpg" />
+                        <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                          <ul className="list-unstyled">
+                            <li><a className="btn btn-success text-white" href="shop-single.html"><i className="far fa-heart" /></a></li>
+                            <li><a className="btn btn-success text-white mt-2" href="shop-single.html"><i className="far fa-eye" /></a></li>
+                            <li><a className="btn btn-success text-white mt-2" href="shop-single.html"><i className="fas fa-cart-plus" /></a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="card-body">
+                        <a href="shop-single.html" className="h3 text-decoration-none">Burberry Hero</a>
+                        <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                          <li>Burberry Hero Parfum Intense 100ml</li>
+                          <li className="pt-2">
+                            <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                            <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                          </li>
+                        </ul>
+                        <ul className="list-unstyled d-flex justify-content-center mb-1">
+                          <li>
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-warning fa fa-star" />
+                            <i className="text-muted fa fa-star" />
+                          </li>
+                        </ul>
+                        <p className="text-center mb-0">$189.990</p>
+                      </div>
+                    </div>
+                  </div>
             </div>
-
-            {/* Más productos relacionados... */}
-
-          </div>
+          </section>
         </div>
       </section>
     </div>

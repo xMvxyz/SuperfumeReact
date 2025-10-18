@@ -1,5 +1,6 @@
 import React from 'react'
 import Carousel from '../components/Carousel'
+import { Link } from 'react-router-dom'
 
 // Página Home: migración inicial del contenido principal de index.html a JSX.
 // Reutiliza imágenes y estilos desde `/img/` y `/css/` gracias a `publicDir` configurado en Vite.
@@ -32,19 +33,19 @@ export default function Home(){
       </div>
       <div className="row">
         <div className="col-12 col-md-4 p-5 mt-3">
-          <a href="#"><img src="/img/JPGaultier_hombre.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Hombre" /></a>
+          <Link to="/shop"><img src="/img/JPGaultier_hombre.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Hombre" /></Link>
           <h5 className="text-center mt-3 mb-3">Hombre</h5>
-          <p className="text-center"><a className="btn btn-success">Comprar</a></p>
+          <p className="text-center"><Link className="btn btn-success" to="/shop">Comprar</Link></p>
         </div>
         <div className="col-12 col-md-4 p-5 mt-3">
-          <a href="#"><img src="/img/chanel_mujer.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Mujer" /></a>
+          <Link to="/shop"><img src="/img/chanel_mujer.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Mujer" /></Link>
           <h2 className="h5 text-center mt-3 mb-3">Mujer</h2>
-          <p className="text-center"><a className="btn btn-success">Comprar</a></p>
+          <p className="text-center"><Link className="btn btn-success" to="/shop">Comprar</Link></p>
         </div>
         <div className="col-12 col-md-4 p-5 mt-3">
-          <a href="#"><img src="/img/perfume_arabe.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Arabes" /></a>
+          <Link to="/shop"><img src="/img/perfume_arabe.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Arabes" /></Link>
           <h2 className="h5 text-center mt-3 mb-3">Arabes</h2>
-          <p className="text-center"><a className="btn btn-success">Comprar</a></p>
+          <p className="text-center"><Link className="btn btn-success" to="/shop">Comprar</Link></p>
         </div>
       </div>
       </section>
@@ -62,9 +63,9 @@ export default function Home(){
           <div className="row">
             <div className="col-12 col-md-4 mb-4">
               <div className="card h-100">
-                <a href="shop-single.html">
-                  <img src="/img/destacado_01.jpg" className="card-img-top" alt="..." />
-                </a>
+                <Link to="/product/1">
+                  <img src="/img/destacado_01.jpg" className="card-img-top" alt="Destacado 1" />
+                </Link>
                 <div className="card-body">
                   <ul className="list-unstyled d-flex justify-content-between">
                     <li>
@@ -76,7 +77,7 @@ export default function Home(){
                     </li>
                     <li className="text-muted text-right">$32.110</li>
                   </ul>
-                  <a href="shop-single.html" className="h2 text-decoration-none text-dark">Perfume Ralph Lauren Polo Blue</a>
+                  <Link to="/product/1" className="h2 text-decoration-none text-dark">Perfume Ralph Lauren Polo Blue</Link>
                   <p className="card-text">
                     Perfume Ralph Lauren Polo Blue Edt 30ml Hombre
                   </p>
@@ -86,9 +87,9 @@ export default function Home(){
             </div>
             <div className="col-12 col-md-4 mb-4">
               <div className="card h-100">
-                <a href="shop-single.html">
-                  <img src="/img/destacado_02.jpg" className="card-img-top" alt="..." />
-                </a>
+                <Link to="/product/2">
+                  <img src="/img/destacado_02.jpg" className="card-img-top" alt="Destacado 2" />
+                </Link>
                 <div className="card-body">
                   <ul className="list-unstyled d-flex justify-content-between">
                     <li>
@@ -100,7 +101,7 @@ export default function Home(){
                     </li>
                     <li className="text-muted text-right">$55.990</li>
                   </ul>
-                  <a href="shop-single.html" className="h2 text-decoration-none text-dark">Ayka for Her</a>
+                  <Link to="/product/2" className="h2 text-decoration-none text-dark">Ayka for Her</Link>
                   <p className="card-text">
                     Ayka for Her EDP 100 ML - Rayhaan
                   </p>
@@ -110,9 +111,9 @@ export default function Home(){
             </div>
             <div className="col-12 col-md-4 mb-4">
               <div className="card h-100">
-                <a href="shop-single.html">
-                  <img src="/img/destacado_03.jpg" className="card-img-top" alt="..." />
-                </a>
+                <Link to="/product/3">
+                  <img src="/img/destacado_03.jpg" className="card-img-top" alt="Destacado 3" />
+                </Link>
                 <div className="card-body">
                   <ul className="list-unstyled d-flex justify-content-between">
                     <li>
@@ -124,7 +125,7 @@ export default function Home(){
                     </li>
                     <li className="text-muted text-right">$83.900</li>
                   </ul>
-                  <a href="shop-single.html" className="h2 text-decoration-none text-dark">Azzaro The Most Wanted</a>
+                  <Link to="/product/3" className="h2 text-decoration-none text-dark">Azzaro The Most Wanted</Link>
                   <p className="card-text">
                     Azzaro The Most Wanted Parfum 100 ml
                   </p>

@@ -38,7 +38,7 @@ export default function Footer(){
             <div className="col-md-4 pt-5">
               <h2 className="h2 text-light border-bottom pb-3 border-light">Información Adicional</h2>
               <ul className="list-unstyled text-light footer-link-list">
-                <li><a className="text-decoration-none" href="#">Inicio</a></li>
+                <li><a className="text-decoration-none" href="/">Inicio</a></li>
                 <li><a className="text-decoration-none" href="/About">Conocenos</a></li>
                 <li><a className="text-decoration-none" href="/Contact">Contacto</a></li>
               </ul>

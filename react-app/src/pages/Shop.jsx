@@ -55,134 +55,361 @@ export default function Shop(){
             </div>
           </div>
 
+        <div className="container py-5">
           <div className="row">
-            {/** Repite las cards de productos. En una migración posterior podemos mapear un array de productos */}
-            <div className="col-md-4">
-              <div className="card mb-4 product-wap rounded-0">
-                <div className="card rounded-0">
-                  <img className="card-img rounded-0 img-fluid" src="/img/tienda_01.jpg" alt="tienda-1" />
-                  <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                    <ul className="list-unstyled">
-                      <li><Link className="btn btn-success text-white" to="/product/1"><i className="far fa-heart" /></Link></li>
-                      <li><Link className="btn btn-success text-white mt-2" to="/product/1"><i className="far fa-eye" /></Link></li>
-                      <li><Link className="btn btn-success text-white mt-2" to="/product/1"><i className="fas fa-cart-plus" /></Link></li>
-                    </ul>
+            <div className="col-lg-9">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="card mb-4 product-wap rounded-0">
+                    <div className="card rounded-0">
+                      <img className="card-img rounded-0 img-fluid" src="/img/tienda_01.jpg" />
+                      <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul className="list-unstyled">
+                          <li><Link className="btn btn-success text-white" to="/product/1"><i className="far fa-heart" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/1"><i className="far fa-eye" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/1"><i className="fas fa-cart-plus" /></Link></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <Link to="/product/1" className="h3 text-decoration-none">Dior Poison</Link>
+                      <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                        <li>Dior Poison EDT 100ML</li>
+                        <li className="pt-2">
+                          <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                        </li>
+                      </ul>
+                      <ul className="list-unstyled d-flex justify-content-center mb-1">
+                        <li>
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-muted fa fa-star" />
+                        </li>
+                      </ul>
+                      <p className="text-center mb-0">$124.990</p>
+                    </div>
                   </div>
                 </div>
-                <div className="card-body">
-                  <Link to="/product/1" className="h3 text-decoration-none">Dior Poison</Link>
-                  <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
-                    <li>Dior Poison EDT 100ML</li>
-                    <li className="pt-2">
-                      <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
-                    </li>
-                  </ul>
-                  <ul className="list-unstyled d-flex justify-content-center mb-1">
-                    <li>
-                      <i className="text-warning fa fa-star" />
-                      <i className="text-warning fa fa-star" />
-                      <i className="text-warning fa fa-star" />
-                      <i className="text-warning fa fa-star" />
-                      <i className="text-muted fa fa-star" />
-                    </li>
-                  </ul>
-                  <p className="text-center mb-0">$124.990</p>
-                </div>
-              </div>
-            </div>
-
-            {/** Otras tarjetas - se pueden replicar o mapear */}
-            <div className="col-md-4">
-              <div className="card mb-4 product-wap rounded-0">
-                <div className="card rounded-0">
-                  <img className="card-img rounded-0 img-fluid" src="/img/tienda_02.jpg" alt="tienda-2" />
-                  <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                    <ul className="list-unstyled">
-                      <li><Link className="btn btn-success text-white" to="/product/2"><i className="far fa-heart" /></Link></li>
-                      <li><Link className="btn btn-success text-white mt-2" to="/product/2"><i className="far fa-eye" /></Link></li>
-                      <li><Link className="btn btn-success text-white mt-2" to="/product/2"><i className="fas fa-cart-plus" /></Link></li>
-                    </ul>
+                <div className="col-md-4">
+                  <div className="card mb-4 product-wap rounded-0">
+                    <div className="card rounded-0">
+                      <img className="card-img rounded-0 img-fluid" src="/img/tienda_02.jpg" />
+                      <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul className="list-unstyled">
+                          <li><Link className="btn btn-success text-white" to="/product/2"><i className="far fa-heart" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/2"><i className="far fa-eye" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/2"><i className="fas fa-cart-plus" /></Link></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <Link to="/product/2" className="h3 text-decoration-none">Sweet Dream</Link>
+                      <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                        <li>Sweet Dream EDT 80ML</li>
+                        <li className="pt-2">
+                          <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                        </li>
+                      </ul>
+                      <ul className="list-unstyled d-flex justify-content-center mb-1">
+                        <li>
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-muted fa fa-star" />
+                          <i className="text-muted fa fa-star" />
+                        </li>
+                      </ul>
+                      <p className="text-center mb-0">$14.990</p>
+                    </div>
                   </div>
                 </div>
-                <div className="card-body">
-                  <Link to="/product/2" className="h3 text-decoration-none">Sweet Dream</Link>
-                  <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
-                    <li>Sweet Dream EDT 80ML</li>
-                    <li className="pt-2">
-                      <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
-                    </li>
-                  </ul>
-                  <ul className="list-unstyled d-flex justify-content-center mb-1">
-                    <li>
-                      <i className="text-warning fa fa-star" />
-                      <i className="text-warning fa fa-star" />
-                      <i className="text-warning fa fa-star" />
-                      <i className="text-muted fa fa-star" />
-                      <i className="text-muted fa fa-star" />
-                    </li>
-                  </ul>
-                  <p className="text-center mb-0">$14.990</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-4">
-              <div className="card mb-4 product-wap rounded-0">
-                <div className="card rounded-0">
-                  <img className="card-img rounded-0 img-fluid" src="/img/tienda_03.jpg" alt="tienda-3" />
-                  <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                    <ul className="list-unstyled">
-                      <li><Link className="btn btn-success text-white" to="/product/3"><i className="far fa-heart" /></Link></li>
-                      <li><Link className="btn btn-success text-white mt-2" to="/product/3"><i className="far fa-eye" /></Link></li>
-                      <li><Link className="btn btn-success text-white mt-2" to="/product/3"><i className="fas fa-cart-plus" /></Link></li>
-                    </ul>
+                <div className="col-md-4">
+                  <div className="card mb-4 product-wap rounded-0">
+                    <div className="card rounded-0">
+                      <img className="card-img rounded-0 img-fluid" src="/img/tienda_03.jpg" />
+                      <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul className="list-unstyled">
+                          <li><Link className="btn btn-success text-white" to="/product/3"><i className="far fa-heart" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/3"><i className="far fa-eye" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/3"><i className="fas fa-cart-plus" /></Link></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <Link to="/product/3" className="h3 text-decoration-none">Dance</Link>
+                      <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                        <li>Shakira Dance Edt 50Ml Vap</li>
+                        <li className="pt-2">
+                          <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                        </li>
+                      </ul>
+                      <ul className="list-unstyled d-flex justify-content-center mb-1">
+                        <li>
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-muted fa fa-star" />
+                          <i className="text-muted fa fa-star" />
+                        </li>
+                      </ul>
+                      <p className="text-center mb-0">$20.000</p>
+                    </div>
                   </div>
                 </div>
-                <div className="card-body">
-                  <Link to="/product/3" className="h3 text-decoration-none">Dance</Link>
-                  <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
-                    <li>Shakira Dance Edt 50Ml Vap</li>
-                    <li className="pt-2">
-                      <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
-                      <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
-                    </li>
-                  </ul>
-                  <ul className="list-unstyled d-flex justify-content-center mb-1">
-                    <li>
-                      <i className="text-warning fa fa-star" />
-                      <i className="text-warning fa fa-star" />
-                      <i className="text-warning fa fa-star" />
-                      <i className="text-muted fa fa-star" />
-                      <i className="text-muted fa fa-star" />
-                    </li>
-                  </ul>
-                  <p className="text-center mb-0">$20.000</p>
+                <div className="col-md-4">
+                  <div className="card mb-4 product-wap rounded-0">
+                    <div className="card rounded-0">
+                      <img className="card-img rounded-0 img-fluid" src="/img/tienda_04.jpg" />
+                      <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul className="list-unstyled">
+                          <li><Link className="btn btn-success text-white" to="/product/4"><i className="far fa-heart" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/4"><i className="far fa-eye" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/4"><i className="fas fa-cart-plus" /></Link></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <Link to="/product/4" className="h3 text-decoration-none">Dolce&amp;Gabana Dolce Garden</Link>
+                      <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                        <li>Dolce Garden Edp 75 Ml</li>
+                        <li className="pt-2">
+                          <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                        </li>
+                      </ul>
+                      <ul className="list-unstyled d-flex justify-content-center mb-1">
+                        <li>
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                        </li>
+                      </ul>
+                      <p className="text-center mb-0">$130.000</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="card mb-4 product-wap rounded-0">
+                    <div className="card rounded-0">
+                      <img className="card-img rounded-0 img-fluid" src="/img/tienda_05.jpg" />
+                      <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul className="list-unstyled">
+                          <li><Link className="btn btn-success text-white" to="/product/5"><i className="far fa-heart" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/5"><i className="far fa-eye" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/5"><i className="fas fa-cart-plus" /></Link></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <Link to="/product/5" className="h3 text-decoration-none">Hugo Boss Bottled Infinite</Link>
+                      <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                        <li>Bottled Infinite Edp 100ml</li>
+                        <li className="pt-2">
+                          <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                        </li>
+                      </ul>
+                      <ul className="list-unstyled d-flex justify-content-center mb-1">
+                        <li>
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-muted fa fa-star" />
+                          <i className="text-muted fa fa-star" />
+                        </li>
+                      </ul>
+                      <p className="text-center mb-0">$81.990</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="card mb-4 product-wap rounded-0">
+                    <div className="card rounded-0">
+                      <img className="card-img rounded-0 img-fluid" src="/img/tienda_06.jpg" />
+                      <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul className="list-unstyled">
+                          <li><Link className="btn btn-success text-white" to="/product/6"><i className="far fa-heart" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/6"><i className="far fa-eye" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/6"><i className="fas fa-cart-plus" /></Link></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <Link to="/product/6" className="h3 text-decoration-none">Stronger With You Intensely</Link>
+                      <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                        <li>Stronger With You  EDP 100ML</li>
+                        <li className="pt-2">
+                          <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                        </li>
+                      </ul>
+                      <ul className="list-unstyled d-flex justify-content-center mb-1">
+                        <li>
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                        </li>
+                      </ul>
+                      <p className="text-center mb-0">$150.990</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="card mb-4 product-wap rounded-0">
+                    <div className="card rounded-0">
+                      <img className="card-img rounded-0 img-fluid" src="/img/tienda_07.jpg" />
+                      <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul className="list-unstyled">
+                          <li><Link className="btn btn-success text-white" to="/product/7"><i className="far fa-heart" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/7"><i className="far fa-eye" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/7"><i className="fas fa-cart-plus" /></Link></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <Link to="/product/7" className="h3 text-decoration-none">Burberry Hero</Link>
+                      <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                        <li>Burberry Hero Parfum Intense 100ml</li>
+                        <li className="pt-2">
+                          <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                        </li>
+                      </ul>
+                      <ul className="list-unstyled d-flex justify-content-center mb-1">
+                        <li>
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-muted fa fa-star" />
+                        </li>
+                      </ul>
+                      <p className="text-center mb-0">$189.990</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="card mb-4 product-wap rounded-0">
+                    <div className="card rounded-0">
+                      <img className="card-img rounded-0 img-fluid" src="/img/tienda_08.jpg" />
+                      <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul className="list-unstyled">
+                          <li><Link className="btn btn-success text-white" to="/product/8"><i className="far fa-heart" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/8"><i className="far fa-eye" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/8"><i className="fas fa-cart-plus" /></Link></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <Link to="/product/8" className="h3 text-decoration-none">Victoria Secret Tease</Link>
+                      <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                        <li>Perfume Victoria Secret Tease 100ml</li>
+                        <li className="pt-2">
+                          <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                        </li>
+                      </ul>
+                      <ul className="list-unstyled d-flex justify-content-center mb-1">
+                        <li>
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-muted fa fa-star" />
+                        </li>
+                      </ul>
+                      <p className="text-center mb-0">$112.990</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="card mb-4 product-wap rounded-0">
+                    <div className="card rounded-0">
+                      <img className="card-img rounded-0 img-fluid" src="/img/tienda_09.jpg" />
+                      <div className="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul className="list-unstyled">
+                          <li><Link className="btn btn-success text-white" to="/product/9"><i className="far fa-heart" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/9"><i className="far fa-eye" /></Link></li>
+                          <li><Link className="btn btn-success text-white mt-2" to="/product/9"><i className="fas fa-cart-plus" /></Link></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <Link to="/product/9" className="h3 text-decoration-none">Le Beau Jean Paul Gaultier</Link>
+                      <ul className="w-100 list-unstyled d-flex justify-content-between mb-0">
+                        <li>Le Beau Jean Paul Gaultier 125ML EDP Intense</li>
+                        <li className="pt-2">
+                          <span className="product-color-dot color-dot-red float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-blue float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-black float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-light float-left rounded-circle ml-1" />
+                          <span className="product-color-dot color-dot-green float-left rounded-circle ml-1" />
+                        </li>
+                      </ul>
+                      <ul className="list-unstyled d-flex justify-content-center mb-1">
+                        <li>
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                          <i className="text-warning fa fa-star" />
+                        </li>
+                      </ul>
+                      <p className="text-center mb-0">$199.990</p>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <div div="row">
+                <ul className="pagination pagination-lg justify-content-end">
+                  <li className="page-item disabled">
+                    <a className="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#" tabIndex={-1}>1</a>
+                  </li>
+                  <li className="page-item">
+                    <a className="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark" href="#">2</a>
+                  </li>
+                  <li className="page-item">
+                    <a className="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>
+                  </li>
+                </ul>
+              </div>
             </div>
-
           </div>
+        </div>
 
-          <div className="row">
-            <div className="col-12">
-              <ul className="pagination pagination-lg justify-content-end">
-                <li className="page-item disabled"><a className="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#">1</a></li>
-                <li className="page-item"><a className="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark" href="#">2</a></li>
-                <li className="page-item"><a className="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a></li>
-              </ul>
-            </div>
-          </div>
 
         </section>
 
@@ -224,7 +451,6 @@ export default function Shop(){
           </div>
         </div>
       </section>
-
     </div>
   )
 }
