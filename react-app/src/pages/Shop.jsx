@@ -14,17 +14,30 @@ const SAMPLE_PRODUCTS = [
 ]
 
 export default function Shop(){
+  // helper: merge admin list into SAMPLE_PRODUCTS
+  const mergeWithSamples = (adminList)=>{
+    // return a shallow copy of SAMPLE_PRODUCTS if adminList invalid or empty
+    if(!Array.isArray(adminList) || adminList.length === 0) return SAMPLE_PRODUCTS.slice()
+    const merged = SAMPLE_PRODUCTS.slice()
+    adminList.forEach(a => {
+      const idx = merged.findIndex(m => m.id === a.id)
+      if(idx >= 0) merged[idx] = a
+      else merged.push(a)
+    })
+    return merged
+  }
+
   const [products, setProducts] = useState(()=>{
     try{
       const raw = localStorage.getItem('superfume_products_v1')
       if(raw){
         const parsed = JSON.parse(raw)
-        if(Array.isArray(parsed) && parsed.length) return parsed
+        return mergeWithSamples(parsed)
       }
     }catch(e){
-
+      // ignore and fall back to samples
     }
-    return SAMPLE_PRODUCTS
+    return SAMPLE_PRODUCTS.slice()
   })
 
   useEffect(()=>{
@@ -32,8 +45,10 @@ export default function Shop(){
       if(e.key === 'superfume_products_v1'){
         try{
           const parsed = JSON.parse(e.newValue)
-          if(Array.isArray(parsed)) setProducts(parsed)
-        }catch(err){}
+          setProducts(mergeWithSamples(parsed))
+        }catch(err){
+          // if parse fails, keep current products
+        }
       }
     }
     window.addEventListener('storage', onStorage)
@@ -67,6 +82,12 @@ export default function Shop(){
 
     return list
   },[products, query, gender, brand, sortBy])
+
+  const getProductImage = (p) => {
+    if(p && p.image) return p.image
+    if(p && p.img) return p.img
+    return '/img/producto_01.jpg'
+  }
 
 
   useEffect(()=>{
@@ -120,7 +141,7 @@ export default function Shop(){
               <div key={p.id} className="col-6 col-md-4">
                 <div className="card h-100 shadow-sm">
                     <div style={{height:260, display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', background:'#f8f9fa'}}>
-                      <img src={p.img} alt={p.title} style={{maxWidth:'100%', maxHeight:'100%', objectFit:'contain'}} />
+                        <img src={getProductImage(p)} alt={p.title} style={{maxWidth:'100%', maxHeight:'100%', objectFit:'contain'}} />
                     </div>
                   <div className="card-body d-flex flex-column">
                     <h6 className="card-title">{p.title}</h6>
