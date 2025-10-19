@@ -46,7 +46,7 @@ export default function Header(){
               </li>
               {/* Search icon visible inside collapse on small screens, placed before Login */}
               <li className="nav-item d-lg-none">
-                <button className="nav-link btn btn-link" style={{paddingLeft:0}} onClick={()=>setShowSearch(true)} aria-label="Buscar">🔍 Buscar</button>
+                <button className="nav-link btn btn-link" style={{paddingLeft:0}} onClick={()=>setShowSearch(true)} aria-label="Buscar">Buscar</button>
               </li>
               {/* Login/Admin visible inside collapse on small screens */}
               <li className="nav-item d-lg-none">
