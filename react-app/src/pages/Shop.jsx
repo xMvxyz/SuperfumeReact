@@ -14,6 +14,36 @@ const SAMPLE_PRODUCTS = [
 ]
 
 export default function Shop(){
+  const CART_KEY = 'superfume_cart_v1'
+
+  function readCart(){
+    try{
+      const raw = localStorage.getItem(CART_KEY)
+      if(!raw) return []
+      return JSON.parse(raw)
+    }catch(e){ return [] }
+  }
+
+  function writeCart(cart){
+    try{
+      localStorage.setItem(CART_KEY, JSON.stringify(cart))
+      // notify other tabs/components
+      window.dispatchEvent(new Event('cart_updated'))
+    }catch(e){ console.error('cart write error', e) }
+  }
+
+  function addToCart(product, qty = 1){
+    const current = readCart()
+    const idx = current.findIndex(i => i.id === product.id)
+    const price = product.precio ?? product.price ?? 0
+    if(idx >= 0){
+      current[idx].qty += qty
+      current[idx].total = current[idx].qty * price
+    }else{
+      current.push({ id: product.id, nombre: product.nombre || product.title || '', precio: price, img: product.img || product.image || '/img/producto_01.jpg', qty: qty, total: price * qty })
+    }
+    writeCart(current)
+  }
   const mergeWithSamples = (adminList)=>{
     if(!Array.isArray(adminList) || adminList.length === 0) return SAMPLE_PRODUCTS.slice()
     const merged = SAMPLE_PRODUCTS.slice()
@@ -140,7 +170,7 @@ export default function Shop(){
                       <div className="fw-700">${(p.precio ?? p.price).toLocaleString()}</div>
                       <div>
                         <Link to={`/product/${p.id}`} className="btn btn-sm btn-outline-info me-2">Ver</Link>
-                        <button className="btn btn-sm btn-outline-info me-2">Añadir</button>
+                        <button className="btn btn-sm btn-outline-info me-2" onClick={()=> addToCart(p)}>Añadir</button>
                       </div>
                     </div>
                   </div>

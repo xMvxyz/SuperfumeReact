@@ -286,7 +286,8 @@ export default function Admin(){
                       <h4 className="title-no-margin">{p.nombre || p.title}</h4>
                       {p.descripcion && <p className="descripcion">{p.descripcion}</p>}
                       <p className="price">${(p.precio ?? p.price)}</p>
-                      <p className="meta"><strong>Marca:</strong> {p.marca || p.brand || '-'} • <strong>Género:</strong> {p.genero || p.gender || '-'}</p>
+                      <p className="meta"><strong>Marca:</strong> {p.marca || p.brand || '-'}  </p>
+                      <p className="meta"><strong>Género:</strong> {p.genero || p.gender || '-'} </p>
                     </div>
                   )}
                 </div>
