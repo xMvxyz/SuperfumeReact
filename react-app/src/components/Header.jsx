@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function Header(){
   const [showSearch, setShowSearch] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const navigate = useNavigate()
 
@@ -24,36 +26,36 @@ export default function Header(){
       <nav className="navbar navbar-expand-lg shadow" data-bs-theme="dark" style={{position:'relative'}}>
         <div className="container-fluid">
           <Link className="navbar-brand" to="/"><h1>Superfume</h1></Link>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+          <button className="navbar-toggler" type="button" aria-controls="navbarColor01" aria-expanded={navOpen} aria-label="Toggle navigation" onClick={()=> setNavOpen(v => !v)}>
             <span className="navbar-toggler-icon" />
           </button>
-          <div className="collapse navbar-collapse justify-content-center" id="navbarColor01">
+          <div className={"collapse navbar-collapse justify-content-center" + (navOpen ? ' show' : '')} id="navbarColor01" aria-expanded={navOpen}>
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link active" to="/">Inicio <span className="visually-hidden">(current)</span></Link>
+                <Link className="nav-link active" to="/" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Inicio <span className="visually-hidden">(current)</span></Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/shop">Tienda</Link>
+                <Link className="nav-link" to="/shop" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Tienda</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/contact">Contacto</Link>
+                <Link className="nav-link" to="/contact" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Contacto</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/about">Nosotros</Link>
+                <Link className="nav-link" to="/about" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Nosotros</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/cart">Carrito</Link>
+                <Link className="nav-link" to="/cart" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Carrito</Link>
               </li>
-              {/* Search icon visible inside collapse on small screens, placed before Login */}
+
               <li className="nav-item d-lg-none">
-                <button className="nav-link btn btn-link" style={{paddingLeft:0}} onClick={()=>setShowSearch(true)} aria-label="Buscar">Buscar</button>
+                <button className="nav-link btn btn-link" style={{paddingLeft:0}} onClick={()=>{ setShowSearch(true); if(window.innerWidth < 992) setNavOpen(false) }} aria-label="Buscar">Buscar</button>
               </li>
-              {/* Login/Admin visible inside collapse on small screens */}
+
               <li className="nav-item d-lg-none">
-                <Link className="nav-link" to="/login">Login</Link>
+                <Link className="nav-link" to="/login" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Login</Link>
               </li>
               <li className="nav-item d-lg-none">
-                <Link className="nav-link" to="/admin">Admin</Link>
+                <Link className="nav-link" to="/admin" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Admin</Link>
               </li>
             </ul>
           </div>
