@@ -27,12 +27,13 @@ export async function register({ email, password, name }){
   try{
     const users = readUsers()
     if(users.find(u => u.email === email)) throw new Error('Email exists')
-    const user = { id: Date.now(), email, password, name }
+    const role = (arguments[0] && arguments[0].role) || 'cliente'
+    const user = { id: Date.now(), email, password, name, role }
     users.push(user)
     writeUsers(users)
     const token = btoa(`${user.id}:${Date.now()}`)
-    setAuth({ token, user: { id: user.id, email: user.email, name: user.name } })
-    return { token, user: { id: user.id, email: user.email, name: user.name } }
+    setAuth({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role } })
+    return { token, user: { id: user.id, email: user.email, name: user.name, role: user.role } }
   }catch(e){ throw e }
 }
 
@@ -42,11 +43,12 @@ export async function login({ email, password }){
   }
   try{
     const users = readUsers()
-    const u = users.find(x => x.email === email && x.password === password)
-    if(!u) throw new Error('Invalid credentials')
+    const u = users.find(x => x.email === email)
+    if(!u) throw new Error('Usuario no registrado')
+    if(u.password !== password) throw new Error('Credenciales inválidas')
     const token = btoa(`${u.id}:${Date.now()}`)
-    setAuth({ token, user: { id: u.id, email: u.email, name: u.name } })
-    return { token, user: { id: u.id, email: u.email, name: u.name } }
+    setAuth({ token, user: { id: u.id, email: u.email, name: u.name, role: u.role } })
+    return { token, user: { id: u.id, email: u.email, name: u.name, role: u.role } }
   }catch(e){ throw e }
 }
 
@@ -63,6 +65,49 @@ export async function getProfile(){
     try{ const res = await client.get('/auth/me'); return res.data }catch(e){}
   }
   return getAuth()?.user || null
+}
+
+export async function list(){
+  if(client.defaults.baseURL){
+    try{ const res = await client.get('/users'); return res.data }catch(e){}
+  }
+  return readUsers()
+}
+
+export async function create(user){
+  if(client.defaults.baseURL){
+    try{ const res = await client.post('/users', user); return res.data }catch(e){}
+  }
+  try{
+    const list = readUsers()
+    const newUser = { id: user.id ?? Date.now(), name: user.name, email: user.email, password: user.password || '', role: user.role || 'cliente' }
+    list.push(newUser)
+    writeUsers(list)
+    return newUser
+  }catch(e){ throw e }
+}
+
+export async function update(id, updates){
+  if(client.defaults.baseURL){
+    try{ const res = await client.put(`/users/${id}`, updates); return res.data }catch(e){}
+  }
+  try{
+    const list = readUsers()
+    const next = list.map(u => String(u.id) === String(id) ? {...u, ...updates} : u)
+    writeUsers(next)
+    return next.find(u => String(u.id) === String(id))
+  }catch(e){ throw e }
+}
+
+export async function remove(id){
+  if(client.defaults.baseURL){
+    try{ const res = await client.delete(`/users/${id}`); return res.data }catch(e){}
+  }
+  try{
+    const next = readUsers().filter(u => String(u.id) !== String(id))
+    writeUsers(next)
+    return next
+  }catch(e){ throw e }
 }
 
 export default { register, login, logout, getProfile }

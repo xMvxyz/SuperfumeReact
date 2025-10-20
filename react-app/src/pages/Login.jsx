@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import users from '../api/users'
 
 export default function Login(){
   const navigate = useNavigate()
@@ -27,11 +28,19 @@ export default function Login(){
     if(Object.keys(eerrors).length) return
 
     setLoading(true)
-    await new Promise(r => setTimeout(r, 700))
-    setLoading(false)
-
-    if(remember) localStorage.setItem('sfm_remember_email', email)
-    navigate('/')
+    try{
+      const res = await users.login({ email: email.trim(), password })
+      // res.user should contain role
+      const role = res?.user?.role || 'cliente'
+      if(remember) localStorage.setItem('sfm_remember_email', email)
+      setLoading(false)
+      if(role === 'admin') navigate('/admin')
+      else navigate('/shop')
+    }catch(err){
+      setLoading(false)
+      const message = err?.message || 'Error autenticando'
+      setErrors({ form: message })
+    }
   }
 
   return (
@@ -89,6 +98,8 @@ export default function Login(){
               </label>
               <a href="#" className="forgot-link">¿Olvidaste tu contraseña?</a>
             </div>
+
+            {errors.form && <div className="error-text mb-8">{errors.form}</div>}
 
             <div className="btn-row">
               <button

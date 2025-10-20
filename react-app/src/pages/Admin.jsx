@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import * as usersApi from '../api/users'
 
 const STORAGE_KEY = 'superfume_products_v1'
 
@@ -17,14 +18,32 @@ function saveProducts(list){
 }
 
 export default function Admin(){
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState(()=> loadProducts())
   const [form, setForm] = useState({nombre:'', descripcion:'', precio:'', img:'/img/producto_01.jpg', genero:'', marca:''})
   const [errors, setErrors] = useState({})
   const [query, setQuery] = useState('')
   const [sortBy, setSortBy] = useState('newest')
 
+
+  const [users, setUsers] = useState([])
+  const [userForm, setUserForm] = useState({ name:'', email:'', password:'', role:'cliente' })
+  const [userErrors, setUserErrors] = useState({})
+  const [editingUserId, setEditingUserId] = useState(null)
+  const [initError, setInitError] = useState(null)
+  const [loadingInit, setLoadingInit] = useState(true)
+
   useEffect(()=>{
-    setProducts(loadProducts())
+    (async ()=>{
+      try{
+        const u = await usersApi.list()
+        setUsers(u || [])
+      }catch(e){
+        console.error('users load', e)
+        setInitError(String(e.message || e))
+      }finally{
+        setLoadingInit(false)
+      }
+    })()
   }, [])
 
   function addProduct(e){
@@ -43,6 +62,42 @@ export default function Admin(){
     saveProducts(next)
   setForm({nombre:'', descripcion:'', precio:'', img:'/img/producto_01.jpg', genero:'', marca:''})
     setErrors({})
+  }
+
+  async function loadUsers(){
+    try{ const u = await usersApi.list(); setUsers(u || []) }catch(e){ console.error('users load', e) }
+  }
+
+  async function addUser(e){
+    e.preventDefault()
+    const errs = {}
+    if(!userForm.name || userForm.name.trim().length < 2) errs.name = 'Nombre requerido'
+    if(!userForm.email || !userForm.email.includes('@')) errs.email = 'Email inválido'
+    if(!userForm.password || userForm.password.length < 6) errs.password = 'Mínimo 6 caracteres'
+    if(Object.keys(errs).length){ setUserErrors(errs); return }
+    try{
+      const created = await usersApi.create(userForm)
+      setUserForm({ name:'', email:'', password:'', role:'cliente' })
+      setUserErrors({})
+      await loadUsers()
+    }catch(err){ console.error('create user', err) }
+  }
+
+  function startEditUser(u){
+    setEditingUserId(u.id)
+    setUserForm({ name: u.name || '', email: u.email || '', password: '', role: u.role || 'cliente' })
+    setUserErrors({})
+  }
+
+  async function saveUser(id){
+    const updates = { name: userForm.name, email: userForm.email, role: userForm.role }
+    if(userForm.password && userForm.password.length >= 6) updates.password = userForm.password
+    try{ await usersApi.update(id, updates); setEditingUserId(null); setUserForm({ name:'', email:'', password:'', role:'cliente' }); await loadUsers() }catch(e){ console.error(e) }
+  }
+
+  async function deleteUser(id){
+    if(!confirm('Eliminar usuario?')) return
+    try{ await usersApi.remove(id); await loadUsers() }catch(e){ console.error(e) }
   }
 
   const [confirmState, setConfirmState] = useState({ open:false, id:null, nombre:'' })
@@ -133,6 +188,8 @@ export default function Admin(){
 
   return (
     <div className="container py-4">
+      {loadingInit && <div className="alert alert-info">Cargando panel de administración...</div>}
+      {initError && <div className="alert alert-danger">Error inicializando Admin: {initError}</div>}
       <h2>Panel de administración</h2>
       <p></p>
 
@@ -229,7 +286,6 @@ export default function Admin(){
             .map(p => (
             <div key={p.id} className="card p-2">
               <div className="admin-row">
-                {/* Imagen izquierda */}
                 <div className="thumb-col">
                   <img src={p.img || p.image} alt={p.nombre || p.title} className="thumb-img" />
                 </div>
@@ -292,7 +348,6 @@ export default function Admin(){
                   )}
                 </div>
 
-                {/* Opciones a la derecha */}
                 <div className="actions-col">
                   {editingId === p.id ? (
                     <div className="actions-inline">
@@ -324,6 +379,51 @@ export default function Admin(){
           </div>
         </div>
       )}
+
+      <div className="card p-3 mt-4">
+        <h3>Usuarios ({users.length})</h3>
+        <form className="admin-form mb-3" onSubmit={addUser}>
+          <div className="admin-form-col min-h-54">
+            <input placeholder="Nombre" value={userForm.name} onChange={e=>setUserForm(f=>({...f, name: e.target.value}))} />
+            {userErrors.name && <small className="error-text">{userErrors.name}</small>}
+          </div>
+          <div className="admin-form-col min-h-54">
+            <input placeholder="Correo" value={userForm.email} onChange={e=>setUserForm(f=>({...f, email: e.target.value}))} />
+            {userErrors.email && <small className="error-text">{userErrors.email}</small>}
+          </div>
+          <div className="admin-form-col min-h-54">
+            <input placeholder="Contraseña" type="password" value={userForm.password} onChange={e=>setUserForm(f=>({...f, password: e.target.value}))} />
+            {userErrors.password && <small className="error-text">{userErrors.password}</small>}
+          </div>
+          <div className="admin-form-col min-h-54">
+            <select value={userForm.role} onChange={e=>setUserForm(f=>({...f, role: e.target.value}))}>
+              <option value="cliente">Cliente</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div className="admin-form-col">
+            <button className="btn btn-success" type="submit">Crear Usuario</button>
+            {editingUserId && (
+              <button type="button" className="btn btn-primary ms-2" onClick={()=> saveUser(editingUserId)}>Guardar cambios</button>
+            )}
+          </div>
+        </form>
+
+        <div className="list-col">
+          {users.map(u => (
+            <div key={u.id} className="card p-2 mb-2 d-flex align-items-center">
+              <div style={{flex:1}}>
+                <strong>{u.name}</strong> <small className="text-muted">{u.email}</small>
+                <div><small>Rol: {u.role || 'cliente'}</small></div>
+              </div>
+              <div>
+                <button className="btn btn-sm btn-primary me-2" onClick={()=> startEditUser(u)}>Editar</button>
+                <button className="btn btn-sm btn-danger" onClick={()=> deleteUser(u.id)}>Eliminar</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

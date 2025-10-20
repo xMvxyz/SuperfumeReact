@@ -23,14 +23,12 @@ export default function Register(){
 		if(Object.keys(e).length){ setErrors(e); return }
 		setErrors({})
 
-		// role assignment: emails that end with '@admin' become admins
-		const isAdmin = form.email.trim().toLowerCase().endsWith('@admin')
+		const isAdmin = form.email.trim().toLowerCase().endsWith('@admin.com')
 		const payload = { email: form.email.trim(), password: form.password, name: form.name.trim(), role: isAdmin ? 'admin' : 'cliente' }
 
 		try{
 			const res = await users.register(payload)
 				setStatus({ success: true, message: 'Registro correcto' })
-				// users.register sets auth for local fallback; redirect to login so user can sign in
 				setForm({ name:'', email:'', password:'' })
 				navigate('/login')
 		}catch(err){
