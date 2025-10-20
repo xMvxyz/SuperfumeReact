@@ -55,17 +55,7 @@ export default function About(){
         </div>
       </section>
 
-      <section className="bg-light py-5">
-        <div className="container my-4">
-          <div className="row text-center py-3">
-            <div className="col-lg-6 m-auto">
-              <h1 className="h1">Marcas Asociadas</h1>
-              <p>Marcas con las que trabajamos para entregar los mejores productos a nuestros clientes.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
+   
     </div>
   )
 }
