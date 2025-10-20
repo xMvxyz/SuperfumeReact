@@ -10,6 +10,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Admin from './pages/Admin'
+import Register from './pages/Register'
 
 export default function App(){
   return (
@@ -25,6 +26,7 @@ export default function App(){
           <Route path="/contact" element={<Contact/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/admin" element={<Admin/>} />
+          <Route path="/register" element={<Register/>} />
         </Routes>
       </main>
       <Footer />
