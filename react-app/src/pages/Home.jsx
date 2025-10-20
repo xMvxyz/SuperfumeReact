@@ -2,6 +2,8 @@ import React from 'react'
 import Carousel from '../components/Carousel'
 import { Link } from 'react-router-dom'
 
+// Página Home: migración inicial del contenido principal de index.html a JSX.
+// Reutiliza imágenes y estilos desde `/img/` y `/css/` gracias a `publicDir` configurado en Vite.
 export default function Home(){
   return (
     <div>
@@ -16,6 +18,7 @@ export default function Home(){
         </div>
       </section>
 
+  {/* Carrusel agregado arriba del hero */}
   <div className="d-flex justify-content-center bg-light">
     <Carousel images={["/img/Carrusel_01.png","/img/test_carrusel.png","/img/carrusel_03.png"]} />
   </div>

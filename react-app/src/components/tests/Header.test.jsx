@@ -1,4 +1,3 @@
-import React from 'react'
 import '@testing-library/jest-dom'
 import { render, screen, fireEvent } from '@testing-library/react'
 import Header from '../Header'
@@ -14,7 +13,7 @@ vi.mock('react-router-dom', async () => {
 })
 
 describe('Header', () => {
-  test('Revision de barra de busqueda en overlay', () => {
+  test('renders main links and toggles search overlay', () => {
     render(<MemoryRouter><Header /></MemoryRouter>)
 
     expect(screen.getByText(/Inicio/i)).toBeInTheDocument()
