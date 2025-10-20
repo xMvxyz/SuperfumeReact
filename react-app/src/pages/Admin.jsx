@@ -26,6 +26,7 @@ export default function Admin(){
 
 
   const [users, setUsers] = useState([])
+  const [userQuery, setUserQuery] = useState('')
   const [userForm, setUserForm] = useState({ name:'', email:'', password:'', role:'cliente' })
   const [userErrors, setUserErrors] = useState({})
   const [editingUserId, setEditingUserId] = useState(null)
@@ -384,6 +385,9 @@ export default function Admin(){
         <h3>Usuarios ({users.length})</h3>
         <form className="admin-form mb-3" onSubmit={addUser}>
           <div className="admin-form-col min-h-54">
+            <input placeholder="Buscar usuarios" value={userQuery} onChange={e=>setUserQuery(e.target.value)} />
+          </div>
+          <div className="admin-form-col min-h-54">
             <input placeholder="Nombre" value={userForm.name} onChange={e=>setUserForm(f=>({...f, name: e.target.value}))} />
             {userErrors.name && <small className="error-text">{userErrors.name}</small>}
           </div>
@@ -410,7 +414,7 @@ export default function Admin(){
         </form>
 
         <div className="list-col">
-          {users.map(u => (
+          {users.filter(u => (u.name || '').toLowerCase().includes(userQuery.toLowerCase())).map(u => (
             <div key={u.id} className="card p-2 mb-2 d-flex align-items-center">
               <div style={{flex:1}}>
                 <strong>{u.name}</strong> <small className="text-muted">{u.email}</small>
