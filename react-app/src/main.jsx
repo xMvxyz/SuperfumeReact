@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, HashRouter } from 'react-router-dom'
 import App from './App'
 
 // Importar CSS desde la carpeta assets ubicada en el root del repo.
@@ -8,10 +8,12 @@ import App from './App'
 // Los archivos CSS están en `publicDir` (../assets). No deben importarse desde JS.
 // En su lugar cargamos estos archivos desde `index.html` con <link href="/css/...">.
 
+const Router = import.meta.env.DEV ? BrowserRouter : HashRouter
+
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <Router>
       <App />
-    </BrowserRouter>
+    </Router>
   </React.StrictMode>
 )
