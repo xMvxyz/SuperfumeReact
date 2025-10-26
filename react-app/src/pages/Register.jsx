@@ -4,66 +4,209 @@ import users from '../api/users'
 
 export default function Register(){
 	const navigate = useNavigate()
-	const [form, setForm] = useState({ name:'', email:'', password:'' })
+	const [name, setName] = useState('')
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
+	const [showPassword, setShowPassword] = useState(false)
+	const [address, setAddress] = useState('')
+	const [region, setRegion] = useState('')
+	const [comuna, setComuna] = useState('')
+	const [postalCode, setPostalCode] = useState('')
+	const [acceptTerms, setAcceptTerms] = useState(false)
 	const [errors, setErrors] = useState({})
-	const [status, setStatus] = useState(null)
+	const [loading, setLoading] = useState(false)
+
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 	function validate(){
 		const e = {}
-		if(!form.name || form.name.trim().length < 10) e.name = 'Nombre requerido (min 10 caracteres)'
-		if(!form.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) e.email = 'Email inválido'
-		if(!form.password || form.password.length < 6) e.password = 'Contraseña mínima 6 caracteres'
+		if(!name || name.trim().length < 3) e.name = 'Nombre requerido (min 3 caracteres)'
+		if(!email || !emailRegex.test(email.trim())) e.email = 'Email inválido'
+		if(!password || password.length < 6) e.password = 'Contraseña mínima 6 caracteres'
+		if(!address || address.trim().length < 5) e.address = 'Dirección de envío requerida'
+		if(!region) e.region = 'Región requerida'
+		if(!comuna) e.comuna = 'Comuna requerida'
+		if(!postalCode || !/^\d{4,6}$/.test(postalCode)) e.postalCode = 'Código postal inválido (4-6 dígitos)'
+		if(!acceptTerms) e.acceptTerms = 'Debes aceptar los términos'
 		return e
 	}
 
-	async function onSubmit(ev){
+	async function handleSubmit(ev){
 		ev.preventDefault()
-		setStatus(null)
 		const e = validate()
-		if(Object.keys(e).length){ setErrors(e); return }
-		setErrors({})
+		setErrors(e)
+		if(Object.keys(e).length) return
 
-		const isAdmin = form.email.trim().toLowerCase().endsWith('@admin.com')
-		const payload = { email: form.email.trim(), password: form.password, name: form.name.trim(), role: isAdmin ? 'admin' : 'cliente' }
-
+		setLoading(true)
 		try{
-			const res = await users.register(payload)
-				setStatus({ success: true, message: 'Registro correcto' })
-				setForm({ name:'', email:'', password:'' })
-				navigate('/login')
+			const isAdmin = email.trim().toLowerCase().endsWith('@admin.com')
+			const payload = {
+				name: name.trim(),
+				email: email.trim(),
+				password,
+				role: isAdmin ? 'admin' : 'cliente',
+				shipping: {
+					address: address.trim(),
+					region,
+					comuna,
+					postalCode: postalCode.trim()
+				}
+			}
+
+			await users.register(payload)
+			setLoading(false)
+			// después del registro vamos al login
+			navigate('/login')
 		}catch(err){
-			setStatus({ success: false, message: err.message || 'Error registrando' })
+			setLoading(false)
+			setErrors({ form: err?.message || 'Error registrando usuario' })
 		}
 	}
 
 	return (
-		<div className="container py-5">
-			<h2>Registro de Usuario</h2>
-			<form className="card p-4 mt-3" onSubmit={onSubmit}>
-				<div className="mb-3">
-					<label className="form-label">Nombre</label>
-					<input className="form-control" value={form.name} onChange={e=>setForm(f=>({...f, name: e.target.value}))} />
-					{errors.name && <small className="text-danger">{errors.name}</small>}
+		<div className="login-page-wrap">
+			<div className="login-card">
+				<div className="login-top">
+					<h3 className="m-0">Crear cuenta</h3>
+					<div className="login-subtext">Completa tus datos de registro</div>
 				</div>
-				<div className="mb-3">
-					<label className="form-label">Correo</label>
-					<input className="form-control" value={form.email} onChange={e=>setForm(f=>({...f, email: e.target.value}))} />
-					{errors.email && <small className="text-danger">{errors.email}</small>}
-				</div>
-				<div className="mb-3">
-					<label className="form-label">Contraseña</label>
-					<input type="password" className="form-control" value={form.password} onChange={e=>setForm(f=>({...f, password: e.target.value}))} />
-					{errors.password && <small className="text-danger">{errors.password}</small>}
-				</div>
+				<div className="login-body">
+					<form onSubmit={handleSubmit} noValidate>
+						<div className="mb-12">
+							<label className="label-13">Nombre completo</label>
+							<input
+								type="text"
+								className="form-control"
+								placeholder="Tu nombre"
+								value={name}
+								onChange={e=>setName(e.target.value)}
+								disabled={loading}
+							/>
+							{errors.name && <div className="error-text">{errors.name}</div>}
+						</div>
 
-				<div className="d-flex justify-content-between align-items-center">
-					<button className="btn btn-info" type="submit">Registrarse</button>
-				</div>
+						<div className="mb-12">
+							<label className="label-13">Correo electrónico</label>
+							<input
+								type="email"
+								className="form-control"
+								placeholder="tu@gmail.com"
+								value={email}
+								onChange={e=>setEmail(e.target.value)}
+								disabled={loading}
+							/>
+							{errors.email && <div className="error-text">{errors.email}</div>}
+						</div>
 
-				{status && (
-					<div className={`mt-3 alert ${status.success ? 'alert-success' : 'alert-danger'}`} role="alert">{status.message}</div>
-				)}
-			</form>
+						<div className="mb-12">
+							<label className="label-13">Contraseña</label>
+							<div className="field-row">
+								<input
+									type={showPassword ? 'text' : 'password'}
+									className="form-control"
+									placeholder="Tu contraseña"
+									value={password}
+									onChange={e=>setPassword(e.target.value)}
+									disabled={loading}
+								/>
+								<button
+									type="button"
+									className="btn btn-outline-secondary nowrap"
+									onClick={()=>setShowPassword(s=>!s)}
+								>
+									{showPassword ? 'Ocultar' : 'Mostrar'}
+								</button>
+							</div>
+							{errors.password && <div className="error-text">{errors.password}</div>}
+						</div>
+
+						<hr />
+
+						<div className="mb-12">
+							<label className="label-13">Dirección de envío</label>
+							<input
+								type="text"
+								className="form-control"
+								placeholder="Calle, número, departamento"
+								value={address}
+								onChange={e=>setAddress(e.target.value)}
+								disabled={loading}
+							/>
+							{errors.address && <div className="error-text">{errors.address}</div>}
+						</div>
+
+						<div className="row g-2 mb-12">
+							<div className="col-6">
+								<label className="label-13">Región</label>
+								<input
+									type="text"
+									className="form-control"
+									value={region}
+									onChange={e=>setRegion(e.target.value)}
+									disabled={loading}
+								/>
+								{errors.region && <div className="error-text">{errors.region}</div>}
+							</div>
+							<div className="col-6">
+								<label className="label-13">Comuna</label>
+								<input
+									type="text"
+									className="form-control"
+									value={comuna}
+									onChange={e=>setComuna(e.target.value)}
+									disabled={loading}
+								/>
+								{errors.comuna && <div className="error-text">{errors.comuna}</div>}
+							</div>
+						</div>
+
+						<div className="mb-12">
+							<label className="label-13">Código postal</label>
+							<input
+								type="text"
+								className="form-control"
+								placeholder="Ej: 8320000"
+								value={postalCode}
+								onChange={e=>setPostalCode(e.target.value.replace(/[^0-9]/g, ''))}
+								disabled={loading}
+							/>
+							{errors.postalCode && <div className="error-text">{errors.postalCode}</div>}
+						</div>
+
+						<div className="row-between mb-12">
+							<label className="remember-wrap">
+								<input
+									type="checkbox"
+									checked={acceptTerms}
+									onChange={e=>setAcceptTerms(e.target.checked)}
+									disabled={loading}
+								/>
+								<span className="remember-text">Acepto los términos y condiciones</span>
+							</label>
+						</div>
+
+						{errors.form && <div className="error-text mb-8">{errors.form}</div>}
+
+						<div className="btn-row">
+							<button
+								className="btn btn-sm btn-outline-info me-2 flex-1 btn-enter"
+								type="submit"
+								disabled={loading}
+							>
+								{loading ? 'Registrando...' : 'Crear cuenta'}
+							</button>
+							<button
+								type="button"
+								className="btn btn-outline-secondary btn-lg flex-1"
+								onClick={()=>navigate('/login')}
+								disabled={loading}
+							>
+								Volver a iniciar sesión
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
 	)
 }
