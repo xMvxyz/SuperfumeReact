@@ -18,6 +18,25 @@ export default function Register(){
 
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+	const CHILE_REGIONS = [
+		{ name: 'Región de Arica y Parinacota', comunas: ['Arica','Camarones','Putre','General Lagos'] },
+		{ name: 'Región de Tarapacá', comunas: ['Iquique','Alto Hospicio','Pozo Almonte'] },
+		{ name: 'Región de Antofagasta', comunas: ['Antofagasta','Mejillones','Calama','Tocopilla'] },
+		{ name: 'Región de Atacama', comunas: ['Copiapó','Caldera','Vallenar'] },
+		{ name: 'Región de Coquimbo', comunas: ['La Serena','Coquimbo','Ovalle'] },
+		{ name: 'Región de Valparaíso', comunas: ['Valparaíso','Viña del Mar','Quilpué','Concón'] },
+		{ name: 'Región Metropolitana de Santiago', comunas: ['Santiago','Providencia','Las Condes','Maipú','Puente Alto'] },
+		{ name: "Región de O'Higgins", comunas: ['Rancagua','Machalí','San Fernando'] },
+		{ name: 'Región del Maule', comunas: ['Talca','Curicó','Linares'] },
+		{ name: 'Región de Ñuble', comunas: ['Chillán','Chillán Viejo','Bulnes'] },
+		{ name: 'Región del Biobío', comunas: ['Concepción','Talcahuano','Chiguayante'] },
+		{ name: 'Región de La Araucanía', comunas: ['Temuco','Villarrica','Pucón'] },
+		{ name: 'Región de Los Ríos', comunas: ['Valdivia','La Unión'] },
+		{ name: 'Región de Los Lagos', comunas: ['Puerto Montt','Osorno','Ancud'] },
+		{ name: 'Región Aysén del General Carlos Ibáñez del Campo', comunas: ['Coihaique','Aisén'] },
+		{ name: 'Región de Magallanes y de la Antártica Chilena', comunas: ['Punta Arenas','Puerto Natales','Porvenir'] }
+	]
+
 	function validate(){
 		const e = {}
 		if(!name || name.trim().length < 3) e.name = 'Nombre requerido (min 3 caracteres)'
@@ -138,24 +157,32 @@ export default function Register(){
 						<div className="row g-2 mb-12">
 							<div className="col-6">
 								<label className="label-13">Región</label>
-								<input
-									type="text"
-									className="form-control"
+								<select
+									className="form-select"
 									value={region}
-									onChange={e=>setRegion(e.target.value)}
+									onChange={e=>{ setRegion(e.target.value); setComuna('') }}
 									disabled={loading}
-								/>
+								>
+									<option value="">Selecciona región</option>
+									{CHILE_REGIONS.map(r=> (
+										<option key={r.name} value={r.name}>{r.name}</option>
+									))}
+								</select>
 								{errors.region && <div className="error-text">{errors.region}</div>}
 							</div>
 							<div className="col-6">
 								<label className="label-13">Comuna</label>
-								<input
-									type="text"
-									className="form-control"
+								<select
+									className="form-select"
 									value={comuna}
 									onChange={e=>setComuna(e.target.value)}
-									disabled={loading}
-								/>
+									disabled={loading || !region}
+								>
+									<option value="">Selecciona comuna</option>
+									{(CHILE_REGIONS.find(r=>r.name === region)?.comunas || []).map(c=> (
+										<option key={c} value={c}>{c}</option>
+									))}
+								</select>
 								{errors.comuna && <div className="error-text">{errors.comuna}</div>}
 							</div>
 						</div>
