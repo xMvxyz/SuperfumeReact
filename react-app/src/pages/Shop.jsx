@@ -27,7 +27,7 @@ export default function Shop(){
   function writeCart(cart){
     try{
       localStorage.setItem(CART_KEY, JSON.stringify(cart))
-      // notify other tabs/components
+      
       window.dispatchEvent(new Event('cart_updated'))
     }catch(e){ console.error('cart write error', e) }
   }

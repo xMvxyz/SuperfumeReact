@@ -51,7 +51,6 @@ export default function Admin(){
     e.preventDefault()
     const newErrors = {}
   if(!form.nombre || form.nombre.trim().length === 0) newErrors.nombre = 'El Nombre es obligatorio'
-  // descripcion optional but trim if provided
   const priceInt = parseInt(form.precio, 10)
   if(isNaN(priceInt) || priceInt <= 0) newErrors.precio = 'El precio debe ser un entero positivo'
     if(Object.keys(newErrors).length){ setErrors(newErrors); return }

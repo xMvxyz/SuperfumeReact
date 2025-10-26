@@ -74,7 +74,6 @@ export default function Register(){
 
 			await users.register(payload)
 			setLoading(false)
-			// después del registro vamos al login
 			navigate('/login')
 		}catch(err){
 			setLoading(false)

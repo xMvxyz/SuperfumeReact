@@ -30,7 +30,6 @@ export default function Login(){
     setLoading(true)
     try{
       const res = await users.login({ email: email.trim(), password })
-      // res.user should contain role
       const role = res?.user?.role || 'cliente'
       if(remember) localStorage.setItem('sfm_remember_email', email)
       setLoading(false)
