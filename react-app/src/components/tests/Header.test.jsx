@@ -13,7 +13,7 @@ vi.mock('react-router-dom', async () => {
 })
 
 describe('Header', () => {
-  test('renders main links and toggles search overlay', () => {
+  test('renderiza los links de header y prueba el overlay', () => {
     render(<MemoryRouter><Header /></MemoryRouter>)
 
     expect(screen.getByText(/Inicio/i)).toBeInTheDocument()
