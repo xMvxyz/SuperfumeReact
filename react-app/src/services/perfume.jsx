@@ -1,4 +1,4 @@
-import client from './client'
+import client from './client.js'
 
 const STORAGE_KEY = 'superfume_products_v1'
 

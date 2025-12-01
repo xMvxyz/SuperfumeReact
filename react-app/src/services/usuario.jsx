@@ -1,4 +1,4 @@
-import client from './client'
+import client from './client.js'
 
 const USERS_KEY = 'superfume_users_v1'
 const AUTH_KEY = 'superfume_auth_v1'

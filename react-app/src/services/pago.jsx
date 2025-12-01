@@ -1,4 +1,4 @@
-import client from './client'
+import client from './client.js'
 
 const PAYMENTS_KEY = 'superfume_payments_v1'
 
