@@ -7,6 +7,11 @@ export default defineConfig({
   base: '/SuperfumeReact/',
   plugins: [react()],
   publicDir: '../assets',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
+  },
   test: {
     environment: 'jsdom',
     globals: true,       
