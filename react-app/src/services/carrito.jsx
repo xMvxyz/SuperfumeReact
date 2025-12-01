@@ -12,14 +12,14 @@ function writeLocal(cart){
 
 export async function getCart(){
   if(client.defaults.baseURL){
-    try{ const res = await client.get('/cart'); return res.data }catch(e){ /* fallback */ }
+    try{ const res = await client.get('/carrito'); return res.data }catch(e){ /* fallback */ }
   }
   return readLocal()
 }
 
 export async function addItem(item){
   if(client.defaults.baseURL){
-    try{ const res = await client.post('/cart/items', item); return res.data }catch(e){ }
+    try{ const res = await client.post('/carrito/items', item); return res.data }catch(e){ }
   }
   const cart = readLocal()
   const idx = cart.findIndex(i => i.id === item.id)
@@ -31,7 +31,7 @@ export async function addItem(item){
 
 export async function updateItem(id, updates){
   if(client.defaults.baseURL){
-    try{ const res = await client.put(`/cart/items/${id}`, updates); return res.data }catch(e){}
+    try{ const res = await client.put(`/carrito/items/${id}`, updates); return res.data }catch(e){}
   }
   const cart = readLocal()
   const next = cart.map(i => i.id === id ? {...i, ...updates, total: ((updates.qty ?? i.qty) * (updates.precio ?? i.precio)) } : i)
@@ -41,7 +41,7 @@ export async function updateItem(id, updates){
 
 export async function removeItem(id){
   if(client.defaults.baseURL){
-    try{ const res = await client.delete(`/cart/items/${id}`); return res.data }catch(e){}
+    try{ const res = await client.delete(`/carrito/items/${id}`); return res.data }catch(e){}
   }
   const cart = readLocal().filter(i => i.id !== id)
   writeLocal(cart)
@@ -50,7 +50,7 @@ export async function removeItem(id){
 
 export async function clearCart(){
   if(client.defaults.baseURL){
-    try{ await client.post('/cart/clear'); }catch(e){}
+    try{ await client.post('/carrito/clear'); }catch(e){}
   }
   writeLocal([])
   return []

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import * as usersApi from '../services/users'
+import * as usersApi from '../services/usuario'
 
 const STORAGE_KEY = 'superfume_products_v1'
 

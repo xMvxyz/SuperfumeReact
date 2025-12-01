@@ -15,7 +15,7 @@ export async function list(){
   // if axios base url configured, try backend
   if(client.defaults.baseURL){
     try{
-      const res = await client.get('/products')
+      const res = await client.get('/perfumes')
       return res.data
     }catch(e){ /* fallback to local */ }
   }
@@ -34,7 +34,7 @@ export async function list(){
 
 export async function get(id){
   if(client.defaults.baseURL){
-    try{ const res = await client.get(`/products/${id}`); return res.data }catch(e){}
+    try{ const res = await client.get(`/perfumes/${id}`); return res.data }catch(e){}
   }
   const all = await list()
   return all.find(p => String(p.id) === String(id)) || null
@@ -42,7 +42,7 @@ export async function get(id){
 
 export async function create(product){
   if(client.defaults.baseURL){
-    try{ const res = await client.post('/products', product); return res.data }catch(e){ }
+    try{ const res = await client.post('/perfumes', product); return res.data }catch(e){ }
   }
   // fallback: write to localStorage
   try{
@@ -58,7 +58,7 @@ export async function create(product){
 
 export async function update(id, updates){
   if(client.defaults.baseURL){
-    try{ const res = await client.put(`/products/${id}`, updates); return res.data }catch(e){ }
+    try{ const res = await client.put(`/perfumes/${id}`, updates); return res.data }catch(e){ }
   }
   try{
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -71,7 +71,7 @@ export async function update(id, updates){
 
 export async function remove(id){
   if(client.defaults.baseURL){
-    try{ const res = await client.delete(`/products/${id}`); return res.data }catch(e){ }
+    try{ const res = await client.delete(`/perfumes/${id}`); return res.data }catch(e){ }
   }
   try{
     const raw = localStorage.getItem(STORAGE_KEY)

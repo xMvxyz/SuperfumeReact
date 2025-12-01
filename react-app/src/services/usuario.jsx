@@ -69,14 +69,14 @@ export async function getProfile(){
 
 export async function list(){
   if(client.defaults.baseURL){
-    try{ const res = await client.get('/users'); return res.data }catch(e){}
+    try{ const res = await client.get('/usuarios'); return res.data }catch(e){}
   }
   return readUsers()
 }
 
 export async function create(user){
   if(client.defaults.baseURL){
-    try{ const res = await client.post('/users', user); return res.data }catch(e){}
+    try{ const res = await client.post('/usuarios', user); return res.data }catch(e){}
   }
   try{
     const list = readUsers()
@@ -89,7 +89,7 @@ export async function create(user){
 
 export async function update(id, updates){
   if(client.defaults.baseURL){
-    try{ const res = await client.put(`/users/${id}`, updates); return res.data }catch(e){}
+    try{ const res = await client.put(`/usuarios/${id}`, updates); return res.data }catch(e){}
   }
   try{
     const list = readUsers()
@@ -101,7 +101,7 @@ export async function update(id, updates){
 
 export async function remove(id){
   if(client.defaults.baseURL){
-    try{ const res = await client.delete(`/users/${id}`); return res.data }catch(e){}
+    try{ const res = await client.delete(`/usuarios/${id}`); return res.data }catch(e){}
   }
   try{
     const next = readUsers().filter(u => String(u.id) !== String(id))

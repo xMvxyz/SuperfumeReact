@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import users from '../services/users'
+import users from '../services/usuario'
 
 export default function Login(){
   const navigate = useNavigate()
