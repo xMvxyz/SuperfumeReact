@@ -30,9 +30,13 @@ jobs:
         working-directory: ./react-app
         run: npm install
 
+      - name: Fix permissions
+        working-directory: ./react-app
+        run: chmod +x node_modules/.bin/vite
+
       - name: Build
         working-directory: ./react-app
-        run: npx vite build
+        run: npm run build
         env:
           NODE_ENV: production
 
