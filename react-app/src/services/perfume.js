@@ -72,7 +72,6 @@ export async function create(product){
     console.error('Error creating perfume:', e.message)
     return null
   }
-  // fallback: write to localStorage
   try{
     const raw = localStorage.getItem(STORAGE_KEY)
     const list = raw ? JSON.parse(raw) : []
