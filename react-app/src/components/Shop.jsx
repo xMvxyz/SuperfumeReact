@@ -29,7 +29,7 @@ export default function Shop(){
       current[idx].qty += qty
       current[idx].total = current[idx].qty * price
     }else{
-      current.push({ id: product.id, nombre: product.nombre || product.title || '', precio: price, img: product.img || product.image || '/img/producto_01.jpg', qty: qty, total: price * qty })
+      current.push({ id: product.id, nombre: product.nombre || product.title || '', precio: price, img: product.imagenUrl || product.img || product.image || '/img/producto_01.jpg', qty: qty, total: price * qty })
     }
     writeCart(current)
   }
@@ -42,6 +42,7 @@ export default function Shop(){
       try {
         setLoading(true)
         const data = await perfumeService.list()
+        console.log('Productos cargados:', data)
         setProducts(data || [])
       } catch (error) {
         console.error('Error loading products:', error)
@@ -66,7 +67,7 @@ export default function Shop(){
     let list = products.slice()
     if(query && query.trim()){
       const q = query.trim().toLowerCase()
-      list = list.filter(p => (p.nombre || p.title || '').toLowerCase().includes(q) || p.desc.toLowerCase().includes(q))
+      list = list.filter(p => (p.nombre || p.title || '').toLowerCase().includes(q) || (p.descripcion || p.desc || '').toLowerCase().includes(q))
     }
     if(gender !== 'Todos') list = list.filter(p => (p.genero || p.gender) === gender)
     if(brand !== 'Todos') list = list.filter(p => (p.marca || p.brand) === brand)
@@ -81,7 +82,7 @@ export default function Shop(){
     return list
   },[products, query, gender, brand, sortBy])
 
-  const getProductImage = (p) => p?.image || p?.img || '/img/producto_01.jpg'
+  const getProductImage = (p) => p?.imagenUrl || p?.image || p?.img || '/img/producto_01.jpg'
 
   useEffect(()=>{
     if(query) setSearchParams({ query })

@@ -14,19 +14,29 @@ async function fetchPublicSamples(){
 export async function list(){
   // Intentar conectar con el backend
   try{
-    const res = await api.get('/Perfume')
-    // Extraer el array de perfumes si viene en formato HATEOAS
-    if(res.data._embedded && res.data._embedded.perfumeResponseDtoList){
-      return res.data._embedded.perfumeResponseDtoList
-    }
+    const res = await api.get('/perfumes')
+    console.log('Respuesta del backend GET /perfumes:', res.data)
+    
     // Si viene como array directo
     if(Array.isArray(res.data)){
       return res.data
     }
+    // Extraer el array de perfumes si viene en formato HATEOAS
+    if(res.data._embedded && res.data._embedded.perfumeResponseDtoList){
+      return res.data._embedded.perfumeResponseDtoList
+    }
     // Si viene como objeto con contenido
-    return res.data.content || []
+    if(res.data.content && Array.isArray(res.data.content)){
+      return res.data.content
+    }
+    // Si es un objeto único, devolverlo como array
+    if(res.data && typeof res.data === 'object'){
+      return [res.data]
+    }
+    return []
   }catch(e){ 
-    console.warn('Backend no disponible, usando datos locales:', e.message)
+    console.error('Error al cargar perfumes del backend:', e)
+    console.error('Detalles del error:', e.response?.data || e.message)
   }
 
   // Fallback: localStorage o samples públicos
@@ -43,7 +53,7 @@ export async function list(){
 
 export async function get(id){
   try{ 
-    const res = await api.get(`/Perfume/${id}`)
+    const res = await api.get(`/perfumes/${id}`)
     // Extraer el DTO de la respuesta HATEOAS si es necesario
     if(res.data && res.data.content) return res.data.content
     return res.data
@@ -56,7 +66,7 @@ export async function get(id){
 
 export async function create(product){
   try{ 
-    const res = await api.post('/Perfume', product)
+    const res = await api.post('/perfumes', product)
     return res.data
   }catch(e){ 
     console.error('Error creating perfume:', e.message)
@@ -76,7 +86,7 @@ export async function create(product){
 
 export async function update(id, updates){
   try{ 
-    const res = await api.put(`/Perfume/${id}`, updates)
+    const res = await api.put(`/perfumes/${id}`, updates)
     return res.data
   }catch(e){ 
     console.error('Error updating perfume:', e.message)
@@ -93,7 +103,7 @@ export async function update(id, updates){
 
 export async function remove(id){
   try{ 
-    const res = await api.delete(`/Perfume/${id}`)
+    const res = await api.delete(`/perfumes/${id}`)
     return res.data
   }catch(e){ 
     console.error('Error deleting perfume:', e.message)
