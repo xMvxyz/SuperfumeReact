@@ -1,4 +1,4 @@
-import client from './client.js'
+import api from './api'
 
 const STORAGE_KEY = 'superfume_products_v1'
 
@@ -13,9 +13,9 @@ async function fetchPublicSamples(){
 
 export async function list(){
   // if axios base url configured, try backend
-  if(client.defaults.baseURL){
+  if(api.defaults.baseURL){
     try{
-      const res = await client.get('/perfumes')
+      const res = await api.get('/perfumes')
       return res.data
     }catch(e){ /* fallback to local */ }
   }
@@ -33,16 +33,16 @@ export async function list(){
 }
 
 export async function get(id){
-  if(client.defaults.baseURL){
-    try{ const res = await client.get(`/perfumes/${id}`); return res.data }catch(e){}
+  if(api.defaults.baseURL){
+    try{ const res = await api.get(`/perfumes/${id}`); return res.data }catch(e){}
   }
   const all = await list()
   return all.find(p => String(p.id) === String(id)) || null
 }
 
 export async function create(product){
-  if(client.defaults.baseURL){
-    try{ const res = await client.post('/perfumes', product); return res.data }catch(e){ }
+  if(api.defaults.baseURL){
+    try{ const res = await api.post('/perfumes', product); return res.data }catch(e){ }
   }
   // fallback: write to localStorage
   try{
@@ -57,8 +57,8 @@ export async function create(product){
 }
 
 export async function update(id, updates){
-  if(client.defaults.baseURL){
-    try{ const res = await client.put(`/perfumes/${id}`, updates); return res.data }catch(e){ }
+  if(api.defaults.baseURL){
+    try{ const res = await api.put(`/perfumes/${id}`, updates); return res.data }catch(e){ }
   }
   try{
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -70,8 +70,8 @@ export async function update(id, updates){
 }
 
 export async function remove(id){
-  if(client.defaults.baseURL){
-    try{ const res = await client.delete(`/perfumes/${id}`); return res.data }catch(e){ }
+  if(api.defaults.baseURL){
+    try{ const res = await api.delete(`/perfumes/${id}`); return res.data }catch(e){ }
   }
   try{
     const raw = localStorage.getItem(STORAGE_KEY)

@@ -1,4 +1,4 @@
-import client from './client.js'
+import api from './api'
 
 const ORDERS_KEY = 'superfume_orders_v1'
 
@@ -23,9 +23,9 @@ function writeLocal(orders) {
  * Obtener todos los pedidos del usuario
  */
 export async function list() {
-  if (client.defaults.baseURL) {
+  if (api.defaults.baseURL) {
     try {
-      const res = await client.get('/pedidos')
+      const res = await api.get('/pedidos')
       return res.data
     } catch (e) {
       console.error('Error fetching orders:', e)
@@ -38,9 +38,9 @@ export async function list() {
  * Obtener un pedido por ID
  */
 export async function get(id) {
-  if (client.defaults.baseURL) {
+  if (api.defaults.baseURL) {
     try {
-      const res = await client.get(`/pedidos/${id}`)
+      const res = await api.get(`/pedidos/${id}`)
       return res.data
     } catch (e) {
       console.error('Error fetching order:', e)
@@ -55,9 +55,9 @@ export async function get(id) {
  * @param {Object} orderData - { items: [...], total: number, direccion: string, metodoPago: string }
  */
 export async function create(orderData) {
-  if (client.defaults.baseURL) {
+  if (api.defaults.baseURL) {
     try {
-      const res = await client.post('/pedidos', orderData)
+      const res = await api.post('/pedidos', orderData)
       return res.data
     } catch (e) {
       console.error('Error creating order:', e)
@@ -88,9 +88,9 @@ export async function create(orderData) {
  * @param {Object} updates - { estado: 'CONFIRMADO' | 'ENVIADO' | 'ENTREGADO' | 'CANCELADO' }
  */
 export async function updateStatus(id, updates) {
-  if (client.defaults.baseURL) {
+  if (api.defaults.baseURL) {
     try {
-      const res = await client.put(`/pedidos/${id}`, updates)
+      const res = await api.put(`/pedidos/${id}`, updates)
       return res.data
     } catch (e) {
       console.error('Error updating order:', e)

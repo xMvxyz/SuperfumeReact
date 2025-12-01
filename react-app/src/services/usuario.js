@@ -1,4 +1,4 @@
-import client from './client.js'
+import api from './api'
 
 const USERS_KEY = 'superfume_users_v1'
 const AUTH_KEY = 'superfume_auth_v1'
@@ -20,8 +20,8 @@ function getAuth(){
 }
 
 export async function register({ email, password, name }){
-  if(client.defaults.baseURL){
-    try{ const res = await client.post('/auth/register', { email, password, name }); return res.data }catch(e){}
+  if(api.defaults.baseURL){
+    try{ const res = await api.post('/auth/register', { email, password, name }); return res.data }catch(e){}
   }
   // local fallback: store user in localStorage (plain-text password for dev only)
   try{
@@ -38,8 +38,8 @@ export async function register({ email, password, name }){
 }
 
 export async function login({ email, password }){
-  if(client.defaults.baseURL){
-    try{ const res = await client.post('/auth/login', { email, password }); return res.data }catch(e){}
+  if(api.defaults.baseURL){
+    try{ const res = await api.post('/auth/login', { email, password }); return res.data }catch(e){}
   }
   try{
     const users = readUsers()
@@ -53,30 +53,30 @@ export async function login({ email, password }){
 }
 
 export async function logout(){
-  if(client.defaults.baseURL){
-    try{ await client.post('/auth/logout'); }catch(e){}
+  if(api.defaults.baseURL){
+    try{ await api.post('/auth/logout'); }catch(e){}
   }
   try{ localStorage.removeItem(AUTH_KEY) }catch(e){}
   return true
 }
 
 export async function getProfile(){
-  if(client.defaults.baseURL){
-    try{ const res = await client.get('/auth/me'); return res.data }catch(e){}
+  if(api.defaults.baseURL){
+    try{ const res = await api.get('/auth/me'); return res.data }catch(e){}
   }
   return getAuth()?.user || null
 }
 
 export async function list(){
-  if(client.defaults.baseURL){
-    try{ const res = await client.get('/usuarios'); return res.data }catch(e){}
+  if(api.defaults.baseURL){
+    try{ const res = await api.get('/usuarios'); return res.data }catch(e){}
   }
   return readUsers()
 }
 
 export async function create(user){
-  if(client.defaults.baseURL){
-    try{ const res = await client.post('/usuarios', user); return res.data }catch(e){}
+  if(api.defaults.baseURL){
+    try{ const res = await api.post('/usuarios', user); return res.data }catch(e){}
   }
   try{
     const list = readUsers()
@@ -88,8 +88,8 @@ export async function create(user){
 }
 
 export async function update(id, updates){
-  if(client.defaults.baseURL){
-    try{ const res = await client.put(`/usuarios/${id}`, updates); return res.data }catch(e){}
+  if(api.defaults.baseURL){
+    try{ const res = await api.put(`/usuarios/${id}`, updates); return res.data }catch(e){}
   }
   try{
     const list = readUsers()
@@ -100,8 +100,8 @@ export async function update(id, updates){
 }
 
 export async function remove(id){
-  if(client.defaults.baseURL){
-    try{ const res = await client.delete(`/usuarios/${id}`); return res.data }catch(e){}
+  if(api.defaults.baseURL){
+    try{ const res = await api.delete(`/usuarios/${id}`); return res.data }catch(e){}
   }
   try{
     const next = readUsers().filter(u => String(u.id) !== String(id))

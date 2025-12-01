@@ -1,4 +1,4 @@
-import client from './client.js'
+import api from './api'
 
 const PAYMENTS_KEY = 'superfume_payments_v1'
 
@@ -24,9 +24,9 @@ function writeLocal(payments) {
  * @param {Object} paymentData - { pedidoId: number, monto: number, metodo: string, detallePago: object }
  */
 export async function processPayment(paymentData) {
-  if (client.defaults.baseURL) {
+  if (api.defaults.baseURL) {
     try {
-      const res = await client.post('/pagos', paymentData)
+      const res = await api.post('/pagos', paymentData)
       return res.data
     } catch (e) {
       console.error('Error processing payment:', e)
@@ -55,9 +55,9 @@ export async function processPayment(paymentData) {
  * Obtener detalles de un pago
  */
 export async function get(id) {
-  if (client.defaults.baseURL) {
+  if (api.defaults.baseURL) {
     try {
-      const res = await client.get(`/pagos/${id}`)
+      const res = await api.get(`/pagos/${id}`)
       return res.data
     } catch (e) {
       console.error('Error fetching payment:', e)
@@ -71,9 +71,9 @@ export async function get(id) {
  * Obtener pagos de un pedido
  */
 export async function getByOrder(orderId) {
-  if (client.defaults.baseURL) {
+  if (api.defaults.baseURL) {
     try {
-      const res = await client.get(`/pagos/pedido/${orderId}`)
+      const res = await api.get(`/pagos/pedido/${orderId}`)
       return res.data
     } catch (e) {
       console.error('Error fetching payments:', e)
@@ -87,9 +87,9 @@ export async function getByOrder(orderId) {
  * Lista todos los pagos del usuario
  */
 export async function list() {
-  if (client.defaults.baseURL) {
+  if (api.defaults.baseURL) {
     try {
-      const res = await client.get('/pagos')
+      const res = await api.get('/pagos')
       return res.data
     } catch (e) {
       console.error('Error fetching payments:', e)
