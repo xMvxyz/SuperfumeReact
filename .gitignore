@@ -11,7 +11,6 @@ dist/
 node_modules/.vite
 
 # React build / env
-.env
 .env.local
 .env.*.local
 

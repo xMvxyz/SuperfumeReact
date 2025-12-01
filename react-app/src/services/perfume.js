@@ -12,15 +12,26 @@ async function fetchPublicSamples(){
 }
 
 export async function list(){
-  // if axios base url configured, try backend
+  // Si hay URL del backend configurada, intentar conectar
   if(api.defaults.baseURL){
     try{
       const res = await api.get('/perfumes')
-      return res.data
-    }catch(e){ /* fallback to local */ }
+      // Extraer el array de perfumes si viene en formato HATEOAS
+      if(res.data._embedded && res.data._embedded.perfumeResponseDtoList){
+        return res.data._embedded.perfumeResponseDtoList
+      }
+      // Si viene como array directo
+      if(Array.isArray(res.data)){
+        return res.data
+      }
+      // Si viene como objeto con contenido
+      return res.data.content || []
+    }catch(e){ 
+      console.warn('Backend no disponible, usando datos locales:', e.message)
+    }
   }
 
-  // fallback: localStorage or public samples
+  // Fallback: localStorage o samples públicos
   try{
     const raw = localStorage.getItem(STORAGE_KEY)
     if(raw){
