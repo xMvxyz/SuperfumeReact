@@ -6,7 +6,7 @@ export default defineConfig({
   // GitHub Pages base URL (nombre del repositorio) - solo en producción
   base: process.env.NODE_ENV === 'production' ? '/SuperfumeReact/' : '/',
   plugins: [react()],
-  publicDir: '../assets',
+  publicDir: 'public/assets',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
