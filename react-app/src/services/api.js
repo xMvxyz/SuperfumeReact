@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const BASE = import.meta.env.VITE_API_BASE_URL || ''
+// Usar variable de entorno si está disponible, de lo contrario usar URL del backend remoto (EC2)
+const BASE = import.meta.env.VITE_API_BASE_URL || 'http://34.224.166.2:8080'
 
 const api = axios.create({
   baseURL: BASE,

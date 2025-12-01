@@ -68,46 +68,50 @@ export async function getProfile(){
 }
 
 export async function list(){
-  if(api.defaults.baseURL){
-    try{ const res = await api.get('/usuarios'); return res.data }catch(e){}
+  try{ 
+    const res = await api.get('/usuario')
+    // Extraer del formato HATEOAS si viene
+    if(res.data && res.data._embedded && res.data._embedded.usuarioResponseDtoList){
+      return res.data._embedded.usuarioResponseDtoList
+    }
+    if(Array.isArray(res.data)){
+      return res.data
+    }
+    return res.data?.content || []
+  }catch(e){
+    console.warn('Error fetching usuarios:', e.message)
+    return []
   }
-  return readUsers()
 }
 
 export async function create(user){
-  if(api.defaults.baseURL){
-    try{ const res = await api.post('/usuarios', user); return res.data }catch(e){}
+  try{ 
+    const res = await api.post('/usuario', user)
+    return res.data
+  }catch(e){ 
+    console.error('Error creating usuario:', e.message)
+    throw e
   }
-  try{
-    const list = readUsers()
-    const newUser = { id: user.id ?? Date.now(), name: user.name, email: user.email, password: user.password || '', role: user.role || 'cliente' }
-    list.push(newUser)
-    writeUsers(list)
-    return newUser
-  }catch(e){ throw e }
 }
 
 export async function update(id, updates){
-  if(api.defaults.baseURL){
-    try{ const res = await api.put(`/usuarios/${id}`, updates); return res.data }catch(e){}
+  try{ 
+    const res = await api.put(`/usuario/${id}`, updates)
+    return res.data
+  }catch(e){ 
+    console.error('Error updating usuario:', e.message)
+    throw e
   }
-  try{
-    const list = readUsers()
-    const next = list.map(u => String(u.id) === String(id) ? {...u, ...updates} : u)
-    writeUsers(next)
-    return next.find(u => String(u.id) === String(id))
-  }catch(e){ throw e }
 }
 
 export async function remove(id){
-  if(api.defaults.baseURL){
-    try{ const res = await api.delete(`/usuarios/${id}`); return res.data }catch(e){}
+  try{ 
+    const res = await api.delete(`/usuario/${id}`)
+    return res.data
+  }catch(e){ 
+    console.error('Error deleting usuario:', e.message)
+    throw e
   }
-  try{
-    const next = readUsers().filter(u => String(u.id) !== String(id))
-    writeUsers(next)
-    return next
-  }catch(e){ throw e }
 }
 
 export default { register, login, logout, getProfile }

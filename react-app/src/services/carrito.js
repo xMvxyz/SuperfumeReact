@@ -11,22 +11,29 @@ function writeLocal(cart){
 }
 
 export async function getCart(){
-  if(api.defaults.baseURL){
-    try{ const res = await api.get('/carrito'); return res.data }catch(e){ /* fallback */ }
+  try{
+    const res = await api.get('/carrito')
+    return res.data
+  }catch(e){ 
+    console.warn('Error fetching carrito:', e.message)
+    return readLocal()
   }
-  return readLocal()
 }
 
 export async function addItem(item){
-  if(api.defaults.baseURL){
-    try{ const res = await api.post('/carrito/items', item); return res.data }catch(e){ }
+  try{
+    const res = await api.post('/carrito/items', item)
+    return res.data
+  }catch(e){ 
+    console.warn('Error adding item to carrito:', e.message)
+    // fallback local
+    const cart = readLocal()
+    const idx = cart.findIndex(i => i.id === item.id)
+    if(idx >= 0){ cart[idx].qty += item.qty; cart[idx].total = cart[idx].qty * (cart[idx].precio || item.precio) }
+    else cart.push(item)
+    writeLocal(cart)
+    return cart
   }
-  const cart = readLocal()
-  const idx = cart.findIndex(i => i.id === item.id)
-  if(idx >= 0){ cart[idx].qty += item.qty; cart[idx].total = cart[idx].qty * (cart[idx].precio || item.precio) }
-  else cart.push(item)
-  writeLocal(cart)
-  return cart
 }
 
 export async function updateItem(id, updates){
@@ -40,12 +47,15 @@ export async function updateItem(id, updates){
 }
 
 export async function removeItem(id){
-  if(api.defaults.baseURL){
-    try{ const res = await api.delete(`/carrito/items/${id}`); return res.data }catch(e){}
+  try{
+    const res = await api.delete(`/carrito/items/${id}`)
+    return res.data
+  }catch(e){ 
+    console.warn('Error removing item from carrito:', e.message)
+    const cart = readLocal().filter(i => i.id !== id)
+    writeLocal(cart)
+    return cart
   }
-  const cart = readLocal().filter(i => i.id !== id)
-  writeLocal(cart)
-  return cart
 }
 
 export async function clearCart(){
