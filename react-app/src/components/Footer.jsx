@@ -3,12 +3,12 @@ import React from 'react'
 export default function Footer(){
   return (
     <footer className="site-footer" style={{marginTop:40}}>
-        <footer className="bg-dark" id="tempaltemo_footer">
+        <footer className="bg-white" id="tempaltemo_footer" style={{boxShadow:'0 -2px 8px rgba(0,0,0,0.08)'}}>
         <div className="container">
           <div className="row">
             <div className="col-md-4 pt-5">
-              <h2 className="h2 text-success border-bottom pb-3 border-light logo">Superfume</h2>
-              <ul className="list-unstyled text-light footer-link-list">
+              <h2 className="h2 text-dark pb-3">Superfume</h2>
+              <ul className="list-unstyled text-dark footer-link-list">
                 <li>
                   <i className="fas fa-map-marker-alt fa-fw" />
                   Pasaje Mapocho 1329, Renca
@@ -24,8 +24,8 @@ export default function Footer(){
               </ul>
             </div>
             <div className="col-md-4 pt-5">
-              <h2 className="h2 text-light border-bottom pb-3 border-light">Productos</h2>
-              <ul className="list-unstyled text-light footer-link-list">
+              <h2 className="h2 text-dark pb-3">Productos</h2>
+              <ul className="list-unstyled text-dark footer-link-list">
                 <li><a className="text-decoration-none" href="#">Azzaro</a></li>
                 <li><a className="text-decoration-none" href="#">Ralph Lauren</a></li>
                 <li><a className="text-decoration-none" href="#">Chanel</a></li>
@@ -36,8 +36,8 @@ export default function Footer(){
               </ul>
             </div>
             <div className="col-md-4 pt-5">
-              <h2 className="h2 text-light border-bottom pb-3 border-light">Información Adicional</h2>
-              <ul className="list-unstyled text-light footer-link-list">
+              <h2 className="h2 text-dark pb-3">Información Adicional</h2>
+              <ul className="list-unstyled text-dark footer-link-list">
                 <li><a className="text-decoration-none" href="/">Inicio</a></li>
                 <li><a className="text-decoration-none" href="/About">Conocenos</a></li>
                 <li><a className="text-decoration-none" href="/Contact">Contacto</a></li>

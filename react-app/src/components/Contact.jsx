@@ -3,10 +3,10 @@ import React from 'react'
 export default function Contact(){
   return (
     <div>
-      <div className="container-fluid bg-light py-5">
+      <div className="container-fluid bg-white py-5">
         <div className="col-md-6 m-auto text-center">
-          <h1 className="h1">Contactanos</h1>
-          <p>Dejanos cualquier queja o sugerencia y nos pondremos en contacto contigo a la brevedad.</p>
+          <h1 className="h1 text-dark">Contactanos</h1>
+          <p className="text-dark">Dejanos cualquier queja o sugerencia y nos pondremos en contacto contigo a la brevedad.</p>
         </div>
       </div>
 
@@ -20,20 +20,20 @@ export default function Contact(){
             <div className="row">
               <div className="form-group col-md-6 mb-3">
                 <label htmlFor="Nombre">Nombre</label>
-                <input type="text" className="form-control mt-1" id="Nombre" name="Nombre" placeholder="Nombre" />
+                <input type="text" className="form-control mt-1" id="Nombre" name="Nombre" placeholder="Nombre" style={{borderRadius: '5px'}} />
               </div>
               <div className="form-group col-md-6 mb-3">
                 <label htmlFor="email">Email</label>
-                <input type="email" className="form-control mt-1" id="email" name="email" placeholder="Email" />
+                <input type="email" className="form-control mt-1" id="email" name="email" placeholder="Email" style={{borderRadius: '5px'}} />
               </div>
             </div>
             <div className="mb-3">
               <label htmlFor="Asunto">Asunto</label>
-              <input type="text" className="form-control mt-1" id="Asunto" name="Asunto" placeholder="Asunto" />
+              <input type="text" className="form-control mt-1" id="Asunto" name="Asunto" placeholder="Asunto" style={{borderRadius: '5px'}} />
             </div>
             <div className="mb-3">
               <label htmlFor="Mensaje">Mensaje</label>
-              <textarea className="form-control mt-1" id="Mensaje" name="Mensaje" placeholder="Mensaje" rows={8} />
+              <textarea className="form-control mt-1" id="Mensaje" name="Mensaje" placeholder="Mensaje" rows={8} style={{borderRadius: '5px'}} />
             </div>
             <div className="row">
               <div className="col text-end mt-2">

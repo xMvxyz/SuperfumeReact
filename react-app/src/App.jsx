@@ -16,7 +16,7 @@ export default function App(){
   return (
     <>
       <Header />
-      <main>
+      <main style={{backgroundColor: '#fff'}}>
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/shop" element={<Shop/>} />

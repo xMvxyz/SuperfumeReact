@@ -23,39 +23,39 @@ export default function Header(){
 
   return (
     <header>
-      <nav className="navbar navbar-expand-lg shadow" data-bs-theme="dark" style={{position:'relative'}}>
+      <nav className="navbar navbar-expand-lg bg-white" data-bs-theme="light" style={{position:'relative', boxShadow:'0 2px 8px rgba(0,0,0,0.08)'}}>
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/"><h1>Superfume</h1></Link>
+          <Link className="navbar-brand" to="/"><h1 style={{color: '#000', margin: 0}}>Superfume</h1></Link>
           <button className="navbar-toggler" type="button" aria-controls="navbarColor01" aria-expanded={navOpen} aria-label="Toggle navigation" onClick={()=> setNavOpen(v => !v)}>
             <span className="navbar-toggler-icon" />
           </button>
           <div className={"collapse navbar-collapse justify-content-center" + (navOpen ? ' show' : '')} id="navbarColor01" aria-expanded={navOpen}>
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link active" to="/" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Inicio <span className="visually-hidden">(current)</span></Link>
+                <Link className="nav-link text-dark" to="/" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Inicio</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/shop" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Tienda</Link>
+                <Link className="nav-link text-dark" to="/shop" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Tienda</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/contact" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Contacto</Link>
+                <Link className="nav-link text-dark" to="/contact" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Contacto</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/about" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Nosotros</Link>
+                <Link className="nav-link text-dark" to="/about" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Nosotros</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/cart" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Carrito</Link>
+                <Link className="nav-link text-dark" to="/cart" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Carrito</Link>
               </li>
 
               <li className="nav-item d-lg-none">
-                <button className="nav-link btn btn-link" style={{paddingLeft:0}} onClick={()=>{ setShowSearch(true); if(window.innerWidth < 992) setNavOpen(false) }} aria-label="Buscar">Buscar</button>
+                <button className="nav-link text-dark btn btn-link" style={{paddingLeft:0}} onClick={()=>{ setShowSearch(true); if(window.innerWidth < 992) setNavOpen(false) }} aria-label="Buscar">Buscar</button>
               </li>
 
               <li className="nav-item d-lg-none">
-                <Link className="nav-link" to="/login" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Login</Link>
+                <Link className="nav-link text-dark" to="/login" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Login</Link>
               </li>
               <li className="nav-item d-lg-none">
-                <Link className="nav-link" to="/admin" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Admin</Link>
+                <Link className="nav-link text-dark" to="/admin" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Admin</Link>
               </li>
             </ul>
           </div>
@@ -66,12 +66,12 @@ export default function Header(){
               .overlay-action-btn.btn-primary { background:#1d242d; color:#fff; border-color:#1d242d }
             `}</style>
             <button className="btn btn-link p-2" aria-label="Buscar" title="Buscar" onClick={()=>setShowSearch(true)}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffff" viewBox="0 0 24 24">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000" viewBox="0 0 24 24">
                 <path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12A6 6 0 0110 4z" />
               </svg>
             </button>
-            <Link className="nav-link" to="/login" style={{padding:'6px 8px'}}>Login</Link>
-            <Link className="nav-link" to="/admin" style={{padding:'6px 8px'}}>Admin</Link>
+            <Link className="nav-link text-dark" to="/login" style={{padding:'6px 8px'}}>Login</Link>
+            <Link className="nav-link text-dark" to="/admin" style={{padding:'6px 8px'}}>Admin</Link>
           </div>
 
           {showSearch && (

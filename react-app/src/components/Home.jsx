@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 export default function Home(){
   return (
     <div>
-      <section className="hero-section bg-light">
+      <section className="hero-section" style={{backgroundColor: '#fff'}}>
         <div className="container">
           <div className="row">
             <div className="col-md-12 text-center">
@@ -16,7 +16,7 @@ export default function Home(){
         </div>
       </section>
 
-  <div className="d-flex justify-content-center bg-light">
+  <div className="d-flex justify-content-center" style={{backgroundColor: '#fff', padding: '20px 0'}}>
     <Carousel images={["/img/Carrusel_01.png","/img/test_carrusel.png","/img/carrusel_03.png"]} />
   </div>
 
@@ -47,7 +47,7 @@ export default function Home(){
       </div>
       </section>
 
-      <section className="bg-light">
+      <section style={{backgroundColor: '#fff'}}>
         <div className="container py-5">
           <div className="row text-center py-3">
             <div className="col-lg-6 m-auto">
@@ -59,7 +59,7 @@ export default function Home(){
           </div>
           <div className="row">
             <div className="col-12 col-md-4 mb-4">
-              <div className="card h-100">
+              <div className="card h-100" style={{boxShadow: '0 4px 8px rgba(0,0,0,0.08)'}}>
                 <Link to="/product/1">
                   <img src="/img/destacado_01.jpg" className="card-img-top" alt="Destacado 1" />
                 </Link>
@@ -83,7 +83,7 @@ export default function Home(){
               </div>
             </div>
             <div className="col-12 col-md-4 mb-4">
-              <div className="card h-100">
+              <div className="card h-100" style={{boxShadow: '0 4px 8px rgba(0,0,0,0.08)'}}>
                 <Link to="/product/2">
                   <img src="/img/destacado_02.jpg" className="card-img-top" alt="Destacado 2" />
                 </Link>
@@ -107,7 +107,7 @@ export default function Home(){
               </div>
             </div>
             <div className="col-12 col-md-4 mb-4">
-              <div className="card h-100">
+              <div className="card h-100" style={{boxShadow: '0 4px 8px rgba(0,0,0,0.08)'}}>
                 <Link to="/product/3">
                   <img src="/img/destacado_03.jpg" className="card-img-top" alt="Destacado 3" />
                 </Link>

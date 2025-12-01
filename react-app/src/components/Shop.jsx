@@ -121,18 +121,18 @@ export default function Shop(){
           <div className="card p-3 mb-3 border border-custom">
             <h5 className="heading-custom">Categorías</h5>
             <div className="mb-3">
-              <div className="d-flex gap-8" role="group" aria-label="Género">
-                <button type="button" className={"btn btn-sm me-2 flex-1 " + (gender==='Todos' ? 'btn-info text-white' : 'btn-outline-info')} onClick={()=>setGender('Todos')}>Todos</button>
-                <button type="button" className={"btn btn-sm me-2 flex-1 " + (gender==='Hombre' ? 'btn-info text-white' : 'btn-outline-info')} onClick={()=>setGender('Hombre')}>Hombre</button>
-                <button type="button" className={"btn btn-sm me-2 flex-1 " + (gender==='Mujer' ? 'btn-info text-white' : 'btn-outline-info')} onClick={()=>setGender('Mujer')}>Mujer</button>
-                <button type="button" className={"btn btn-sm me-2 flex-1 " + (gender==='Unisex' ? 'btn-info text-white' : 'btn-outline-info')} onClick={()=>setGender('Unisex')}>Unisex</button>
+              <div className="d-flex flex-column gap-2" role="group" aria-label="Género">
+                <button type="button" className={"btn btn-sm category-btn " + (gender==='Todos' ? 'btn-dark' : 'btn-outline-dark')} onClick={()=>setGender('Todos')}>Todos</button>
+                <button type="button" className={"btn btn-sm category-btn " + (gender==='Hombre' ? 'btn-dark' : 'btn-outline-dark')} onClick={()=>setGender('Hombre')}>Hombre</button>
+                <button type="button" className={"btn btn-sm category-btn " + (gender==='Mujer' ? 'btn-dark' : 'btn-outline-dark')} onClick={()=>setGender('Mujer')}>Mujer</button>
+                <button type="button" className={"btn btn-sm category-btn " + (gender==='Unisex' ? 'btn-dark' : 'btn-outline-dark')} onClick={()=>setGender('Unisex')}>Unisex</button>
               </div>
             </div>
             <div>
               <label className="form-label">Marca</label>
-              <div className="d-flex flex-wrap gap-8">
+              <div className="d-flex flex-column gap-2">
                 {brands.map(b=> (
-                  <button key={b} type="button" className={"btn btn-sm me-2 " + (brand===b ? 'btn-info text-white' : 'btn-outline-info')} onClick={()=>setBrand(b)}>{b}</button>
+                  <button key={b} type="button" className={"btn btn-sm category-btn " + (brand===b ? 'btn-dark' : 'btn-outline-dark')} onClick={()=>setBrand(b)}>{b}</button>
                 ))}
               </div>
             </div>
@@ -146,7 +146,7 @@ export default function Shop(){
             </div>
             <div className="toolbar-row">
               <label className="me-2">Ordenar</label>
-              <select className="form-select form-control-sm select-sort" value={sortBy} onChange={e=>setSortBy(e.target.value)}>
+              <select className="form-select form-control-sm" style={{borderColor: '#000', color: '#000'}} value={sortBy} onChange={e=>setSortBy(e.target.value)}>
                 <option value="featured">Destacados</option>
                 <option value="price-asc">Precio ↑</option>
                 <option value="price-desc">Precio ↓</option>
@@ -156,7 +156,7 @@ export default function Shop(){
             </div>
           </div>
 
-          <div className="row g-4">
+          <div className="row g-4 justify-content-center">
             {filtered.map(p=> (
               <div key={p.id} className="col-6 col-md-4">
                 <div className="card h-100 shadow-sm">
@@ -166,11 +166,11 @@ export default function Shop(){
                   <div className="card-body d-flex flex-column">
                     <h6 className="card-title">{p.nombre || p.title}</h6>
                     <p className="text-muted small mb-2 flex-1">{p.desc}</p>
-                    <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex flex-column gap-2">
                       <div className="fw-700">${(p.precio ?? p.price).toLocaleString()}</div>
-                      <div>
-                        <Link to={`/product/${p.id}`} className="btn btn-sm btn-outline-info me-2">Ver</Link>
-                        <button className="btn btn-sm btn-outline-info me-2" onClick={()=> addToCart(p)}>Añadir</button>
+                      <div className="d-flex gap-2">
+                        <Link to={`/product/${p.id}`} className="btn btn-sm btn-outline-dark flex-1 product-btn">Ver</Link>
+                        <button className="btn btn-sm btn-outline-dark flex-1 product-btn" onClick={()=> addToCart(p)}>Añadir</button>
                       </div>
                     </div>
                   </div>
