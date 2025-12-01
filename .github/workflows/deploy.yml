@@ -32,7 +32,9 @@ jobs:
 
       - name: Build
         working-directory: ./react-app
-        run: npm run build
+        run: npx vite build
+        env:
+          NODE_ENV: production
 
       - name: Create .nojekyll file
         working-directory: ./react-app
