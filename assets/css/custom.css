@@ -133,7 +133,7 @@ Custom Css
   overflow:hidden;
 }
 .login-top{
-  background:linear-gradient(90deg,#1d242d,#2d343f);
+  background: #000;
   color:#fff;
   padding:22px;
   display:flex;
@@ -142,6 +142,12 @@ Custom Css
   justify-content:center;
   text-align:center;
 }
+
+.login-top h3 {
+  color: #fff !important;
+  opacity: 0.95;
+}
+
 .login-body{
   padding:22px;
   background:#ffffff;
@@ -149,6 +155,18 @@ Custom Css
 .login-body label{
   color:#1d242d;
   font-weight:500;
+}
+
+.login-body .form-control,
+.login-body .form-select {
+  border-radius: 5px;
+}
+
+.login-body .btn,
+.login-card .btn {
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-size: 14px;
 }
 
 .form-control:focus{ box-shadow:none; border-color:#1d242d; }
@@ -175,3 +193,105 @@ Custom Css
 .flex-1{ flex:1; }
 
 .btn-enter{ color:#1d242d; }
+
+/* Header y Footer estilos */
+/* Fondo blanco para navbar */
+.navbar.bg-white {
+  background-color: #fff !important;
+}
+
+/* Todos los enlaces del navbar en negro */
+.navbar.bg-white .nav-link,
+.navbar.bg-white .navbar-brand,
+.navbar.bg-white .navbar-brand h1,
+.navbar.bg-white a {
+  color: #000 !important;
+  transition: color 0.3s ease !important;
+}
+
+/* Hover a gris (plomo) Bootstrap */
+.navbar.bg-white .nav-link:hover,
+.navbar.bg-white .navbar-brand:hover,
+.navbar.bg-white .navbar-brand h1:hover,
+.navbar.bg-white a:hover {
+  color: #6c757d !important;
+}
+
+/* Asegurar que el botón de búsqueda también sea negro */
+.navbar.bg-white .btn-link {
+  color: #000 !important;
+}
+
+.navbar.bg-white .btn-link:hover {
+  color: #6c757d !important;
+}
+
+/* Footer enlaces */
+.footer-link-list a {
+  color: #000 !important;
+  transition: color 0.3s ease;
+}
+
+.footer-link-list a:hover {
+  color: #6c757d !important;
+}
+
+/* Botones de categoría en Shop */
+.category-btn.btn-outline-dark {
+  background-color: #fff;
+  color: #000;
+  border-color: #000;
+  transition: all 0.3s ease;
+}
+
+.category-btn.btn-outline-dark:hover {
+  background-color: #fff;
+  color: #000;
+  border-color: #000;
+}
+
+.category-btn.btn-dark {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.category-btn.btn-dark:hover {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* Botones de productos en Shop */
+.product-btn.btn-outline-dark {
+  background-color: #fff;
+  color: #000;
+  border-color: #000;
+  font-weight: 400;
+  transition: all 0.3s ease;
+}
+
+.product-btn.btn-outline-dark:hover {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* Asegurar que los botones tengan el mismo peso de fuente */
+.btn {
+  font-weight: 400 !important;
+}
+
+/* Deshabilitar hover en servicios de About */
+.services-icon-wap {
+  transition: none !important;
+}
+
+.services-icon-wap:hover {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.services-icon-wap:hover i {
+  color: inherit !important;
+}

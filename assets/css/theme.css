@@ -1,0 +1,433 @@
+/* 
+ * Superfume - Theme Custom CSS
+ * Integración personalizada de Bootstrap con colores y fuentes del tema
+ */
+
+/* ===== Variables de Colores ===== */
+:root {
+  /* Colores principales */
+  --superfume-primary: #1d242d;
+  --superfume-secondary: #212934;
+  --superfume-dark: #000000;
+  --superfume-light: #ffffff;
+  --superfume-warning: #ede861;
+  --superfume-muted: #bcbcbc;
+  --superfume-gray: #3e4a56;
+  
+  /* Fuentes */
+  --font-family-base: 'Roboto', sans-serif;
+  
+  /* Pesos de fuente */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+}
+
+/* ===== Sobrescritura de Bootstrap ===== */
+
+/* Colores de fondo */
+.bg-primary {
+  background-color: var(--superfume-primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--superfume-secondary) !important;
+}
+
+.bg-dark {
+  background-color: var(--superfume-dark) !important;
+}
+
+.bg-warning {
+  background-color: var(--superfume-warning) !important;
+}
+
+/* Colores de texto */
+.text-primary {
+  color: var(--superfume-primary) !important;
+}
+
+.text-secondary {
+  color: var(--superfume-secondary) !important;
+}
+
+.text-warning {
+  color: var(--superfume-warning) !important;
+}
+
+.text-muted {
+  color: var(--superfume-muted) !important;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: var(--superfume-primary) !important;
+  border-color: var(--superfume-primary) !important;
+  color: var(--superfume-light) !important;
+  font-weight: var(--font-weight-medium) !important;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #000 !important;
+  border-color: #000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+  background-color: var(--superfume-secondary) !important;
+  border-color: var(--superfume-secondary) !important;
+  color: var(--superfume-light) !important;
+}
+
+.btn-secondary:hover {
+  background-color: var(--superfume-primary) !important;
+  border-color: var(--superfume-primary) !important;
+}
+
+.btn-outline-primary {
+  color: var(--superfume-primary) !important;
+  border-color: var(--superfume-primary) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--superfume-primary) !important;
+  color: var(--superfume-light) !important;
+}
+
+.btn-success {
+  background-color: var(--superfume-primary) !important;
+  border-color: var(--superfume-primary) !important;
+}
+
+.btn-success:hover {
+  background-color: #000 !important;
+  border-color: #000 !important;
+}
+
+/* Enlaces */
+a {
+  color: var(--superfume-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+/* Tipografía */
+body {
+  font-family: var(--font-family-base);
+  font-size: 18px;
+  font-weight: var(--font-weight-light);
+  color: #333;
+}
+
+h1, .h1 {
+  font-family: var(--font-family-base);
+  font-size: 48px;
+  font-weight: 200;
+  color: var(--superfume-primary);
+}
+
+h2, .h2 {
+  font-family: var(--font-family-base);
+  font-size: 30px;
+  font-weight: var(--font-weight-light);
+  color: var(--superfume-primary);
+}
+
+h3, .h3 {
+  font-family: var(--font-family-base);
+  font-size: 22px;
+  font-weight: var(--font-weight-regular);
+  color: var(--superfume-primary);
+}
+
+h4, .h4 {
+  font-family: var(--font-family-base);
+  font-size: 20px;
+  font-weight: var(--font-weight-regular);
+}
+
+h5, .h5 {
+  font-family: var(--font-family-base);
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+}
+
+h6, .h6 {
+  font-family: var(--font-family-base);
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Formularios */
+.form-control {
+  border-color: #ddd;
+  font-family: var(--font-family-base);
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--superfume-primary);
+  box-shadow: 0 0 0 0.2rem rgba(29, 36, 45, 0.25);
+}
+
+.form-label {
+  font-weight: var(--font-weight-medium);
+  color: var(--superfume-primary);
+  margin-bottom: 0.5rem;
+}
+
+.form-select {
+  border-color: #ddd;
+  font-family: var(--font-family-base);
+}
+
+.form-select:focus {
+  border-color: var(--superfume-primary);
+  box-shadow: 0 0 0 0.2rem rgba(29, 36, 45, 0.25);
+}
+
+/* Cards */
+.card {
+  border: 1px solid #e0e0e0;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.10);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+.card-header {
+  background-color: var(--superfume-primary);
+  color: var(--superfume-light);
+  font-weight: var(--font-weight-medium);
+}
+
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--superfume-secondary) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  font-weight: var(--font-weight-medium) !important;
+  color: var(--superfume-light) !important;
+  font-size: 24px !important;
+}
+
+.navbar-nav .nav-link {
+  color: var(--superfume-light) !important;
+  font-weight: var(--font-weight-regular);
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--superfume-warning) !important;
+}
+
+.navbar-nav .nav-link.active {
+  color: var(--superfume-warning) !important;
+  font-weight: var(--font-weight-medium) !important;
+}
+
+/* Badges */
+.badge {
+  font-weight: var(--font-weight-medium);
+  padding: 0.35em 0.65em;
+}
+
+.badge-primary {
+  background-color: var(--superfume-primary) !important;
+}
+
+.badge-warning {
+  background-color: var(--superfume-warning) !important;
+  color: var(--superfume-dark) !important;
+}
+
+/* Pagination */
+.pagination .page-link {
+  color: var(--superfume-primary);
+  border-color: #ddd;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: var(--superfume-primary);
+  border-color: var(--superfume-primary);
+  color: var(--superfume-light);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--superfume-primary);
+  border-color: var(--superfume-primary);
+  color: var(--superfume-light);
+}
+
+/* Alerts */
+.alert {
+  border-radius: 8px;
+  font-weight: var(--font-weight-regular);
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+  color: #856404;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+  color: #0c5460;
+}
+
+/* Modals */
+.modal-content {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  background-color: var(--superfume-primary);
+  color: var(--superfume-light);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.modal-title {
+  font-weight: var(--font-weight-medium);
+}
+
+.modal-footer {
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Tablas */
+.table {
+  font-family: var(--font-family-base);
+}
+
+.table thead th {
+  background-color: var(--superfume-primary);
+  color: var(--superfume-light);
+  font-weight: var(--font-weight-medium);
+  border-bottom: 2px solid var(--superfume-primary);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(29, 36, 45, 0.05);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  background-color: transparent;
+}
+
+.breadcrumb-item a {
+  color: var(--superfume-primary);
+}
+
+.breadcrumb-item.active {
+  color: var(--superfume-muted);
+}
+
+/* Dropdowns */
+.dropdown-menu {
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+  color: var(--superfume-primary);
+  transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--superfume-primary);
+  color: var(--superfume-light);
+}
+
+/* Progress bars */
+.progress {
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+.progress-bar {
+  background-color: var(--superfume-primary);
+}
+
+/* Spinners */
+.spinner-border {
+  color: var(--superfume-primary);
+}
+
+/* Toast */
+.toast {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.toast-header {
+  background-color: var(--superfume-primary);
+  color: var(--superfume-light);
+}
+
+/* Utilidades adicionales */
+.text-superfume {
+  color: var(--superfume-primary) !important;
+}
+
+.bg-superfume {
+  background-color: var(--superfume-primary) !important;
+}
+
+.border-superfume {
+  border-color: var(--superfume-primary) !important;
+}
+
+.shadow-superfume {
+  box-shadow: 0 4px 8px rgba(29, 36, 45, 0.15) !important;
+}
+
+/* Animaciones suaves */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+button, a, .btn {
+  transition: all 0.3s ease;
+}
