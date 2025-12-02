@@ -20,36 +20,27 @@ function getAuth(){
 }
 
 export async function register({ email, password, name }){
-  if(api.defaults.baseURL){
-    try{ const res = await api.post('/auth/register', { email, password, name }); return res.data }catch(e){}
+  try{ 
+    const res = await api.post('/auth/register', { email, password, name })
+    console.log('✓ Usuario registrado en backend:', res.data)
+    setAuth(res.data)
+    return res.data
+  }catch(e){ 
+    console.error('Error registrando usuario:', e.message)
+    throw e
   }
-  // local fallback: store user in localStorage (plain-text password for dev only)
-  try{
-    const users = readUsers()
-    if(users.find(u => u.email === email)) throw new Error('Email exists')
-    const role = (arguments[0] && arguments[0].role) || 'cliente'
-    const user = { id: Date.now(), email, password, name, role }
-    users.push(user)
-    writeUsers(users)
-    const token = btoa(`${user.id}:${Date.now()}`)
-    setAuth({ token, user: { id: user.id, email: user.email, name: user.name, role: user.role } })
-    return { token, user: { id: user.id, email: user.email, name: user.name, role: user.role } }
-  }catch(e){ throw e }
 }
 
 export async function login({ email, password }){
-  if(api.defaults.baseURL){
-    try{ const res = await api.post('/auth/login', { email, password }); return res.data }catch(e){}
+  try{ 
+    const res = await api.post('/auth/login', { email, password })
+    console.log('✓ Usuario autenticado:', res.data)
+    setAuth(res.data)
+    return res.data
+  }catch(e){ 
+    console.error('Error en login:', e.message)
+    throw e
   }
-  try{
-    const users = readUsers()
-    const u = users.find(x => x.email === email)
-    if(!u) throw new Error('Usuario no registrado')
-    if(u.password !== password) throw new Error('Credenciales inválidas')
-    const token = btoa(`${u.id}:${Date.now()}`)
-    setAuth({ token, user: { id: u.id, email: u.email, name: u.name, role: u.role } })
-    return { token, user: { id: u.id, email: u.email, name: u.name, role: u.role } }
-  }catch(e){ throw e }
 }
 
 export async function logout(){

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import * as usersApi from '../services/usuario'
+import * as perfumeService from '../services/perfume'
 
 const STORAGE_KEY = 'superfume_products_v1'
 
@@ -18,11 +19,12 @@ function saveProducts(list){
 }
 
 export default function Admin(){
-  const [products, setProducts] = useState(()=> loadProducts())
-  const [form, setForm] = useState({nombre:'', descripcion:'', precio:'', img:'/img/producto_01.jpg', genero:'', marca:''})
+  const [products, setProducts] = useState([])
+  const [form, setForm] = useState({nombre:'', descripcion:'', precio:'', stock:'', categoria:'', img:'/img/producto_01.jpg', genero:'', marca:''})
   const [errors, setErrors] = useState({})
   const [query, setQuery] = useState('')
   const [sortBy, setSortBy] = useState('newest')
+  const [creatingProduct, setCreatingProduct] = useState(false)
 
 
   const [users, setUsers] = useState([])
@@ -36,32 +38,53 @@ export default function Admin(){
   useEffect(()=>{
     (async ()=>{
       try{
+        // Cargar usuarios
         const u = await usersApi.list()
         setUsers(u || [])
+        
+        // Cargar perfumes desde BD
+        const perfumes = await perfumeService.list()
+        console.log('✓ Perfumes cargados en Admin:', perfumes.length)
+        setProducts(perfumes || [])
       }catch(e){
-        console.error('users load', e)
+        console.error('Error cargando datos de admin:', e)
         setInitError(String(e.message || e))
+        // Fallback: cargar del localStorage
+        const cached = loadProducts()
+        if(cached.length > 0) setProducts(cached)
       }finally{
         setLoadingInit(false)
       }
     })()
   }, [])
 
-  function addProduct(e){
+  async function addProduct(e){
     e.preventDefault()
     const newErrors = {}
   if(!form.nombre || form.nombre.trim().length === 0) newErrors.nombre = 'El Nombre es obligatorio'
   const priceInt = parseInt(form.precio, 10)
   if(isNaN(priceInt) || priceInt <= 0) newErrors.precio = 'El precio debe ser un entero positivo'
+  const stockInt = parseInt(form.stock, 10)
+  if(isNaN(stockInt) || stockInt < 0) newErrors.stock = 'El stock debe ser un número no negativo'
     if(Object.keys(newErrors).length){ setErrors(newErrors); return }
 
-    const id = Date.now()
-  const p = { id, nombre: form.nombre.trim(), descripcion: (form.descripcion||'').trim(), precio: priceInt, img: form.img, genero: form.genero || '', marca: form.marca || '' }
-    const next = [p, ...products]
-    setProducts(next)
-    saveProducts(next)
-  setForm({nombre:'', descripcion:'', precio:'', img:'/img/producto_01.jpg', genero:'', marca:''})
-    setErrors({})
+    const payload = { nombre: form.nombre.trim(), descripcion: (form.descripcion||'').trim(), precio: priceInt, stock: stockInt, categoria: form.categoria || '', img: form.img, genero: form.genero || '', marca: form.marca || '', imagenUrl: form.img }
+    
+    setCreatingProduct(true)
+    try{
+      const created = await perfumeService.create(payload)
+      if(created && created.id){
+        setProducts(prev => [created, ...prev])
+        saveProducts([created, ...products])
+      }
+      setForm({nombre:'', descripcion:'', precio:'', stock:'', categoria:'', img:'/img/producto_01.jpg', genero:'', marca:''})
+      setErrors({})
+    }catch(err){
+      console.error('Error creando perfume:', err)
+      setErrors({general: 'Error al guardar perfume'})
+    }finally{
+      setCreatingProduct(false)
+    }
   }
 
   async function loadUsers(){
@@ -107,13 +130,19 @@ export default function Admin(){
     setConfirmState({ open:true, id, nombre: p ? (p.nombre || p.title) : '' })
   }
 
-  function confirmRemove(){
+  async function confirmRemove(){
     const id = confirmState.id
     if(id == null) return
-    const next = products.filter(p=>p.id !== id)
-    setProducts(next)
-    saveProducts(next)
-    setConfirmState({ open:false, id:null, nombre:'' })
+    try{
+      await perfumeService.remove(id)
+      const next = products.filter(p=>p.id !== id)
+      setProducts(next)
+      saveProducts(next)
+      setConfirmState({ open:false, id:null, nombre:'' })
+    }catch(err){
+      console.error('Error eliminando perfume:', err)
+      setConfirmState({ open:false, id:null, nombre:'' })
+    }
   }
 
   function cancelConfirm(){
@@ -121,7 +150,7 @@ export default function Admin(){
   }
 
   const [editingId, setEditingId] = useState(null)
-  const [editValues, setEditValues] = useState({nombre:'', descripcion:'', precio:'', img:'', genero:'', marca:''})
+  const [editValues, setEditValues] = useState({nombre:'', descripcion:'', precio:'', stock:'', categoria:'', img:'', genero:'', marca:''})
 
   function startEdit(p){
     setEditingId(p.id)
@@ -129,7 +158,9 @@ export default function Admin(){
       nombre: p.nombre || p.title || '',
       descripcion: p.descripcion || '',
       precio: String(p.precio ?? p.price ?? ''),
-      img: p.img || p.image || '',
+      stock: String(p.stock ?? ''),
+      categoria: p.categoria || '',
+      img: p.img || p.image || p.imagenUrl || '',
       genero: p.genero || p.gender || '',
       marca: p.marca || p.brand || ''
     })
@@ -138,21 +169,31 @@ export default function Admin(){
 
   function cancelEdit(){
     setEditingId(null)
-    setEditValues({nombre:'', precio:'', img:''})
+    setEditValues({nombre:'', descripcion:'', precio:'', stock:'', categoria:'', img:'', genero:'', marca:''})
     setErrors({})
   }
 
-  function saveEdit(id){
+  async function saveEdit(id){
     const newErrors = {}
     if(!editValues.nombre || editValues.nombre.trim().length === 0) newErrors.nombre = 'El Nombre es obligatorio'
     const priceInt = parseInt(editValues.precio,10)
     if(isNaN(priceInt) || priceInt <= 0) newErrors.precio = 'El precio debe ser un entero positivo'
+    const stockInt = parseInt(editValues.stock, 10)
+    if(isNaN(stockInt) || stockInt < 0) newErrors.stock = 'El stock debe ser un número no negativo'
     if(Object.keys(newErrors).length){ setErrors(newErrors); return }
 
-    const next = products.map(p => p.id === id ? {...p, nombre: editValues.nombre.trim(), descripcion: (editValues.descripcion||'').trim(), precio: priceInt, img: editValues.img, genero: editValues.genero || '', marca: editValues.marca || ''} : p)
-    setProducts(next)
-    saveProducts(next)
-    cancelEdit()
+    const updates = { nombre: editValues.nombre.trim(), descripcion: (editValues.descripcion||'').trim(), precio: priceInt, stock: stockInt, categoria: editValues.categoria || '', img: editValues.img, genero: editValues.genero || '', marca: editValues.marca || '', imagenUrl: editValues.img }
+    
+    try{
+      const updated = await perfumeService.update(id, updates)
+      const next = products.map(p => p.id === id ? {...p, ...updates} : p)
+      setProducts(next)
+      saveProducts(next)
+      cancelEdit()
+    }catch(err){
+      console.error('Error actualizando perfume:', err)
+      setErrors({general: 'Error al actualizar perfume'})
+    }
   }
 
   function readFileAsDataUrl(file){
@@ -237,6 +278,7 @@ export default function Admin(){
           <div className="admin-form-col min-h-54">
             <input
               placeholder="Precio"
+              type="number"
               value={form.precio}
               onChange={e=>setForm(f=>({...f, precio: e.target.value}))}
             />
@@ -244,9 +286,25 @@ export default function Admin(){
           </div>
           <div className="admin-form-col min-h-54">
             <input
+              placeholder="Stock"
+              type="number"
+              value={form.stock}
+              onChange={e=>setForm(f=>({...f, stock: e.target.value}))}
+            />
+            {errors.stock && <small className="error-text">{errors.stock}</small>}
+          </div>
+          <div className="admin-form-col min-h-54">
+            <input
               placeholder="Marca"
               value={form.marca}
               onChange={e=>setForm(f=>({...f, marca: e.target.value}))}
+            />
+          </div>
+          <div className="admin-form-col min-h-54">
+            <input
+              placeholder="Categoría"
+              value={form.categoria}
+              onChange={e=>setForm(f=>({...f, categoria: e.target.value}))}
             />
           </div>
           <div className="admin-form-col min-h-54">
@@ -262,7 +320,8 @@ export default function Admin(){
             <input type="file" accept="image/*" onChange={handleFormFileChange} />
             <div className="spacer-6"></div>
           </div>
-          <button className="btn btn-success" type="submit">Agregar</button>
+          <button className="btn btn-success" type="submit" disabled={creatingProduct}>{creatingProduct ? 'Guardando...' : 'Agregar'}</button>
+          {errors.general && <small className="error-text">{errors.general}</small>}
         </form>
       </div>
 
@@ -304,10 +363,20 @@ export default function Admin(){
                       <div className="admin-form-col min-w-120">
                         <label className="field-label">Precio</label>
                         <input
+                          type="number"
                           value={editValues.precio}
                           onChange={e=>setEditValues(v=>({...v, precio: e.target.value}))}
                         />
                         {errors.precio && <small className="error-text">{errors.precio}</small>}
+                      </div>
+                      <div className="admin-form-col min-w-120">
+                        <label className="field-label">Stock</label>
+                        <input
+                          type="number"
+                          value={editValues.stock}
+                          onChange={e=>setEditValues(v=>({...v, stock: e.target.value}))}
+                        />
+                        {errors.stock && <small className="error-text">{errors.stock}</small>}
                       </div>
                       <div className="admin-form-col min-w-180">
                         <label className="field-label">Descripción</label>
@@ -321,6 +390,13 @@ export default function Admin(){
                         <input
                           value={editValues.marca}
                           onChange={e=>setEditValues(v=>({...v, marca: e.target.value}))}
+                        />
+                      </div>
+                      <div className="admin-form-col min-w-120">
+                        <label className="field-label">Categoría</label>
+                        <input
+                          value={editValues.categoria}
+                          onChange={e=>setEditValues(v=>({...v, categoria: e.target.value}))}
                         />
                       </div>
                       <div className="admin-form-col min-w-120">
@@ -344,6 +420,8 @@ export default function Admin(){
                       <p className="price">${(p.precio ?? p.price)}</p>
                       <p className="meta"><strong>Marca:</strong> {p.marca || p.brand || '-'}  </p>
                       <p className="meta"><strong>Género:</strong> {p.genero || p.gender || '-'} </p>
+                      <p className="meta"><strong>Categoría:</strong> {p.categoria || '-'} </p>
+                      <p className="meta"><strong>Stock:</strong> {p.stock ?? '-'} </p>
                     </div>
                   )}
                 </div>

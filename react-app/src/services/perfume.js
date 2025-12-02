@@ -17,22 +17,20 @@ export async function list(){
     const res = await api.get('/perfumes')
     console.log('Respuesta del backend GET /perfumes:', res.data)
     
-    // Si viene como array directo
+    // El backend ahora devuelve un array simple
     if(Array.isArray(res.data)){
+      console.log('✓ Perfumes cargados desde backend:', res.data.length)
       return res.data
     }
-    // Extraer el array de perfumes si viene en formato HATEOAS
-    if(res.data._embedded && res.data._embedded.perfumeResponseDtoList){
+    
+    // Por si acaso viene en otra estructura
+    if(res.data._embedded && Array.isArray(res.data._embedded.perfumeResponseDtoList)){
       return res.data._embedded.perfumeResponseDtoList
     }
-    // Si viene como objeto con contenido
     if(res.data.content && Array.isArray(res.data.content)){
       return res.data.content
     }
-    // Si es un objeto único, devolverlo como array
-    if(res.data && typeof res.data === 'object'){
-      return [res.data]
-    }
+    
     return []
   }catch(e){ 
     console.error('Error al cargar perfumes del backend:', e)
@@ -43,11 +41,14 @@ export async function list(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY)
     if(raw){
-      return JSON.parse(raw)
+      const cached = JSON.parse(raw)
+      console.log('✓ Perfumes cargados desde cache local:', cached.length)
+      return cached
     }
   }catch(e){}
 
   const samples = await fetchPublicSamples()
+  console.log('✓ Perfumes cargados desde samples:', samples.length)
   return samples
 }
 
