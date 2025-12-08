@@ -75,12 +75,20 @@ export default function Header(){
           </div>
 
           {showSearch && (
-              <div style={{position:'absolute', left:0, right:0, top:0, height: '64px', display:'flex', alignItems:'center', justifyContent:'center', zIndex:1050, boxShadow:'0 6px 18px rgba(0,0,0,0.12)'}}>
-                <div style={{width:'90%', maxWidth:680}}>
-                  <div style={{display:'flex', gap:8, alignItems:'center'}}>
-                    <input autoFocus value={searchQuery} onChange={e=>setSearchQuery(e.target.value)} onKeyDown={handleKey} placeholder="Buscar Productos..." className="header-search-input" style={{flex:1}} />
-                    <button className="overlay-action-btn btn btn-primary" onClick={doSearch}>Buscar</button>
-                    <button className="overlay-action-btn btn btn-secondary" onClick={()=>setShowSearch(false)}>Cancelar</button>
+              <div style={{position:'absolute', left:0, right:0, top:0, height: '100%', display:'flex', alignItems:'center', justifyContent:'center', zIndex:1050, backgroundColor:'#fff', boxShadow:'0 2px 8px rgba(0,0,0,0.08)'}}>
+                <div style={{width:'90%', maxWidth:600}}>
+                  <div style={{display:'flex', gap:12, alignItems:'center'}}>
+                    <input autoFocus value={searchQuery} onChange={e=>setSearchQuery(e.target.value)} onKeyDown={handleKey} placeholder="Buscar productos..." className="header-search-input" style={{flex:1}} />
+                    <button className="btn btn-dark" onClick={doSearch} aria-label="Buscar" title="Buscar" style={{height:40, width:40, padding:0, display:'flex', alignItems:'center', justifyContent:'center', borderRadius:'5px'}}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12A6 6 0 0110 4z" />
+                      </svg>
+                    </button>
+                    <button className="btn btn-secondary" onClick={()=>setShowSearch(false)} aria-label="Cancelar" title="Cerrar" style={{height:40, width:40, padding:0, display:'flex', alignItems:'center', justifyContent:'center', borderRadius:'5px'}}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.364 5.636L12 12.071 5.636 5.707 4.222 7.121 10.586 13.485 4.222 19.849 5.636 21.263 12 14.899 18.364 21.263 19.778 19.849 13.414 13.485 19.778 7.121z" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>

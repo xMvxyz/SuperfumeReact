@@ -2,22 +2,6 @@ import React, { useState, useEffect } from 'react'
 import * as usersApi from '../services/usuario'
 import * as perfumeService from '../services/perfume'
 
-const STORAGE_KEY = 'superfume_products_v1'
-
-function loadProducts(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if(!raw) return []
-    return JSON.parse(raw)
-  }catch(e){
-    return []
-  }
-}
-
-function saveProducts(list){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
-}
-
 export default function Admin(){
   const [products, setProducts] = useState([])
   const [form, setForm] = useState({nombre:'', descripcion:'', precio:'', stock:'', categoria:'', img:'/img/producto_01.jpg', genero:'', marca:''})
@@ -26,34 +10,25 @@ export default function Admin(){
   const [sortBy, setSortBy] = useState('newest')
   const [creatingProduct, setCreatingProduct] = useState(false)
 
-
   const [users, setUsers] = useState([])
   const [userQuery, setUserQuery] = useState('')
   const [userForm, setUserForm] = useState({ name:'', email:'', password:'', role:'cliente' })
   const [userErrors, setUserErrors] = useState({})
   const [editingUserId, setEditingUserId] = useState(null)
   const [initError, setInitError] = useState(null)
-  const [loadingInit, setLoadingInit] = useState(true)
 
   useEffect(()=>{
     (async ()=>{
       try{
-        // Cargar usuarios
         const u = await usersApi.list()
         setUsers(u || [])
         
-        // Cargar perfumes desde BD
         const perfumes = await perfumeService.list()
         console.log('✓ Perfumes cargados en Admin:', perfumes.length)
         setProducts(perfumes || [])
       }catch(e){
         console.error('Error cargando datos de admin:', e)
         setInitError(String(e.message || e))
-        // Fallback: cargar del localStorage
-        const cached = loadProducts()
-        if(cached.length > 0) setProducts(cached)
-      }finally{
-        setLoadingInit(false)
       }
     })()
   }, [])
@@ -75,7 +50,6 @@ export default function Admin(){
       const created = await perfumeService.create(payload)
       if(created && created.id){
         setProducts(prev => [created, ...prev])
-        saveProducts([created, ...products])
       }
       setForm({nombre:'', descripcion:'', precio:'', stock:'', categoria:'', img:'/img/producto_01.jpg', genero:'', marca:''})
       setErrors({})
@@ -137,7 +111,6 @@ export default function Admin(){
       await perfumeService.remove(id)
       const next = products.filter(p=>p.id !== id)
       setProducts(next)
-      saveProducts(next)
       setConfirmState({ open:false, id:null, nombre:'' })
     }catch(err){
       console.error('Error eliminando perfume:', err)
@@ -188,7 +161,6 @@ export default function Admin(){
       const updated = await perfumeService.update(id, updates)
       const next = products.map(p => p.id === id ? {...p, ...updates} : p)
       setProducts(next)
-      saveProducts(next)
       cancelEdit()
     }catch(err){
       console.error('Error actualizando perfume:', err)
@@ -228,105 +200,156 @@ export default function Admin(){
   }
 
   return (
-    <div className="container py-4">
-      {loadingInit && <div className="alert alert-info">Cargando panel de administración...</div>}
+    <div className="container py-5">
       {initError && <div className="alert alert-danger">Error inicializando Admin: {initError}</div>}
-      <h2>Panel de administración</h2>
-      <p></p>
-
-      <div className="card mb-4 p-3">
-        <div className="filters-row">
-          <input
-            className="search-input"
-            placeholder="Buscar..."
-            value={query}
-            onChange={e=>setQuery(e.target.value)}
-          />
-          <div className="sort-wrap">
-            <label className="sort-label">Ordenar Por:</label>
-            <select
-              className="sort-select"
-              value={sortBy}
-              onChange={e=>setSortBy(e.target.value)}
-            >
-              <option value="newest">Más nuevos</option>
-              <option value="oldest">Más antiguos</option>
-              <option value="price-asc">Precio ↑</option>
-              <option value="price-desc">Precio ↓</option>
-              <option value="title-az">Título A-Z</option>
-              <option value="title-za">Título Z-A</option>
-            </select>
-          </div>
-        </div>
-
-  <form className="admin-form" onSubmit={addProduct}>
-          <div className="admin-form-col min-h-54">
-            <input
-              placeholder="Nombre del Producto"
-              value={form.nombre}
-              onChange={e=>setForm(f=>({...f, nombre: e.target.value}))}
-            />
-            {errors.nombre && <small className="error-text">{errors.nombre}</small>}
-          </div>
-          <div className="admin-form-col min-h-54">
-            <input
-              placeholder="Descripción"
-              value={form.descripcion}
-              onChange={e=>setForm(f=>({...f, descripcion: e.target.value}))}
-            />
-          </div>
-          <div className="admin-form-col min-h-54">
-            <input
-              placeholder="Precio"
-              type="number"
-              value={form.precio}
-              onChange={e=>setForm(f=>({...f, precio: e.target.value}))}
-            />
-            {errors.precio && <small className="error-text">{errors.precio}</small>}
-          </div>
-          <div className="admin-form-col min-h-54">
-            <input
-              placeholder="Stock"
-              type="number"
-              value={form.stock}
-              onChange={e=>setForm(f=>({...f, stock: e.target.value}))}
-            />
-            {errors.stock && <small className="error-text">{errors.stock}</small>}
-          </div>
-          <div className="admin-form-col min-h-54">
-            <input
-              placeholder="Marca"
-              value={form.marca}
-              onChange={e=>setForm(f=>({...f, marca: e.target.value}))}
-            />
-          </div>
-          <div className="admin-form-col min-h-54">
-            <input
-              placeholder="Categoría"
-              value={form.categoria}
-              onChange={e=>setForm(f=>({...f, categoria: e.target.value}))}
-            />
-          </div>
-          <div className="admin-form-col min-h-54">
-            <select value={form.genero} onChange={e=>setForm(f=>({...f, genero: e.target.value}))}>
-              <option value="">Género</option>
-              <option value="Hombre">Hombre</option>
-              <option value="Mujer">Mujer</option>
-              <option value="Unisex">Unisex</option>
-            </select>
-          </div>
-          <div className="admin-form-col image-col min-h-54 min-w-220">
-            <label className="image-label">Imagen</label>
-            <input type="file" accept="image/*" onChange={handleFormFileChange} />
-            <div className="spacer-6"></div>
-          </div>
-          <button className="btn btn-success" type="submit" disabled={creatingProduct}>{creatingProduct ? 'Guardando...' : 'Agregar'}</button>
-          {errors.general && <small className="error-text">{errors.general}</small>}
-        </form>
+      
+      <div className="mb-5">
+        <h1 className="mb-2" style={{color: '#000', fontWeight: 'bold'}}>Panel de Administración</h1>
+        <p className="text-muted">Gestiona productos y usuarios de Superfume</p>
       </div>
 
-      <div>
-        <h3>Productos ({products.length})</h3>
+      <div className="card mb-5 shadow-sm" style={{border: 'none', borderRadius: '8px'}}>
+        <div className="card-header" style={{backgroundColor: '#000', color: '#fff', borderRadius: '8px 8px 0 0', padding: '16px 20px'}}>
+          <h4 className="mb-0">Agregar Nuevo Producto</h4>
+        </div>
+        <div className="card-body p-4">
+          <div className="row mb-3">
+            <div className="col-md-6 mb-3">
+              <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Buscar Productos</label>
+              <input
+                className="form-control"
+                placeholder="Buscar..."
+                value={query}
+                onChange={e=>setQuery(e.target.value)}
+                style={{borderRadius: '5px'}}
+              />
+            </div>
+            <div className="col-md-6 mb-3">
+              <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Ordenar Por</label>
+              <select
+                className="form-select"
+                value={sortBy}
+                onChange={e=>setSortBy(e.target.value)}
+                style={{borderRadius: '5px'}}
+              >
+                <option value="newest">Más nuevos</option>
+                <option value="oldest">Más antiguos</option>
+                <option value="price-asc">Precio ↑</option>
+                <option value="price-desc">Precio ↓</option>
+                <option value="title-az">Título A-Z</option>
+                <option value="title-za">Título Z-A</option>
+              </select>
+            </div>
+          </div>
+
+  <form onSubmit={addProduct}>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Nombre del Producto *</label>
+                <input
+                  className="form-control"
+                  placeholder="Ej: Chanel No. 5"
+                  value={form.nombre}
+                  onChange={e=>setForm(f=>({...f, nombre: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {errors.nombre && <small className="text-danger d-block mt-1">{errors.nombre}</small>}
+              </div>
+              <div className="col-md-6 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Marca</label>
+                <input
+                  className="form-control"
+                  placeholder="Ej: Chanel"
+                  value={form.marca}
+                  onChange={e=>setForm(f=>({...f, marca: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+              </div>
+              <div className="col-md-4 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Categoría</label>
+                <input
+                  className="form-control"
+                  placeholder="Ej: Eau de Parfum"
+                  value={form.categoria}
+                  onChange={e=>setForm(f=>({...f, categoria: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+              </div>
+              <div className="col-md-4 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Género</label>
+                <select 
+                  className="form-select"
+                  value={form.genero} 
+                  onChange={e=>setForm(f=>({...f, genero: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                >
+                  <option value="">Seleccionar...</option>
+                  <option value="Hombre">Hombre</option>
+                  <option value="Mujer">Mujer</option>
+                  <option value="Unisex">Unisex</option>
+                </select>
+              </div>
+              <div className="col-md-4 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Precio *</label>
+                <input
+                  className="form-control"
+                  placeholder="0"
+                  type="number"
+                  value={form.precio}
+                  onChange={e=>setForm(f=>({...f, precio: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {errors.precio && <small className="text-danger d-block mt-1">{errors.precio}</small>}
+              </div>
+              <div className="col-md-12 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Stock *</label>
+                <input
+                  className="form-control"
+                  placeholder="0"
+                  type="number"
+                  value={form.stock}
+                  onChange={e=>setForm(f=>({...f, stock: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {errors.stock && <small className="text-danger d-block mt-1">{errors.stock}</small>}
+              </div>
+              <div className="col-md-12 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Descripción</label>
+                <textarea
+                  className="form-control"
+                  placeholder="Descripción del producto..."
+                  value={form.descripcion}
+                  onChange={e=>setForm(f=>({...f, descripcion: e.target.value}))}
+                  rows={3}
+                  style={{borderRadius: '5px'}}
+                />
+              </div>
+              <div className="col-md-12 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Imagen del Producto</label>
+                <input 
+                  type="file" 
+                  className="form-control"
+                  accept="image/*" 
+                  onChange={handleFormFileChange}
+                  style={{borderRadius: '5px'}}
+                />
+              </div>
+            </div>
+            <div className="d-flex justify-content-end gap-2 mt-3">
+              <button className="btn btn-success px-4" type="submit" disabled={creatingProduct} style={{borderRadius: '5px'}}>
+                {creatingProduct ? 'Guardando...' : 'Agregar Producto'}
+              </button>
+            </div>
+            {errors.general && <small className="text-danger d-block mt-2">{errors.general}</small>}
+          </form>
+        </div>
+      </div>
+
+      <div className="card shadow-sm" style={{border: 'none', borderRadius: '8px'}}>
+        <div className="card-header" style={{backgroundColor: '#000', color: '#fff', borderRadius: '8px 8px 0 0', padding: '16px 20px'}}>
+          <h4 className="mb-0">Productos ({products.length})</h4>
+        </div>
+        <div className="card-body p-4">
         <div className="list-col">
           {products
             .filter(p => (p.nombre || p.title || '').toLowerCase().includes(query.toLowerCase()))
@@ -434,7 +457,7 @@ export default function Admin(){
                     </div>
                   ) : (
                     <div className="actions-inline">
-                      <button type="button" className="btn btn-primary" onClick={()=> startEdit(p)}>Editar</button>
+                      <button type="button" className="btn btn-dark" onClick={()=> startEdit(p)}>Editar</button>
                       <button type="button" className="btn btn-danger" onClick={()=> requestRemoveProduct(p.id)}>Eliminar</button>
                     </div>
                   )}
@@ -442,6 +465,7 @@ export default function Admin(){
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
 
@@ -451,58 +475,105 @@ export default function Admin(){
             <h4 className="mt-0">Confirmar eliminación</h4>
             <p>¿Estás seguro de que deseas eliminar <strong>{confirmState.nombre}</strong>?</p>
             <div className="modal-actions">
-              <button className="btn btn-secondary" onClick={cancelConfirm}>Cancelar</button>
+              <button className="btn btn-dark" onClick={cancelConfirm}>Cancelar</button>
               <button className="btn btn-danger" onClick={confirmRemove}>Eliminar</button>
             </div>
           </div>
         </div>
       )}
 
-      <div className="card p-3 mt-4">
-        <h3>Usuarios ({users.length})</h3>
-        <form className="admin-form mb-3" onSubmit={addUser}>
-          <div className="admin-form-col min-h-54">
-            <input placeholder="Buscar usuarios" value={userQuery} onChange={e=>setUserQuery(e.target.value)} />
+      <div className="card shadow-sm mt-5" style={{border: 'none', borderRadius: '8px'}}>
+        <div className="card-header" style={{backgroundColor: '#000', color: '#fff', borderRadius: '8px 8px 0 0', padding: '16px 20px'}}>
+          <h4 className="mb-0">Gestión de Usuarios ({users.length})</h4>
+        </div>
+        <div className="card-body p-4">
+          <div className="mb-4">
+            <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Buscar Usuarios</label>
+            <input 
+              className="form-control" 
+              placeholder="Buscar por nombre..." 
+              value={userQuery} 
+              onChange={e=>setUserQuery(e.target.value)}
+              style={{borderRadius: '5px'}}
+            />
           </div>
-          <div className="admin-form-col min-h-54">
-            <input placeholder="Nombre" value={userForm.name} onChange={e=>setUserForm(f=>({...f, name: e.target.value}))} />
-            {userErrors.name && <small className="error-text">{userErrors.name}</small>}
-          </div>
-          <div className="admin-form-col min-h-54">
-            <input placeholder="Correo" value={userForm.email} onChange={e=>setUserForm(f=>({...f, email: e.target.value}))} />
-            {userErrors.email && <small className="error-text">{userErrors.email}</small>}
-          </div>
-          <div className="admin-form-col min-h-54">
-            <input placeholder="Contraseña" type="password" value={userForm.password} onChange={e=>setUserForm(f=>({...f, password: e.target.value}))} />
-            {userErrors.password && <small className="error-text">{userErrors.password}</small>}
-          </div>
-          <div className="admin-form-col min-h-54">
-            <select value={userForm.role} onChange={e=>setUserForm(f=>({...f, role: e.target.value}))}>
-              <option value="cliente">Cliente</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-          <div className="admin-form-col">
-            <button className="btn btn-success" type="submit">Crear Usuario</button>
-            {editingUserId && (
-              <button type="button" className="btn btn-primary ms-2" onClick={()=> saveUser(editingUserId)}>Guardar cambios</button>
-            )}
-          </div>
-        </form>
-
-        <div className="list-col">
-          {users.filter(u => (u.name || '').toLowerCase().includes(userQuery.toLowerCase())).map(u => (
-            <div key={u.id} className="card p-2 mb-2 d-flex align-items-center">
-              <div style={{flex:1}}>
-                <strong>{u.name}</strong> <small className="text-muted">{u.email}</small>
-                <div><small>Rol: {u.role || 'cliente'}</small></div>
+          
+          <form onSubmit={addUser} className="mb-4 p-3" style={{backgroundColor: '#f8f9fa', borderRadius: '8px'}}>
+            <h5 className="mb-3" style={{color: '#333'}}>Crear Nuevo Usuario</h5>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Nombre *</label>
+                <input 
+                  className="form-control"
+                  placeholder="Nombre completo" 
+                  value={userForm.name} 
+                  onChange={e=>setUserForm(f=>({...f, name: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {userErrors.name && <small className="text-danger d-block mt-1">{userErrors.name}</small>}
               </div>
-              <div>
-                <button className="btn btn-sm btn-primary me-2" onClick={()=> startEditUser(u)}>Editar</button>
-                <button className="btn btn-sm btn-danger" onClick={()=> deleteUser(u.id)}>Eliminar</button>
+              <div className="col-md-6 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Correo Electrónico *</label>
+                <input 
+                  className="form-control"
+                  placeholder="correo@ejemplo.com" 
+                  value={userForm.email} 
+                  onChange={e=>setUserForm(f=>({...f, email: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {userErrors.email && <small className="text-danger d-block mt-1">{userErrors.email}</small>}
+              </div>
+              <div className="col-md-6 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Contraseña *</label>
+                <input 
+                  className="form-control"
+                  placeholder="Mínimo 6 caracteres" 
+                  type="password" 
+                  value={userForm.password} 
+                  onChange={e=>setUserForm(f=>({...f, password: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {userErrors.password && <small className="text-danger d-block mt-1">{userErrors.password}</small>}
+              </div>
+              <div className="col-md-6 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Rol</label>
+                <select 
+                  className="form-select"
+                  value={userForm.role} 
+                  onChange={e=>setUserForm(f=>({...f, role: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                >
+                  <option value="cliente">Cliente</option>
+                  <option value="admin">Admin</option>
+                </select>
               </div>
             </div>
-          ))}
+            <div className="d-flex justify-content-end gap-2">
+              <button className="btn btn-success px-4" type="submit" style={{borderRadius: '5px'}}>Crear Usuario</button>
+              {editingUserId && (
+                <button type="button" className="btn btn-dark px-4" onClick={()=> saveUser(editingUserId)} style={{borderRadius: '5px'}}>Guardar Cambios</button>
+              )}
+            </div>
+          </form>
+
+          <div>
+            <h5 className="mb-3" style={{color: '#333'}}>Lista de Usuarios</h5>
+            <div className="list-col">
+              {users.filter(u => (u.name || '').toLowerCase().includes(userQuery.toLowerCase())).map(u => (
+                <div key={u.id} className="card p-3 mb-2 d-flex flex-row align-items-center" style={{borderRadius: '8px', border: '1px solid #e0e0e0'}}>
+                  <div style={{flex:1}}>
+                    <h6 className="mb-1" style={{color: '#000'}}>{u.name}</h6>
+                    <small className="text-muted d-block">{u.email}</small>
+                    <small><span className="badge bg-secondary mt-1">Rol: {u.role || 'cliente'}</span></small>
+                  </div>
+                  <div className="d-flex gap-2">
+                    <button className="btn btn-sm btn-dark" onClick={()=> startEditUser(u)} style={{borderRadius: '5px'}}>Editar</button>
+                    <button className="btn btn-sm btn-danger" onClick={()=> deleteUser(u.id)} style={{borderRadius: '5px'}}>Eliminar</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

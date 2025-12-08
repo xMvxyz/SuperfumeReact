@@ -28,12 +28,10 @@ export default function Home(){
   return (
     <div>
       <section className="hero-section" style={{backgroundColor: '#fff'}}>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12 text-center">
-              <h1>Bienvenido a Superfume</h1>
-              <p>Encuentra tus fragancias favoritas.</p>
-            </div>
+        <div className="container-fluid bg-white py-5">
+          <div className="col-md-6 m-auto text-center">
+            <h1 className="h1 text-dark">Bienvenido a Superfume</h1>
+            <p className="text-dark">Encuentra tus fragancias favoritas.</p>
           </div>
         </div>
       </section>

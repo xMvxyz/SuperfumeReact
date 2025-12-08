@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import Carousel from './Carousel'
 import * as perfumeService from '../services/perfume'
 
 export default function ProductDetail(){
@@ -92,29 +91,20 @@ export default function ProductDetail(){
     )
   }
 
-  const images = product.imagenUrl ? [product.imagenUrl] : ['/img/producto_01.jpg']
-
   return (
     <div>
       <section className="bg-light">
         <div className="container pb-5">
           <div className="row">
             <div className="col-lg-5 mt-5">
-              <div style={{position:'relative', marginBottom: '1rem'}}>
-                <Carousel images={images} maxHeight={500} />
+              <div className="card h-100" style={{border: 'none', overflow: 'hidden'}}>
+                <img 
+                  className="card-img-top img-fluid w-100" 
+                  src={product.imagenUrl || '/img/producto_01.jpg'} 
+                  alt={product.nombre}
+                  style={{ objectFit: 'cover', height: '100%' }}
+                />
               </div>
-              {product.imagenUrl && (
-                <div className="row">
-                  <div className="col-12">
-                    <img 
-                      className="card-img img-fluid" 
-                      src={product.imagenUrl} 
-                      alt={product.nombre}
-                      style={{ maxHeight: '150px', objectFit: 'cover' }}
-                    />
-                  </div>
-                </div>
-              )}
             </div>
 
             <div className="col-lg-7 mt-5">
