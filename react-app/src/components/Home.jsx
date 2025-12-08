@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Carousel from '../components/Carousel'
+import Quiz from '../components/Quiz'
 import { Link } from 'react-router-dom'
 import * as perfumeService from '../services/perfume'
 
@@ -15,7 +16,7 @@ export default function Home(){
         // Tomar los primeros 3 productos
         setFeaturedProducts((data || []).slice(0, 3))
       } catch (error) {
-        console.error('Error loading featured products:', error)
+        console.error('Error cargando productos:', error)
         setFeaturedProducts([])
       } finally {
         setLoading(false)
@@ -41,6 +42,9 @@ export default function Home(){
     <Carousel images={["/img/Carrusel_01.png","/img/test_carrusel.png","/img/carrusel_03.png"]} />
   </div>
 
+      {/* Quiz de fragancias */}
+      <Quiz />
+
       <section><div className="row text-center pt-3">
       <div className="col-lg-6 m-auto">
         <h1 className="h1">Perfumes</h1>
@@ -52,18 +56,54 @@ export default function Home(){
       <div className="row">
         <div className="col-12 col-md-4 p-5 mt-3">
           <Link to="/shop?query=Hombre"><img src="/img/JPGaultier_hombre.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Hombre" /></Link>
-          <h5 className="text-center mt-3 mb-3">Hombre</h5>
-          <p className="text-center"><Link className="btn btn-success" to="/shop?query=Hombre">Comprar</Link></p>
+          <h5 className="text-center mt-3 mb-3" style={{ color: '#000' }}>Hombre</h5>
+          <p className="text-center">
+            <Link 
+              className="btn btn-dark" 
+              to="/shop?query=Hombre"
+              style={{ 
+                borderRadius: '5px',
+                backgroundColor: '#000',
+                borderColor: '#000'
+              }}
+            >
+              Comprar
+            </Link>
+          </p>
         </div>
         <div className="col-12 col-md-4 p-5 mt-3">
           <Link to="/shop?query=Mujer"><img src="/img/chanel_mujer.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Mujer" /></Link>
-          <h2 className="h5 text-center mt-3 mb-3">Mujer</h2>
-          <p className="text-center"><Link className="btn btn-success" to="/shop?query=Mujer">Comprar</Link></p>
+          <h2 className="h5 text-center mt-3 mb-3" style={{ color: '#000' }}>Mujer</h2>
+          <p className="text-center">
+            <Link 
+              className="btn btn-dark" 
+              to="/shop?query=Mujer"
+              style={{ 
+                borderRadius: '5px',
+                backgroundColor: '#000',
+                borderColor: '#000'
+              }}
+            >
+              Comprar
+            </Link>
+          </p>
         </div>
         <div className="col-12 col-md-4 p-5 mt-3">
           <Link to="/shop"><img src="/img/perfume_arabe.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Arabes" /></Link>
-          <h2 className="h5 text-center mt-3 mb-3">Arabes</h2>
-          <p className="text-center"><Link className="btn btn-success" to="/shop">Comprar</Link></p>
+          <h2 className="h5 text-center mt-3 mb-3" style={{ color: '#000' }}>Arabes</h2>
+          <p className="text-center">
+            <Link 
+              className="btn btn-dark" 
+              to="/shop"
+              style={{ 
+                borderRadius: '5px',
+                backgroundColor: '#000',
+                borderColor: '#000'
+              }}
+            >
+              Comprar
+            </Link>
+          </p>
         </div>
       </div>
       </section>
