@@ -58,7 +58,7 @@ export default function Quiz() {
     return (
       <section className="py-5" style={{ backgroundColor: '#fff' }}>
         <div className="container" style={{ maxWidth: '1200px' }}>
-          <div className="card p-5 shadow" style={{ border: 'none', borderRadius: '12px' }}>
+          <div className="card p-5 shadow" style={{ border: 'none', borderRadius: '10px' }}>
             <div className="row align-items-center">
               <div className="col-md-6">
                 <h2 className="fw-bold mb-3" style={{ color: '#000', fontSize: '2.5rem' }}>FRAGANCIAS AUTÉNTICAS DE MARCAS DISEÑADORAS</h2>
@@ -66,14 +66,14 @@ export default function Quiz() {
                   Mereces lo mejor, especialmente cuando se trata de tus perfumes. Por eso nos asociamos con marcas que conoces y amas para asegurarte fragancias auténticas.
                 </p>
                 <button 
-                  className="btn btn-dark btn-lg px-5 py-3"
+                  className="btn btn-dark"
                   onClick={handleStartQuiz}
                   style={{ 
                     letterSpacing: '1px',
                     borderRadius: '5px'
                   }}
                 >
-                  EMPEZAR CON UN QUIZ →
+                  EMPEZAR CON UN QUIZ
                 </button>
               </div>
               <div className="col-md-6">

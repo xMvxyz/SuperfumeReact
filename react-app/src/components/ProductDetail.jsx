@@ -28,13 +28,31 @@ export default function ProductDetail(){
   }
 
   function addToCart(product, quantity = 1){
+    // Verificar stock disponible
+    const availableStock = product.stock ?? 0
+    if (availableStock <= 0) {
+      alert('Producto sin stock disponible')
+      return
+    }
+    
     const current = readCart()
     const idx = current.findIndex(i => i.id === product.id)
     const price = product.precio ?? 0
+    
+    // Verificar si la cantidad total excede el stock
     if(idx >= 0){
-      current[idx].qty += quantity
+      const newQty = current[idx].qty + quantity
+      if (newQty > availableStock) {
+        alert(`Solo hay ${availableStock} unidades disponibles en stock`)
+        return
+      }
+      current[idx].qty = newQty
       current[idx].total = current[idx].qty * price
     }else{
+      if (quantity > availableStock) {
+        alert(`Solo hay ${availableStock} unidades disponibles en stock`)
+        return
+      }
       current.push({ 
         id: product.id, 
         nombre: product.nombre || '', 
@@ -135,24 +153,54 @@ export default function ProductDetail(){
                     </>
                   )}
 
-                  <h6>Stock disponible: {product.stock}</h6>
+                  <div className="mb-3">
+                    <h6>Stock disponible: 
+                      <span className={`ms-2 badge ${product.stock > 10 ? 'bg-success' : product.stock > 0 ? 'bg-warning' : 'bg-danger'}`}>
+                        {product.stock ?? 0} unidades
+                      </span>
+                    </h6>
+                  </div>
 
                   <form onSubmit={(e) => { e.preventDefault(); addToCart(product, qty); }}>
                     <div className="row">
                       <div className="col-auto">
                         <ul className="list-inline pb-3">
                           <li className="list-inline-item">Cantidad</li>
-                          <li className="list-inline-item"><button type="button" className="btn btn-success btn-sm" onClick={() => setQty(Math.max(1, qty - 1))}>-</button></li>
+                          <li className="list-inline-item">
+                            <button 
+                              type="button" 
+                              className="btn btn-success btn-sm" 
+                              onClick={() => setQty(Math.max(1, qty - 1))}
+                              disabled={qty <= 1}
+                            >
+                              -
+                            </button>
+                          </li>
                           <li className="list-inline-item"><span className="badge bg-secondary" style={{ fontSize: '16px', padding: '8px 12px' }}>{qty}</span></li>
-                          <li className="list-inline-item"><button type="button" className="btn btn-success btn-sm" onClick={() => setQty(qty + 1)}>+</button></li>
+                          <li className="list-inline-item">
+                            <button 
+                              type="button" 
+                              className="btn btn-success btn-sm" 
+                              onClick={() => setQty(qty + 1)}
+                              disabled={qty >= (product.stock ?? 0)}
+                            >
+                              +
+                            </button>
+                          </li>
                         </ul>
                       </div>
                     </div>
 
                     <div className="row pb-3">
                       <div className="col d-grid">
-                        <button type="submit" className="btn btn-success btn-lg" name="submit" value="addtocard">
-                          Agregar al carrito
+                        <button 
+                          type="submit" 
+                          className="btn btn-success btn-lg" 
+                          name="submit" 
+                          value="addtocard"
+                          disabled={!product.stock || product.stock <= 0}
+                        >
+                          {product.stock > 0 ? 'Agregar al carrito' : 'Sin stock'}
                         </button>
                       </div>
                       <div className="col d-grid">
