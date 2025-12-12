@@ -87,18 +87,23 @@ export async function create(product){
 export async function update(id, updates){
   try{ 
     const res = await api.put(`/perfumes/${id}`, updates)
+    console.log('✓ Perfume actualizado:', res.data)
     return res.data
   }catch(e){ 
-    console.error('Error updating perfume:', e.message)
-    return null
+    console.error('Error updating perfume desde API:', e.response?.data || e.message)
+    // Fallback: actualizar en localStorage
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY)
+      const list = raw ? JSON.parse(raw) : []
+      const next = list.map(p => String(p.id) === String(id) ? {...p, ...updates, id} : p)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      console.log('Perfume actualizado en localStorage')
+      return next.find(p => String(p.id) === String(id))
+    }catch(e2){ 
+      console.error('Error updating perfume en localStorage:', e2)
+      return null 
+    }
   }
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY)
-    const list = raw ? JSON.parse(raw) : []
-    const next = list.map(p => String(p.id) === String(id) ? {...p, ...updates} : p)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-    return next.find(p => String(p.id) === String(id))
-  }catch(e){ return null }
 }
 
 export async function remove(id){
