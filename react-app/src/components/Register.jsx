@@ -7,6 +7,7 @@ export default function Register(){
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
+	const [rut, setRut] = useState('')
 	const [showPassword, setShowPassword] = useState(false)
 	const [address, setAddress] = useState('')
 	const [region, setRegion] = useState('')
@@ -20,21 +21,21 @@ export default function Register(){
 
 	const CHILE_REGIONS = [
 		{ name: 'Región de Arica y Parinacota', comunas: ['Arica','Camarones','Putre','General Lagos'] },
-		{ name: 'Región de Tarapacá', comunas: ['Iquique','Alto Hospicio','Pozo Almonte'] },
-		{ name: 'Región de Antofagasta', comunas: ['Antofagasta','Mejillones','Calama','Tocopilla'] },
-		{ name: 'Región de Atacama', comunas: ['Copiapó','Caldera','Vallenar'] },
-		{ name: 'Región de Coquimbo', comunas: ['La Serena','Coquimbo','Ovalle'] },
-		{ name: 'Región de Valparaíso', comunas: ['Valparaíso','Viña del Mar','Quilpué','Concón'] },
-		{ name: 'Región Metropolitana de Santiago', comunas: ['Santiago','Providencia','Las Condes','Maipú','Puente Alto'] },
-		{ name: "Región de O'Higgins", comunas: ['Rancagua','Machalí','San Fernando'] },
-		{ name: 'Región del Maule', comunas: ['Talca','Curicó','Linares'] },
-		{ name: 'Región de Ñuble', comunas: ['Chillán','Chillán Viejo','Bulnes'] },
-		{ name: 'Región del Biobío', comunas: ['Concepción','Talcahuano','Chiguayante'] },
-		{ name: 'Región de La Araucanía', comunas: ['Temuco','Villarrica','Pucón'] },
-		{ name: 'Región de Los Ríos', comunas: ['Valdivia','La Unión'] },
-		{ name: 'Región de Los Lagos', comunas: ['Puerto Montt','Osorno','Ancud'] },
-		{ name: 'Región Aysén del General Carlos Ibáñez del Campo', comunas: ['Coihaique','Aisén'] },
-		{ name: 'Región de Magallanes y de la Antártica Chilena', comunas: ['Punta Arenas','Puerto Natales','Porvenir'] }
+		{ name: 'Región de Tarapacá', comunas: ['Iquique','Alto Hospicio','Pozo Almonte','Pica','Huara','Colchane','Camiña'] },
+		{ name: 'Región de Antofagasta', comunas: ['Antofagasta','Mejillones','Calama','Tocopilla','Taltal','Sierra Gorda','María Elena','Ollagüe'] },
+		{ name: 'Región de Atacama', comunas: ['Copiapó','Caldera','Vallenar','Chañaral','Diego de Almagro','Tierra Amarilla','Huasco','Freirina','Alto del Carmen'] },
+		{ name: 'Región de Coquimbo', comunas: ['La Serena','Coquimbo','Ovalle','Illapel','Vicuña','Andacollo','Monte Patria','Combarbalá','Paihuano'] },
+		{ name: 'Región de Valparaíso', comunas: ['Valparaíso','Viña del Mar','Quilpué','Villa Alemana','Concón','Quintero','Puchuncaví','Casablanca','San Antonio','Cartagena','El Quisco','Algarrobo','Santo Domingo'] },
+		{ name: 'Región Metropolitana de Santiago', comunas: ['Santiago','Providencia','Las Condes','Maipú','Puente Alto','La Florida','Ñuñoa','Vitacura','Lo Barnechea','Peñalolén','Macul','La Reina','Quilicura','Huechuraba','Recoleta','Independencia','Conchalí','Renca','Quinta Normal','Estación Central','Cerrillos','Pedro Aguirre Cerda','Lo Espejo','San Miguel','San Joaquín','La Cisterna','El Bosque','La Granja','La Pintana','San Ramón','Lo Prado','Cerro Navia','Pudahuel','Colina','Lampa','Tiltil','San Bernardo','Calera de Tango','Buin','Paine','Melipilla','Alhué','Curacaví','María Pinto','San Pedro','Talagante','El Monte','Isla de Maipo','Padre Hurtado','Peñaflor'] },
+		{ name: "Región del Libertador General Bernardo O'Higgins", comunas: ['Rancagua','Machalí','San Fernando','Rengo','San Vicente','Pichilemu','Santa Cruz','Chimbarongo','Nancagua','Placilla','Graneros','Codegua'] },
+		{ name: 'Región del Maule', comunas: ['Talca','Curicó','Linares','Constitución','Cauquenes','Parral','Molina','San Clemente','San Javier','Villa Alegre','Maule'] },
+		{ name: 'Región de Ñuble', comunas: ['Chillán','Chillán Viejo','Bulnes','San Carlos','Quirihue','Coihueco','Pinto','El Carmen','Pemuco','Yungay','San Nicolás','Ninhue'] },
+		{ name: 'Región del Biobío', comunas: ['Concepción','Talcahuano','Chiguayante','San Pedro de la Paz','Hualpén','Penco','Tomé','Coronel','Lota','Los Ángeles','Cabrero','Nacimiento','Cañete','Lebu','Arauco','Curanilahue'] },
+		{ name: 'Región de La Araucanía', comunas: ['Temuco','Villarrica','Pucón','Angol','Victoria','Lautaro','Nueva Imperial','Carahue','Pitrufquén','Loncoche','Collipulli','Traiguén','Curacautín','Lonquimay','Melipeuco','Curarrehue','Cunco'] },
+		{ name: 'Región de Los Ríos', comunas: ['Valdivia','La Unión','Río Bueno','Panguipulli','Paillaco','Lanco','Los Lagos','Corral','Máfil','Mariquina','Futrono','Lago Ranco'] },
+		{ name: 'Región de Los Lagos', comunas: ['Puerto Montt','Osorno','Castro','Ancud','Puerto Varas','Frutillar','Llanquihue','Fresia','Los Muermos','Maullín','Calbuco','Cochamó','Purranque','Río Negro','San Pablo','Puerto Octay','Quellón','Quemchi','Dalcahue','Curaco de Vélez','Quinchao','Puqueldón','Chonchi'] },
+		{ name: 'Región de Aysén del General Carlos Ibáñez del Campo', comunas: ['Coyhaique','Aysén','Puerto Aysén','Chile Chico','Cochrane','Río Ibáñez','Cisnes','Guaitecas','Lago Verde','Tortel'] },
+		{ name: 'Región de Magallanes y de la Antártica Chilena', comunas: ['Punta Arenas','Puerto Natales','Porvenir','Puerto Williams','Cabo de Hornos','Primavera','Timaukel','Torres del Paine','Laguna Blanca','San Gregorio','Río Verde'] }
 	]
 
 	function validate(){
@@ -42,6 +43,7 @@ export default function Register(){
 		if(!name || name.trim().length < 3) e.name = 'Nombre requerido (min 3 caracteres)'
 		if(!email || !emailRegex.test(email.trim())) e.email = 'Email inválido'
 		if(!password || password.length < 6) e.password = 'Contraseña mínima 6 caracteres'
+		if(!rut || rut.trim().length < 8) e.rut = 'RUT requerido (sin puntos, con guión)'
 		if(!address || address.trim().length < 5) e.address = 'Dirección de envío requerida'
 		if(!region) e.region = 'Región requerida'
 		if(!comuna) e.comuna = 'Comuna requerida'
@@ -59,25 +61,30 @@ export default function Register(){
 		setLoading(true)
 		try{
 			const isAdmin = email.trim().toLowerCase().endsWith('@admin.com')
+			const rolId = isAdmin ? 1 : 2 // 1=admin, 2=cliente
+			const direccionCompleta = `${address.trim()}, ${comuna}, ${region}, ${postalCode.trim()}`
+			
 			const payload = {
-				name: name.trim(),
-				email: email.trim(),
-				password,
-				role: isAdmin ? 'admin' : 'cliente',
-				shipping: {
-					address: address.trim(),
-					region,
-					comuna,
-					postalCode: postalCode.trim()
-				}
+				nombre: name.trim(),
+				correo: email.trim(),
+				contrasena: password,
+				rut: rut.trim(),
+				telefono: '',
+				direccion: direccionCompleta,
+				rolId: rolId
 			}
 
-			await users.register(payload)
+			const result = await users.register(payload)
+			console.log('✓ Usuario registrado exitosamente:', result)
 			setLoading(false)
+			alert('¡Registro exitoso! Ahora puedes iniciar sesión.')
 			navigate('/login')
 		}catch(err){
 			setLoading(false)
-			setErrors({ form: err?.message || 'Error registrando usuario' })
+			console.error('Error en registro:', err)
+			const errorMsg = err?.response?.data?.message || err?.message || 'Error registrando usuario'
+			setErrors({ form: errorMsg })
+			alert('Error: ' + errorMsg)
 		}
 	}
 
@@ -103,20 +110,33 @@ export default function Register(){
 							{errors.name && <div className="error-text">{errors.name}</div>}
 						</div>
 
-						<div className="mb-12">
-							<label className="label-13">Correo electrónico</label>
-							<input
-								type="email"
-								className="form-control"
-								placeholder="tu@gmail.com"
-								value={email}
-								onChange={e=>setEmail(e.target.value)}
-								disabled={loading}
-							/>
-							{errors.email && <div className="error-text">{errors.email}</div>}
-						</div>
+					<div className="mb-12">
+						<label className="label-13">Correo electrónico</label>
+						<input
+							type="email"
+							className="form-control"
+							placeholder="tu@gmail.com"
+							value={email}
+							onChange={e=>setEmail(e.target.value)}
+							disabled={loading}
+						/>
+						{errors.email && <div className="error-text">{errors.email}</div>}
+					</div>
 
-						<div className="mb-12">
+					<div className="mb-12">
+						<label className="label-13">RUT</label>
+						<input
+							type="text"
+							className="form-control"
+							placeholder="12345678-9"
+							value={rut}
+							onChange={e=>setRut(e.target.value)}
+							disabled={loading}
+						/>
+						{errors.rut && <div className="error-text">{errors.rut}</div>}
+					</div>
+
+					<div className="mb-12">
 							<label className="label-13">Contraseña</label>
 							<div className="field-row">
 								<input

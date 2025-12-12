@@ -19,14 +19,14 @@ function getAuth(){
   try{ const raw = localStorage.getItem(AUTH_KEY); return raw ? JSON.parse(raw) : null }catch(e){ return null }
 }
 
-export async function register({ email, password, name }){
+export async function register(payload){
   try{ 
-    const res = await api.post('/auth/register', { email, password, name })
+    const res = await api.post('/auth/register', payload)
     console.log('✓ Usuario registrado en backend:', res.data)
-    setAuth(res.data)
+    // No guardamos auth aquí, solo retornamos el resultado
     return res.data
   }catch(e){ 
-    console.error('Error registrando usuario:', e.message)
+    console.error('Error registrando usuario:', e.response?.data || e.message)
     throw e
   }
 }
