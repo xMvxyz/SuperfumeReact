@@ -143,13 +143,27 @@ export default function ProductDetail(){
                     </ul>
                   )}
 
+                  {product.fragancia && (
+                    <ul className="list-inline">
+                      <li className="list-inline-item"><h6>Fragancia:</h6></li>
+                      <li className="list-inline-item"><p className="text-muted"><strong>{product.fragancia}</strong></p></li>
+                    </ul>
+                  )}
+
                   <h6>Descripción:</h6>
                   <p>{product.descripcion || 'Sin descripción disponible'}</p>
 
-                  {product.categoria && (
+                  {product.notas && (
                     <>
-                      <h6>Categoría:</h6>
-                      <p>{product.categoria}</p>
+                      <h6>Notas:</h6>
+                      <p>{product.notas}</p>
+                    </>
+                  )}
+
+                  {product.perfil && (
+                    <>
+                      <h6>Perfil:</h6>
+                      <p>{product.perfil}</p>
                     </>
                   )}
 

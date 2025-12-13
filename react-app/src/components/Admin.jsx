@@ -4,7 +4,7 @@ import * as perfumeService from '../services/perfume'
 
 export default function Admin(){
   const [products, setProducts] = useState([])
-  const [form, setForm] = useState({nombre:'', descripcion:'', precio:'', stock:'', categoria:'', img:'/img/producto_01.jpg', genero:'', marca:'', fragancia:''})
+  const [form, setForm] = useState({nombre:'', descripcion:'', precio:'', stock:'', img:'/img/producto_01.jpg', genero:'', marca:'', fragancia:'', notas:'', perfil:''})
   const [errors, setErrors] = useState({})
   const [query, setQuery] = useState('')
   const [sortBy, setSortBy] = useState('newest')
@@ -37,13 +37,16 @@ export default function Admin(){
     e.preventDefault()
     const newErrors = {}
   if(!form.nombre || form.nombre.trim().length === 0) newErrors.nombre = 'El Nombre es obligatorio'
+  if(!form.fragancia || form.fragancia.trim().length === 0) newErrors.fragancia = 'La Fragancia es obligatoria'
+  if(!form.notas || form.notas.trim().length === 0) newErrors.notas = 'Las Notas son obligatorias'
+  if(!form.perfil || form.perfil.trim().length === 0) newErrors.perfil = 'El Perfil es obligatorio'
   const priceInt = parseInt(form.precio, 10)
   if(isNaN(priceInt) || priceInt <= 0) newErrors.precio = 'El precio debe ser un entero positivo'
   const stockInt = parseInt(form.stock, 10)
   if(isNaN(stockInt) || stockInt < 0) newErrors.stock = 'El stock debe ser un número no negativo'
     if(Object.keys(newErrors).length){ setErrors(newErrors); return }
 
-    const payload = { nombre: form.nombre.trim(), descripcion: (form.descripcion||'').trim(), precio: priceInt, stock: stockInt, categoria: form.categoria || '', genero: form.genero || '', marca: form.marca || '', imagenUrl: form.img, fragancia: form.fragancia || '' }
+    const payload = { nombre: form.nombre.trim(), descripcion: (form.descripcion||'').trim(), precio: priceInt, stock: stockInt, genero: form.genero || '', marca: form.marca || '', imagenUrl: form.img, fragancia: form.fragancia.trim(), notas: form.notas.trim(), perfil: form.perfil.trim() }
     
     setCreatingProduct(true)
     try{
@@ -51,7 +54,7 @@ export default function Admin(){
       if(created && created.id){
         setProducts(prev => [created, ...prev])
       }
-      setForm({nombre:'', descripcion:'', precio:'', stock:'', categoria:'', img:'/img/producto_01.jpg', genero:'', marca:'', fragancia:''})
+      setForm({nombre:'', descripcion:'', precio:'', stock:'', img:'/img/producto_01.jpg', genero:'', marca:'', fragancia:'', notas:'', perfil:''})
       setErrors({})
     }catch(err){
       console.error('Error creando perfume:', err)
@@ -123,7 +126,7 @@ export default function Admin(){
   }
 
   const [editingId, setEditingId] = useState(null)
-  const [editValues, setEditValues] = useState({nombre:'', descripcion:'', precio:'', stock:'', categoria:'', img:'', genero:'', marca:'', fragancia:''})
+  const [editValues, setEditValues] = useState({nombre:'', descripcion:'', precio:'', stock:'', img:'', genero:'', marca:'', fragancia:'', notas:'', perfil:''})
 
   function startEdit(p){
     setEditingId(p.id)
@@ -132,31 +135,35 @@ export default function Admin(){
       descripcion: p.descripcion || '',
       precio: String(p.precio ?? p.price ?? ''),
       stock: String(p.stock ?? ''),
-      categoria: p.categoria || '',
       img: p.img || p.image || p.imagenUrl || '',
       genero: p.genero || p.gender || '',
       marca: p.marca || p.brand || '',
-      fragancia: p.fragancia || ''
+      fragancia: p.fragancia || '',
+      notas: p.notas || '',
+      perfil: p.perfil || ''
     })
     setErrors({})
   }
 
   function cancelEdit(){
     setEditingId(null)
-    setEditValues({nombre:'', descripcion:'', precio:'', stock:'', categoria:'', img:'', genero:'', marca:'', fragancia:''})
+    setEditValues({nombre:'', descripcion:'', precio:'', stock:'', img:'', genero:'', marca:'', fragancia:'', notas:'', perfil:''})
     setErrors({})
   }
 
   async function saveEdit(id){
     const newErrors = {}
     if(!editValues.nombre || editValues.nombre.trim().length === 0) newErrors.nombre = 'El Nombre es obligatorio'
+    if(!editValues.fragancia || editValues.fragancia.trim().length === 0) newErrors.fragancia = 'La Fragancia es obligatoria'
+    if(!editValues.notas || editValues.notas.trim().length === 0) newErrors.notas = 'Las Notas son obligatorias'
+    if(!editValues.perfil || editValues.perfil.trim().length === 0) newErrors.perfil = 'El Perfil es obligatorio'
     const priceInt = parseInt(editValues.precio,10)
     if(isNaN(priceInt) || priceInt <= 0) newErrors.precio = 'El precio debe ser un entero positivo'
     const stockInt = parseInt(editValues.stock, 10)
     if(isNaN(stockInt) || stockInt < 0) newErrors.stock = 'El stock debe ser un número no negativo'
     if(Object.keys(newErrors).length){ setErrors(newErrors); return }
 
-    const updates = { nombre: editValues.nombre.trim(), descripcion: (editValues.descripcion||'').trim(), precio: priceInt, stock: stockInt, categoria: editValues.categoria || '', genero: editValues.genero || '', marca: editValues.marca || '', imagenUrl: editValues.img, fragancia: editValues.fragancia || '' }
+    const updates = { nombre: editValues.nombre.trim(), descripcion: (editValues.descripcion||'').trim(), precio: priceInt, stock: stockInt, genero: editValues.genero || '', marca: editValues.marca || '', imagenUrl: editValues.img, fragancia: editValues.fragancia.trim(), notas: editValues.notas.trim(), perfil: editValues.perfil.trim() }
     
     try{
       const updated = await perfumeService.update(id, updates)
@@ -273,17 +280,7 @@ export default function Admin(){
                   style={{borderRadius: '5px'}}
                 />
               </div>
-              <div className="col-md-4 mb-3">
-                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Categoría</label>
-                <input
-                  className="form-control"
-                  placeholder="Ej: Eau de Parfum"
-                  value={form.categoria}
-                  onChange={e=>setForm(f=>({...f, categoria: e.target.value}))}
-                  style={{borderRadius: '5px'}}
-                />
-              </div>
-              <div className="col-md-4 mb-3">
+              <div className="col-md-12 mb-3">
                 <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Género</label>
                 <select 
                   className="form-select"
@@ -298,7 +295,7 @@ export default function Admin(){
                 </select>
               </div>
               <div className="col-md-4 mb-3">
-                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Fragancia</label>
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Fragancia *</label>
                 <input
                   className="form-control"
                   placeholder="Ej: Floral, Amaderada, Cítrica"
@@ -306,6 +303,29 @@ export default function Admin(){
                   onChange={e=>setForm(f=>({...f, fragancia: e.target.value}))}
                   style={{borderRadius: '5px'}}
                 />
+                {errors.fragancia && <small className="text-danger d-block mt-1">{errors.fragancia}</small>}
+              </div>
+              <div className="col-md-4 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Notas *</label>
+                <input
+                  className="form-control"
+                  placeholder="Ej: Jazmín, Vainilla, Sándalo"
+                  value={form.notas}
+                  onChange={e=>setForm(f=>({...f, notas: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {errors.notas && <small className="text-danger d-block mt-1">{errors.notas}</small>}
+              </div>
+              <div className="col-md-4 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Perfil *</label>
+                <input
+                  className="form-control"
+                  placeholder="Ej: Elegante, Fresco, Sensual"
+                  value={form.perfil}
+                  onChange={e=>setForm(f=>({...f, perfil: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {errors.perfil && <small className="text-danger d-block mt-1">{errors.perfil}</small>}
               </div>
               <div className="col-md-6 mb-3">
                 <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Precio *</label>
@@ -402,11 +422,28 @@ export default function Admin(){
                         {errors.nombre && <small className="error-text">{errors.nombre}</small>}
                       </div>
                       <div className="admin-form-col min-w-120">
-                        <label className="field-label">Fragancia</label>
+                        <label className="field-label">Fragancia *</label>
                         <input
                           value={editValues.fragancia}
                           onChange={e=>setEditValues(v=>({...v, fragancia: e.target.value}))}
                         />
+                        {errors.fragancia && <small className="error-text">{errors.fragancia}</small>}
+                      </div>
+                      <div className="admin-form-col min-w-120">
+                        <label className="field-label">Notas *</label>
+                        <input
+                          value={editValues.notas}
+                          onChange={e=>setEditValues(v=>({...v, notas: e.target.value}))}
+                        />
+                        {errors.notas && <small className="error-text">{errors.notas}</small>}
+                      </div>
+                      <div className="admin-form-col min-w-120">
+                        <label className="field-label">Perfil *</label>
+                        <input
+                          value={editValues.perfil}
+                          onChange={e=>setEditValues(v=>({...v, perfil: e.target.value}))}
+                        />
+                        {errors.perfil && <small className="error-text">{errors.perfil}</small>}
                       </div>
                       <div className="admin-form-col min-w-120">
                         <label className="field-label">Precio</label>
@@ -441,13 +478,6 @@ export default function Admin(){
                         />
                       </div>
                       <div className="admin-form-col min-w-120">
-                        <label className="field-label">Categoría</label>
-                        <input
-                          value={editValues.categoria}
-                          onChange={e=>setEditValues(v=>({...v, categoria: e.target.value}))}
-                        />
-                      </div>
-                      <div className="admin-form-col min-w-120">
                         <label className="field-label">Género</label>
                         <select value={editValues.genero} onChange={e=>setEditValues(v=>({...v, genero: e.target.value}))}>
                           <option value="">Género</option>
@@ -465,10 +495,11 @@ export default function Admin(){
                     <div>
                       <h4 className="title-no-margin">{p.nombre || p.title}</h4>
                       {p.descripcion && <p className="descripcion">{p.descripcion}</p>}
-                      <p className="price">{p.fragancia || 'Sin fragancia especificada'}</p>
+                      <p className="price"><strong>Fragancia:</strong> {p.fragancia || 'Sin fragancia especificada'}</p>
                       <p className="meta"><strong>Marca:</strong> {p.marca || p.brand || '-'}  </p>
                       <p className="meta"><strong>Género:</strong> {p.genero || p.gender || '-'} </p>
-                      <p className="meta"><strong>Categoría:</strong> {p.categoria || '-'} </p>
+                      <p className="meta"><strong>Notas:</strong> {p.notas || '-'} </p>
+                      <p className="meta"><strong>Perfil:</strong> {p.perfil || '-'} </p>
                       <p className="meta"><strong>Precio:</strong> ${(p.precio ?? p.price)} | <strong>Stock:</strong> {p.stock ?? '-'} </p>
                     </div>
                   )}
