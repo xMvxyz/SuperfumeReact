@@ -77,8 +77,8 @@ export default function Header(){
           <button className="navbar-toggler" type="button" aria-controls="navbarColor01" aria-expanded={navOpen} aria-label="Toggle navigation" onClick={()=> setNavOpen(v => !v)}>
             <span className="navbar-toggler-icon" />
           </button>
-          <div className={"collapse navbar-collapse justify-content-center" + (navOpen ? ' show' : '')} id="navbarColor01" aria-expanded={navOpen}>
-            <ul className="navbar-nav">
+          <div className={"collapse navbar-collapse" + (navOpen ? ' show' : '')} id="navbarColor01" aria-expanded={navOpen} style={{justifyContent: 'center'}}>
+            <ul className="navbar-nav" style={{margin: '0 auto'}}>
               <li className="nav-item">
                 <Link className="nav-link text-dark" to="/" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Inicio</Link>
               </li>
@@ -134,11 +134,11 @@ export default function Header(){
                 position: absolute;
                 top: 50px;
                 right: 0;
-                background: white;
-                border: 1px solid #e8e8e8;
-                border-radius: 8px;
+                background: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 5px;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                padding: 12px;
+                padding: 16px;
                 min-width: 200px;
                 z-index: 1000;
               }
@@ -146,7 +146,7 @@ export default function Header(){
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
-                background: #1d242d;
+                background: #000;
                 color: white;
                 border: none;
                 display: flex;
@@ -157,7 +157,7 @@ export default function Header(){
                 font-size: 16px;
               }
               .user-icon-btn:hover {
-                background: #2a3340;
+                background: #333;
               }
             `}</style>
             <button className="btn btn-link p-2" aria-label="Buscar" title="Buscar" onClick={()=>setShowSearch(true)}>
@@ -178,12 +178,13 @@ export default function Header(){
                 
                 {showUserMenu && user.role?.toLowerCase() !== 'admin' && user.role?.toLowerCase() !== 'administrador' && (
                   <div className="user-menu-dropdown">
-                    <div style={{padding: '8px 0', borderBottom: '1px solid #e8e8e8', marginBottom: '8px'}}>
+                    <div style={{padding: '8px 0', borderBottom: '1px solid #dee2e6', marginBottom: '12px'}}>
                       <strong>{user.nombre}</strong>
-                      <div style={{fontSize: '12px', color: '#666'}}>{user.correo}</div>
+                      <div style={{fontSize: '12px', color: '#6c757d'}}>{user.correo}</div>
                     </div>
                     <button 
-                      className="btn btn-sm btn-danger w-100"
+                      className="btn btn-danger w-100"
+                      style={{borderRadius: '5px', padding: '10px'}}
                       onClick={handleLogout}
                     >
                       Cerrar Sesión

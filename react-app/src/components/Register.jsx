@@ -61,17 +61,17 @@ export default function Register(){
 		setLoading(true)
 		try{
 			const isAdmin = email.trim().toLowerCase().endsWith('@admin.com')
-			const rolId = isAdmin ? 1 : 2 // 1=admin, 2=cliente
+			const roleStr = isAdmin ? 'admin' : 'cliente'
 			const direccionCompleta = `${address.trim()}, ${comuna}, ${region}, ${postalCode.trim()}`
 			
 			const payload = {
-				nombre: name.trim(),
-				correo: email.trim(),
-				contrasena: password,
+				name: name.trim(),
+				email: email.trim(),
+				password: password,
 				rut: rut.trim(),
-				telefono: '',
-				direccion: direccionCompleta,
-				rolId: rolId
+				phone: '',
+				address: direccionCompleta,
+				role: roleStr
 			}
 
 			const result = await users.register(payload)

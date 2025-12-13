@@ -110,43 +110,43 @@ export default function ProductDetail(){
   }
 
   return (
-    <div>
-      <section className="bg-light">
+    <div style={{backgroundColor: '#fff', minHeight: '100vh'}}>
+      <section style={{backgroundColor: '#fff', paddingTop: '40px'}}>
         <div className="container pb-5">
           <div className="row">
             <div className="col-lg-5 mt-5">
-              <div className="card h-100" style={{border: 'none', overflow: 'hidden'}}>
+              <div className="card h-100" style={{border: 'none', overflow: 'hidden', borderRadius: '5px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
                 <img 
                   className="card-img-top img-fluid w-100" 
                   src={product.imagenUrl || '/img/producto_01.jpg'} 
                   alt={product.nombre}
-                  style={{ objectFit: 'cover', height: '100%' }}
+                  style={{ objectFit: 'cover', height: '100%', borderRadius: '5px' }}
                 />
               </div>
             </div>
 
             <div className="col-lg-7 mt-5">
-              <div className="card">
+              <div className="card" style={{borderRadius: '5px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', border: 'none'}}>
                 <div className="card-body">
                   <h1 className="h2">{product.nombre}</h1>
                   <p className="h3 py-2">${(product.precio || 0).toLocaleString()}</p>
                   
                   <ul className="list-inline">
                     <li className="list-inline-item"><h6>Marca:</h6></li>
-                    <li className="list-inline-item"><p className="text-muted"><strong>{product.marca}</strong></p></li>
+                    <li className="list-inline-item"><p className="text-muted">{product.marca}</p></li>
                   </ul>
 
                   {product.genero && (
                     <ul className="list-inline">
                       <li className="list-inline-item"><h6>Género:</h6></li>
-                      <li className="list-inline-item"><p className="text-muted"><strong>{product.genero}</strong></p></li>
+                      <li className="list-inline-item"><p className="text-muted">{product.genero}</p></li>
                     </ul>
                   )}
 
                   {product.fragancia && (
                     <ul className="list-inline">
                       <li className="list-inline-item"><h6>Fragancia:</h6></li>
-                      <li className="list-inline-item"><p className="text-muted"><strong>{product.fragancia}</strong></p></li>
+                      <li className="list-inline-item"><p className="text-muted">{product.fragancia}</p></li>
                     </ul>
                   )}
 
@@ -205,11 +205,31 @@ export default function ProductDetail(){
                       </div>
                     </div>
 
+                    <style>{`
+                      .product-detail-btn {
+                        background-color: #fff;
+                        color: #000;
+                        border: 2px solid #000;
+                        border-radius: 5px;
+                        padding: 12px 24px;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                      }
+                      .product-detail-btn:hover:not(:disabled) {
+                        background-color: #000;
+                        color: #fff;
+                        border-color: #000;
+                      }
+                      .product-detail-btn:disabled {
+                        opacity: 0.5;
+                        cursor: not-allowed;
+                      }
+                    `}</style>
                     <div className="row pb-3">
                       <div className="col d-grid">
                         <button 
                           type="submit" 
-                          className="btn btn-success btn-lg" 
+                          className="btn btn-lg product-detail-btn" 
                           name="submit" 
                           value="addtocard"
                           disabled={!product.stock || product.stock <= 0}
@@ -218,7 +238,7 @@ export default function ProductDetail(){
                         </button>
                       </div>
                       <div className="col d-grid">
-                        <button type="button" className="btn btn-outline-secondary btn-lg" onClick={() => navigate('/shop')}>
+                        <button type="button" className="btn btn-lg product-detail-btn" onClick={() => navigate('/shop')}>
                           Continuar comprando
                         </button>
                       </div>

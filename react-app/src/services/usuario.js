@@ -32,8 +32,11 @@ export async function register(payload){
 }
 
 export async function login({ email, password }){
-  try{ 
-    const res = await api.post('/auth/login', { correo: email, contrasena: password })
+  try{
+    const payload = { email, password }
+    console.log('Enviando login con:', payload)
+    console.log('URL del backend:', api.defaults.baseURL)
+    const res = await api.post('/auth/login', payload)
     console.log('Respuesta del backend:', res.data)
     
     if(!res.data.success){
