@@ -1,12 +1,60 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import * as userService from '../services/usuario'
 
 export default function Header(){
   const [showSearch, setShowSearch] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [user, setUser] = useState(null)
+  const [showUserMenu, setShowUserMenu] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    loadUser()
+    window.addEventListener('storage', loadUser)
+    return () => window.removeEventListener('storage', loadUser)
+  }, [])
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (showUserMenu && !e.target.closest('.user-icon-btn') && !e.target.closest('.user-menu-dropdown')) {
+        setShowUserMenu(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showUserMenu])
+
+  function loadUser() {
+    try {
+      const auth = localStorage.getItem('superfume_auth_v1')
+      if (auth) {
+        const authData = JSON.parse(auth)
+        setUser(authData.user)
+      } else {
+        setUser(null)
+      }
+    } catch (e) {
+      setUser(null)
+    }
+  }
+
+  async function handleLogout() {
+    await userService.logout()
+    setUser(null)
+    setShowUserMenu(false)
+    navigate('/')
+  }
+
+  function handleUserClick() {
+    if (user?.role?.toLowerCase() === 'admin' || user?.role?.toLowerCase() === 'administrador') {
+      navigate('/admin')
+    } else {
+      setShowUserMenu(!showUserMenu)
+    }
+  }
 
   function doSearch(){
     setShowSearch(false)
@@ -51,27 +99,104 @@ export default function Header(){
                 <button className="nav-link text-dark btn btn-link" style={{paddingLeft:0}} onClick={()=>{ setShowSearch(true); if(window.innerWidth < 992) setNavOpen(false) }} aria-label="Buscar">Buscar</button>
               </li>
 
-              <li className="nav-item d-lg-none">
-                <Link className="nav-link text-dark" to="/login" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Login</Link>
-              </li>
-              <li className="nav-item d-lg-none">
-                <Link className="nav-link text-dark" to="/admin" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Admin</Link>
-              </li>
+              {user ? (
+                <>
+                  <li className="nav-item d-lg-none">
+                    <span className="nav-link text-dark">Hola, {user.nombre}</span>
+                  </li>
+                  {(user.role?.toLowerCase() === 'admin' || user.role?.toLowerCase() === 'administrador') && (
+                    <li className="nav-item d-lg-none">
+                      <Link className="nav-link text-dark" to="/admin" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Panel Admin</Link>
+                    </li>
+                  )}
+                  <li className="nav-item d-lg-none">
+                    <button className="nav-link text-dark btn btn-link" style={{paddingLeft:0}} onClick={handleLogout}>Cerrar Sesión</button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="nav-item d-lg-none">
+                    <Link className="nav-link text-dark" to="/login" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Login</Link>
+                  </li>
+                  <li className="nav-item d-lg-none">
+                    <Link className="nav-link text-dark" to="/register" onClick={()=> { if(window.innerWidth < 992) setNavOpen(false) }}>Registrarse</Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
-          <div className="d-none d-lg-flex align-items-center ms-auto" style={{gap:8}}>
+          <div className="d-none d-lg-flex align-items-center ms-auto" style={{gap:8, position:'relative'}}>
             <style>{`
               .header-search-input { padding:10px; height:40px; border-radius:6px; border:1px solid #e8e8e8 }
               .overlay-action-btn { height:40px; padding:8px 12px; border-radius:6px; border:1px solid #e8e8e8; display:inline-flex; align-items:center; justify-content:center }
               .overlay-action-btn.btn-primary { background:#1d242d; color:#fff; border-color:#1d242d }
+              .user-menu-dropdown {
+                position: absolute;
+                top: 50px;
+                right: 0;
+                background: white;
+                border: 1px solid #e8e8e8;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                padding: 12px;
+                min-width: 200px;
+                z-index: 1000;
+              }
+              .user-icon-btn {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: #1d242d;
+                color: white;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 16px;
+              }
+              .user-icon-btn:hover {
+                background: #2a3340;
+              }
             `}</style>
             <button className="btn btn-link p-2" aria-label="Buscar" title="Buscar" onClick={()=>setShowSearch(true)}>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000" viewBox="0 0 24 24">
                 <path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12A6 6 0 0110 4z" />
               </svg>
             </button>
-            <Link className="nav-link text-dark" to="/login" style={{padding:'6px 8px'}}>Login</Link>
-            <Link className="nav-link text-dark" to="/admin" style={{padding:'6px 8px'}}>Admin</Link>
+            
+            {user ? (
+              <>
+                <button 
+                  className="user-icon-btn" 
+                  onClick={handleUserClick}
+                  title={user.role?.toLowerCase() === 'admin' || user.role?.toLowerCase() === 'administrador' ? 'Ir al Panel Admin' : user.nombre}
+                >
+                  {user.nombre?.charAt(0).toUpperCase() || 'U'}
+                </button>
+                
+                {showUserMenu && user.role?.toLowerCase() !== 'admin' && user.role?.toLowerCase() !== 'administrador' && (
+                  <div className="user-menu-dropdown">
+                    <div style={{padding: '8px 0', borderBottom: '1px solid #e8e8e8', marginBottom: '8px'}}>
+                      <strong>{user.nombre}</strong>
+                      <div style={{fontSize: '12px', color: '#666'}}>{user.correo}</div>
+                    </div>
+                    <button 
+                      className="btn btn-sm btn-danger w-100"
+                      onClick={handleLogout}
+                    >
+                      Cerrar Sesión
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <Link className="nav-link text-dark" to="/login" style={{padding:'6px 8px'}}>Iniciar Sesión</Link>
+                <Link className="nav-link text-dark" to="/register" style={{padding:'6px 8px'}}>Registrarse</Link>
+              </>
+            )}
           </div>
 
           {showSearch && (

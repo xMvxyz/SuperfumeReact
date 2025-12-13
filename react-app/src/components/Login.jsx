@@ -33,12 +33,22 @@ export default function Login(){
       const role = res?.user?.role || 'cliente'
       if(remember) localStorage.setItem('sfm_remember_email', email)
       setLoading(false)
-      if(role === 'admin') navigate('/admin')
-      else navigate('/shop')
+      console.log('Usuario con rol:', role)
+      
+      //evento para que el Header se actualice
+      window.dispatchEvent(new Event('storage'))
+      
+      if(role.toLowerCase() === 'admin' || role.toLowerCase() === 'administrador') {
+        navigate('/admin')
+      } else {
+        navigate('/shop')
+      }
     }catch(err){
       setLoading(false)
+      console.error('Error en login:', err)
       const message = err?.message || 'Error autenticando'
       setErrors({ form: message })
+      alert('Error: ' + message)
     }
   }
 

@@ -33,13 +33,27 @@ export async function register(payload){
 
 export async function login({ email, password }){
   try{ 
-    const res = await api.post('/auth/login', { email, password })
-    console.log('✓ Usuario autenticado:', res.data)
-    setAuth(res.data)
-    return res.data
+    const res = await api.post('/auth/login', { correo: email, contrasena: password })
+    console.log('Respuesta del backend:', res.data)
+    
+    if(!res.data.success){
+      throw new Error(res.data.mensaje || 'Error en el login')
+    }
+    
+    // Guardar la sesión
+    const authData = {
+      user: {
+        ...res.data.usuario,
+        role: res.data.usuario.rol?.nombre || 'cliente'
+      },
+      token: 'authenticated'
+    }
+    setAuth(authData)
+    console.log('Usuario autenticado:', authData)
+    return authData
   }catch(e){ 
-    console.error('Error en login:', e.message)
-    throw e
+    console.error('Error en login:', e.response?.data || e.message)
+    throw new Error(e.response?.data?.mensaje || e.message || 'Error autenticando')
   }
 }
 
