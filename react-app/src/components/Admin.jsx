@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import * as usersApi from '../services/usuario'
 import * as perfumeService from '../services/perfume'
 
 export default function Admin(){
+  const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [form, setForm] = useState({nombre:'', descripcion:'', precio:'', stock:'', img:'/img/producto_01.jpg', genero:'', marca:'', fragancia:'', notas:'', perfil:''})
   const [errors, setErrors] = useState({})
@@ -16,6 +18,31 @@ export default function Admin(){
   const [userErrors, setUserErrors] = useState({})
   const [editingUserId, setEditingUserId] = useState(null)
   const [initError, setInitError] = useState(null)
+
+  // Verificar autenticación y rol de administrador
+  useEffect(()=>{
+    try{
+      const authData = localStorage.getItem('superfume_auth_v1')
+      if(!authData){
+        console.log('No hay sesión, redirigiendo a login')
+        navigate('/login')
+        return
+      }
+      const { user } = JSON.parse(authData)
+      const userRole = user?.role?.toLowerCase()
+      console.log('Usuario en Admin:', user?.nombre, 'Rol:', userRole, 'Rol ID:', user?.rol?.id)
+      
+      // Verificar que el rol sea admin o administrador
+      if(userRole !== 'admin' && userRole !== 'administrador'){
+        console.log('Usuario no es administrador, redirigiendo')
+        navigate('/shop')
+        return
+      }
+    }catch(e){
+      console.error('Error verificando autenticación:', e)
+      navigate('/login')
+    }
+  }, [navigate])
 
   useEffect(()=>{
     (async ()=>{

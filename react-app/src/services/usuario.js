@@ -43,13 +43,13 @@ export async function login({ email, password }){
       throw new Error(res.data.mensaje || 'Error en el login')
     }
     
-    // Guardar la sesión
+    // Guardar la sesión con el token JWT real
     const authData = {
       user: {
         ...res.data.usuario,
         role: res.data.usuario.rol?.nombre || 'cliente'
       },
-      token: 'authenticated'
+      token: res.data.token // Guardar el token JWT real del backend
     }
     setAuth(authData)
     console.log('Usuario autenticado:', authData)
