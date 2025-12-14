@@ -18,7 +18,12 @@ api.interceptors.request.use(
         const { token } = JSON.parse(authData)
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
+          console.log('Token agregado a la petición:', config.url, 'Token:', token.substring(0, 20) + '...')
+        } else {
+          console.warn('No hay token en authData para:', config.url)
         }
+      } else {
+        console.warn('No hay authData en localStorage para:', config.url)
       }
     } catch (e) {
       console.error('Error reading auth token:', e)
@@ -33,9 +38,12 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      console.error('Error 401 - No autorizado:', error.config?.url)
+      console.error('Respuesta del servidor:', error.response?.data)
       // Token inválido o expirado - limpiar auth y redirigir
       localStorage.removeItem('superfume_auth_v1')
       if (window.location.pathname !== '/login') {
+        console.log('Redirigiendo a /login desde:', window.location.pathname)
         window.location.href = '/login'
       }
     }

@@ -23,21 +23,36 @@ export default function Admin(){
   useEffect(()=>{
     try{
       const authData = localStorage.getItem('superfume_auth_v1')
+      console.log('Verificando autenticación en Admin...')
+      
       if(!authData){
         console.log('No hay sesión, redirigiendo a login')
         navigate('/login')
         return
       }
-      const { user } = JSON.parse(authData)
+      
+      const parsed = JSON.parse(authData)
+      const { user, token } = parsed
       const userRole = user?.role?.toLowerCase()
-      console.log('Usuario en Admin:', user?.nombre, 'Rol:', userRole, 'Rol ID:', user?.rol?.id)
+      
+      console.log('Datos de sesión encontrados:')
+      console.log('  - Usuario:', user?.nombre)
+      console.log('  - Email:', user?.correo)
+      console.log('  - Rol:', user?.role)
+      console.log('  - Rol (lowercase):', userRole)
+      console.log('  - Rol ID:', user?.rol?.id)
+      console.log('  - Token presente:', token ? 'Sí' : 'No')
+      console.log('  - Token length:', token ? token.length : 0)
       
       // Verificar que el rol sea admin o administrador
       if(userRole !== 'admin' && userRole !== 'administrador'){
-        console.log('Usuario no es administrador, redirigiendo')
+        console.log('Usuario no es administrador, redirigiendo a /shop')
+        console.log('Rol detectado:', userRole)
         navigate('/shop')
         return
       }
+      
+      console.log('Usuario autorizado para acceder al panel de administración')
     }catch(e){
       console.error('Error verificando autenticación:', e)
       navigate('/login')
@@ -51,7 +66,7 @@ export default function Admin(){
         setUsers(u || [])
         
         const perfumes = await perfumeService.list()
-        console.log('✓ Perfumes cargados en Admin:', perfumes.length)
+        console.log('Perfumes cargados en Admin:', perfumes.length)
         setProducts(perfumes || [])
       }catch(e){
         console.error('Error cargando datos de admin:', e)

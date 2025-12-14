@@ -52,7 +52,10 @@ export async function login({ email, password }){
       token: res.data.token // Guardar el token JWT real del backend
     }
     setAuth(authData)
-    console.log('Usuario autenticado:', authData)
+    console.log('Usuario autenticado:', authData.user)
+    console.log('Rol del usuario:', authData.user.role)
+    console.log('Token guardado:', authData.token ? 'Sí (longitud: ' + authData.token.length + ')' : 'No')
+    console.log('Token (primeros 50 chars):', authData.token ? authData.token.substring(0, 50) + '...' : 'N/A')
     return authData
   }catch(e){ 
     console.error('Error en login:', e.response?.data || e.message)

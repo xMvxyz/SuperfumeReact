@@ -29,18 +29,25 @@ export default function Login(){
 
     setLoading(true)
     try{
+      console.log('Iniciando login con email:', email.trim())
       const res = await users.login({ email: email.trim(), password })
       const role = res?.user?.role || 'cliente'
       if(remember) localStorage.setItem('sfm_remember_email', email)
       setLoading(false)
-      console.log('Usuario con rol:', role)
+      
+      console.log('Login exitoso!')
+      console.log('  - Usuario:', res?.user?.nombre)
+      console.log('  - Rol:', role)
+      console.log('  - Email:', res?.user?.correo)
       
       //evento para que el Header se actualice
       window.dispatchEvent(new Event('storage'))
       
       if(role.toLowerCase() === 'admin' || role.toLowerCase() === 'administrador') {
+        console.log('Usuario es administrador, navegando a /admin')
         navigate('/admin')
       } else {
+        console.log('Usuario es cliente, navegando a /shop')
         navigate('/shop')
       }
     }catch(err){
