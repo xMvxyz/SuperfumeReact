@@ -22,14 +22,39 @@ export default function Shop(){
   }
 
   function addToCart(product, qty = 1){
+    const availableStock = product.stock ?? 0
+    if (availableStock <= 0) {
+      alert('Producto sin stock disponible')
+      return
+    }
+
     const current = readCart()
     const idx = current.findIndex(i => i.id === product.id)
     const price = product.precio ?? product.price ?? 0
+    
     if(idx >= 0){
-      current[idx].qty += qty
+      const newQty = current[idx].qty + qty
+      if (newQty > availableStock) {
+        alert(`Solo hay ${availableStock} unidades disponibles en stock`)
+        return
+      }
+      current[idx].qty = newQty
       current[idx].total = current[idx].qty * price
+      current[idx].stock = availableStock // actualizar stock
     }else{
-      current.push({ id: product.id, nombre: product.nombre || product.title || '', precio: price, img: product.imagenUrl || product.img || product.image || '/img/producto_01.jpg', qty: qty, total: price * qty })
+      if (qty > availableStock) {
+        alert(`Solo hay ${availableStock} unidades disponibles en stock`)
+        return
+      }
+      current.push({ 
+        id: product.id, 
+        nombre: product.nombre || product.title || '', 
+        precio: price, 
+        img: product.imagenUrl || product.img || product.image || '/img/producto_01.jpg', 
+        qty: qty, 
+        total: price * qty,
+        stock: availableStock
+      })
     }
     writeCart(current)
   }

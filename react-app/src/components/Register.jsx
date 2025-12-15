@@ -8,6 +8,7 @@ export default function Register(){
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [rut, setRut] = useState('')
+	const [phone, setPhone] = useState('')
 	const [showPassword, setShowPassword] = useState(false)
 	const [address, setAddress] = useState('')
 	const [region, setRegion] = useState('')
@@ -44,6 +45,7 @@ export default function Register(){
 		if(!email || !emailRegex.test(email.trim())) e.email = 'Email inválido'
 		if(!password || password.length < 6) e.password = 'Contraseña mínima 6 caracteres'
 		if(!rut || rut.trim().length < 8) e.rut = 'RUT requerido (sin puntos, con guión)'
+		if(!phone || !/^[0-9]{8,9}$/.test(phone.trim())) e.phone = 'Teléfono inválido (8-9 dígitos)'
 		if(!address || address.trim().length < 5) e.address = 'Dirección de envío requerida'
 		if(!region) e.region = 'Región requerida'
 		if(!comuna) e.comuna = 'Comuna requerida'
@@ -69,7 +71,7 @@ export default function Register(){
 				email: email.trim(),
 				password: password,
 				rut: rut.trim(),
-				phone: '',
+				phone: phone.trim(),
 				address: direccionCompleta,
 				role: roleStr
 			}
@@ -134,6 +136,20 @@ export default function Register(){
 							disabled={loading}
 						/>
 						{errors.rut && <div className="error-text">{errors.rut}</div>}
+					</div>
+
+					<div className="mb-12">
+						<label className="label-13">Teléfono</label>
+						<input
+							type="tel"
+							className="form-control"
+							placeholder="912345678"
+							value={phone}
+							onChange={e=>setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+							disabled={loading}
+							maxLength={9}
+						/>
+						{errors.phone && <div className="error-text">{errors.phone}</div>}
 					</div>
 
 					<div className="mb-12">

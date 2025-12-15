@@ -48,6 +48,7 @@ export default function ProductDetail(){
       }
       current[idx].qty = newQty
       current[idx].total = current[idx].qty * price
+      current[idx].stock = availableStock // actualizar stock
     }else{
       if (quantity > availableStock) {
         alert(`Solo hay ${availableStock} unidades disponibles en stock`)
@@ -59,7 +60,8 @@ export default function ProductDetail(){
         precio: price, 
         img: product.imagenUrl || '/img/producto_01.jpg', 
         qty: quantity, 
-        total: price * quantity 
+        total: price * quantity,
+        stock: availableStock
       })
     }
     writeCart(current)

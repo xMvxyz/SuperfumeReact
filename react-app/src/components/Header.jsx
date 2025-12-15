@@ -48,13 +48,7 @@ export default function Header(){
     navigate('/')
   }
 
-  function handleUserClick() {
-    if (user?.role?.toLowerCase() === 'admin' || user?.role?.toLowerCase() === 'administrador') {
-      navigate('/admin')
-    } else {
-      setShowUserMenu(!showUserMenu)
-    }
-  }
+
 
   function doSearch(){
     setShowSearch(false)
@@ -170,18 +164,32 @@ export default function Header(){
               <>
                 <button 
                   className="user-icon-btn" 
-                  onClick={handleUserClick}
-                  title={user.role?.toLowerCase() === 'admin' || user.role?.toLowerCase() === 'administrador' ? 'Ir al Panel Admin' : user.nombre}
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  title={user.nombre}
                 >
                   {user.nombre?.charAt(0).toUpperCase() || 'U'}
                 </button>
                 
-                {showUserMenu && user.role?.toLowerCase() !== 'admin' && user.role?.toLowerCase() !== 'administrador' && (
+                {showUserMenu && (
                   <div className="user-menu-dropdown">
                     <div style={{padding: '8px 0', borderBottom: '1px solid #dee2e6', marginBottom: '12px'}}>
                       <strong>{user.nombre}</strong>
                       <div style={{fontSize: '12px', color: '#6c757d'}}>{user.correo}</div>
+                      {user.role && (
+                        <div style={{fontSize: '11px', color: '#007bff', marginTop: '4px'}}>
+                          {user.role}
+                        </div>
+                      )}
                     </div>
+                    {(user.role?.toLowerCase() === 'admin' || user.role?.toLowerCase() === 'administrador') && (
+                      <button 
+                        className="btn btn-primary w-100 mb-2"
+                        style={{borderRadius: '5px', padding: '10px'}}
+                        onClick={() => { navigate('/admin'); setShowUserMenu(false); }}
+                      >
+                        Panel Admin
+                      </button>
+                    )}
                     <button 
                       className="btn btn-danger w-100"
                       style={{borderRadius: '5px', padding: '10px'}}

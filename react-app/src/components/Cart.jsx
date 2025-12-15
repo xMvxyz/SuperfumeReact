@@ -36,7 +36,15 @@ export default function Cart(){
   },[])
 
   function changeQty(id, delta){
-    const next = items.map(i => i.id === id ? {...i, qty: Math.max(1, i.qty + delta), total: Math.max(1, i.qty + delta) * i.precio } : i)
+    const next = items.map(i => {
+      if (i.id === id) {
+        const newQty = i.qty + delta
+        const maxStock = i.stock || 999
+        const finalQty = Math.max(1, Math.min(newQty, maxStock))
+        return {...i, qty: finalQty, total: finalQty * i.precio }
+      }
+      return i
+    })
     setItems(next)
     writeCart(next)
   }
@@ -44,7 +52,14 @@ export default function Cart(){
   function setQtyDirect(id, value){
     let qty = parseInt(value,10)
     if(isNaN(qty) || qty < 1) qty = 1
-    const next = items.map(i => i.id === id ? {...i, qty, total: qty * i.precio } : i)
+    const next = items.map(i => {
+      if (i.id === id) {
+        const maxStock = i.stock || 999
+        const finalQty = Math.min(qty, maxStock)
+        return {...i, qty: finalQty, total: finalQty * i.precio }
+      }
+      return i
+    })
     setItems(next)
     writeCart(next)
   }
@@ -71,12 +86,15 @@ export default function Cart(){
               <div className="item-info flex-grow-1">
                 <p className="item-name">{item.nombre}</p>
                 <div className="text-muted small">Precio unitario: ${item.precio.toLocaleString()}</div>
+                {item.stock && (
+                  <div className="text-muted small mt-1">Stock disponible: {item.stock}</div>
+                )}
               </div>
               <div className="item-controls text-end">
                 <div className="quantity d-inline-flex align-items-center">
                   <button className="btn btn-sm btn-secondary" onClick={()=> changeQty(item.id, -1)}>-</button>
-                  <input type="number" value={item.qty} min={1} onChange={e=> setQtyDirect(item.id, e.target.value)} style={{width:60, textAlign:'center', margin:'0 8px'}} />
-                  <button className="btn btn-sm btn-secondary" onClick={()=> changeQty(item.id, +1)}>+</button>
+                  <input type="number" value={item.qty} min={1} max={item.stock || 999} onChange={e=> setQtyDirect(item.id, e.target.value)} style={{width:60, textAlign:'center', margin:'0 8px'}} />
+                  <button className="btn btn-sm btn-secondary" onClick={()=> changeQty(item.id, +1)} disabled={item.qty >= (item.stock || 999)}>+</button>
                 </div>
                 <p className="item-total mt-2">${(item.precio * item.qty).toLocaleString()}</p>
                 <div className="mt-2">
