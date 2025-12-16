@@ -37,7 +37,23 @@ export default function Home(){
       </section>
 
   <div className="d-flex justify-content-center" style={{backgroundColor: '#fff', padding: '20px 0'}}>
-    <Carousel images={["/img/Carrusel_01.png","/img/test_carrusel.png","/img/carrusel_03.png"]} />
+    <Carousel slides={[
+      { 
+        image: "https://mseuhoqwkeqlniuyfpsr.supabase.co/storage/v1/object/public/Imagenes/DiorBanner.jpg", 
+        link: "/product/17",
+        alt: "Dior Sauvage" 
+      },
+      { 
+        image: "https://mseuhoqwkeqlniuyfpsr.supabase.co/storage/v1/object/public/Imagenes/HugoBossBanner.jpg", 
+        link: "/product/7",
+        alt: "Hugo Boss" 
+      },
+      { 
+        image: "https://mseuhoqwkeqlniuyfpsr.supabase.co/storage/v1/object/public/Imagenes/ShakiraBanner.jpg", 
+        link: "/product/4",
+        alt: "Shakira Sweetdream" 
+      }
+    ]} />
   </div>
 
       {/* Quiz de fragancias */}
