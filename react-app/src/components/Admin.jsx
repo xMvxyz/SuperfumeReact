@@ -11,6 +11,7 @@ export default function Admin(){
   const [query, setQuery] = useState('')
   const [sortBy, setSortBy] = useState('newest')
   const [creatingProduct, setCreatingProduct] = useState(false)
+  const [modal, setModal] = useState({ isOpen: false, title: '', message: '' })
 
   const [users, setUsers] = useState([])
   const [userQuery, setUserQuery] = useState('')
@@ -98,6 +99,7 @@ export default function Admin(){
       }
       setForm({nombre:'', descripcion:'', precio:'', stock:'', img:'/img/producto_01.jpg', genero:'', marca:'', fragancia:'', notas:'', perfil:''})
       setErrors({})
+      setModal({ isOpen: true, title: 'Producto creado', message: 'Producto creado correctamente' })
     }catch(err){
       console.error('Error creando perfume:', err)
       setErrors({general: 'Error al guardar perfume'})
@@ -213,15 +215,15 @@ export default function Admin(){
         const next = products.map(p => p.id === id ? {...p, ...updates, id, img: updates.imagenUrl} : p)
         setProducts(next)
         cancelEdit()
-        alert('Producto actualizado exitosamente')
+        setModal({ isOpen: true, title: 'Producto actualizado', message: 'Producto actualizado correctamente' })
       }else{
         setErrors({general: 'No se pudo actualizar el perfume'})
-        alert('Error: No se pudo actualizar el perfume')
+        setModal({ isOpen: true, title: 'Error', message: 'No se pudo actualizar el perfume' })
       }
     }catch(err){
       console.error('Error actualizando perfume:', err)
       setErrors({general: 'Error al actualizar perfume'})
-      alert('Error al actualizar perfume: ' + (err.message || 'Error desconocido'))
+      setModal({ isOpen: true, title: 'Error', message: 'Error al actualizar perfume: ' + (err.message || 'Error desconocido') })
     }
   }
 
@@ -575,6 +577,18 @@ export default function Admin(){
             <div className="modal-actions">
               <button className="btn btn-dark" onClick={cancelConfirm}>Cancelar</button>
               <button className="btn btn-danger" onClick={confirmRemove}>Eliminar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {modal.isOpen && (
+        <div className="modal-backdrop">
+          <div className="modal-card">
+            <h4 className="mt-0">{modal.title}</h4>
+            <p>{modal.message}</p>
+            <div className="modal-actions">
+              <button className="btn btn-dark" onClick={() => setModal({ ...modal, isOpen: false })}>Continuar</button>
             </div>
           </div>
         </div>

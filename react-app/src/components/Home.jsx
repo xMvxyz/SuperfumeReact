@@ -36,7 +36,7 @@ export default function Home(){
         </div>
       </section>
 
-  <div className="d-flex justify-content-center" style={{backgroundColor: '#fff', padding: '20px 0'}}>
+  <div style={{backgroundColor: '#fff', width: '100%'}}>
     <Carousel slides={[
       { 
         image: "https://mseuhoqwkeqlniuyfpsr.supabase.co/storage/v1/object/public/Imagenes/DiorBanner.jpg", 

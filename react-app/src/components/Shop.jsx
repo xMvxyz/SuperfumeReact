@@ -96,6 +96,12 @@ export default function Shop(){
   const [brand, setBrand] = useState('Todos')
   const [sortBy, setSortBy] = useState('featured')
 
+  // Sincronizar el estado query con los parámetros de la URL cuando cambian
+  useEffect(() => {
+    const urlQuery = searchParams.get('query') || ''
+    setQuery(urlQuery)
+  }, [searchParams])
+
   const brands = useMemo(()=>['Todos', ...Array.from(new Set(products.map(p=>p.marca || p.brand)))], [products])
   const fragancias = useMemo(()=>['Todos', ...Array.from(new Set(products.map(p=>p.fragancia).filter(Boolean)))], [products])
 
@@ -159,28 +165,6 @@ export default function Shop(){
         </aside>
 
         <section className="col-lg-9">
-          {/* Barra de búsqueda */}
-          <div className="mb-4">
-            <div className="input-group">
-              <input 
-                type="text" 
-                className="form-control" 
-                placeholder="Buscar perfumes..." 
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                style={{borderColor: '#000'}}
-              />
-              <button 
-                className="btn btn-outline-dark" 
-                type="button"
-                onClick={() => setQuery('')}
-                disabled={!query}
-              >
-                Limpiar
-              </button>
-            </div>
-          </div>
-
           <div className="d-flex mb-3 align-items-center justify-content-between">
             <div>
               <strong>Mostrando {filtered.length} productos</strong>

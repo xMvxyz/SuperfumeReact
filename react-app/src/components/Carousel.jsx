@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function Carousel({ slides = [], interval = 4000, maxHeight = 400 }){
+export default function Carousel({ slides = [], interval = 4000 }){
   const [idx, setIdx] = useState(0)
 
   useEffect(()=>{
@@ -14,16 +14,16 @@ export default function Carousel({ slides = [], interval = 4000, maxHeight = 400
   if(!slides || slides.length === 0) return null
 
   return (
-      <div style={{position:'relative'}}>
-        <div style={{overflow:'hidden', borderRadius:8, boxShadow:'0 6px 3px -3px rgba(0,0,0,0.15)'}}>
+      <div style={{position:'relative', width: '100%'}}>
+        <div style={{overflow:'hidden', boxShadow:'0 6px 3px -3px rgba(0,0,0,0.15)'}}>
           {slides.map((slide, i) => (
             <div key={i} style={{display: i===idx ? 'block' : 'none'}}>
               {slide.link ? (
                 <Link to={slide.link}>
-                  <img src={slide.image} alt={slide.alt || `slide-${i}`} style={{width:'100%', maxHeight, objectFit:'cover', cursor:'pointer'}} />
+                  <img src={slide.image} alt={slide.alt || `slide-${i}`} style={{width:'100%', height:'auto', display:'block', cursor:'pointer'}} />
                 </Link>
               ) : (
-                <img src={slide.image} alt={slide.alt || `slide-${i}`} style={{width:'100%', maxHeight, objectFit:'cover'}} />
+                <img src={slide.image} alt={slide.alt || `slide-${i}`} style={{width:'100%', height:'auto', display:'block'}} />
               )}
             </div>
           ))}
