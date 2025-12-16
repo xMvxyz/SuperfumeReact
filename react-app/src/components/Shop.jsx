@@ -4,6 +4,7 @@ import * as perfumeService from '../services/perfume'
 
 export default function Shop(){
   const CART_KEY = 'superfume_cart_v1'
+  const [modal, setModal] = useState({ isOpen: false, title: '', message: '' })
 
   function readCart(){
     try{
@@ -24,7 +25,7 @@ export default function Shop(){
   function addToCart(product, qty = 1){
     const availableStock = product.stock ?? 0
     if (availableStock <= 0) {
-      alert('Producto sin stock disponible')
+      setModal({ isOpen: true, title: 'Sin stock', message: 'Producto sin stock disponible' })
       return
     }
 
@@ -35,7 +36,7 @@ export default function Shop(){
     if(idx >= 0){
       const newQty = current[idx].qty + qty
       if (newQty > availableStock) {
-        alert(`Solo hay ${availableStock} unidades disponibles en stock`)
+        setModal({ isOpen: true, title: 'Stock insuficiente', message: `Solo hay ${availableStock} unidades disponibles en stock` })
         return
       }
       current[idx].qty = newQty
@@ -43,7 +44,7 @@ export default function Shop(){
       current[idx].stock = availableStock // actualizar stock
     }else{
       if (qty > availableStock) {
-        alert(`Solo hay ${availableStock} unidades disponibles en stock`)
+        setModal({ isOpen: true, title: 'Stock insuficiente', message: `Solo hay ${availableStock} unidades disponibles en stock` })
         return
       }
       current.push({ 
@@ -57,6 +58,7 @@ export default function Shop(){
       })
     }
     writeCart(current)
+    setModal({ isOpen: true, title: '¡Agregado!', message: 'Item agregado al carrito' })
   }
 
   const [products, setProducts] = useState([])
@@ -232,6 +234,18 @@ export default function Shop(){
           )}
         </section>
       </div>
+      
+      {modal.isOpen && (
+        <div className="modal-backdrop">
+          <div className="modal-card">
+            <h4 className="mt-0">{modal.title}</h4>
+            <p>{modal.message}</p>
+            <div className="modal-actions">
+              <button className="btn btn-dark" onClick={() => setModal({ ...modal, isOpen: false })}>Continuar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -295,3 +295,15 @@ Custom Css
 .services-icon-wap:hover i {
   color: inherit !important;
 }
+
+/* Ocultar flechas arriba/abajo del input type=number en el carrito */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

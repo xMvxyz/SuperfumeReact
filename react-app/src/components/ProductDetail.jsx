@@ -9,6 +9,7 @@ export default function ProductDetail(){
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [qty, setQty] = useState(1)
+  const [modal, setModal] = useState({ isOpen: false, title: '', message: '' })
 
   const CART_KEY = 'superfume_cart_v1'
 
@@ -31,7 +32,7 @@ export default function ProductDetail(){
     // Verificar stock disponible
     const availableStock = product.stock ?? 0
     if (availableStock <= 0) {
-      alert('Producto sin stock disponible')
+      setModal({ isOpen: true, title: 'Sin stock', message: 'Producto sin stock disponible' })
       return
     }
     
@@ -43,7 +44,7 @@ export default function ProductDetail(){
     if(idx >= 0){
       const newQty = current[idx].qty + quantity
       if (newQty > availableStock) {
-        alert(`Solo hay ${availableStock} unidades disponibles en stock`)
+        setModal({ isOpen: true, title: 'Stock insuficiente', message: `Solo hay ${availableStock} unidades disponibles en stock` })
         return
       }
       current[idx].qty = newQty
@@ -51,7 +52,7 @@ export default function ProductDetail(){
       current[idx].stock = availableStock // actualizar stock
     }else{
       if (quantity > availableStock) {
-        alert(`Solo hay ${availableStock} unidades disponibles en stock`)
+        setModal({ isOpen: true, title: 'Stock insuficiente', message: `Solo hay ${availableStock} unidades disponibles en stock` })
         return
       }
       current.push({ 
@@ -65,7 +66,7 @@ export default function ProductDetail(){
       })
     }
     writeCart(current)
-    alert('Producto añadido al carrito')
+    setModal({ isOpen: true, title: '¡Agregado!', message: 'Item agregado al carrito' })
   }
 
   useEffect(() => {
@@ -153,25 +154,25 @@ export default function ProductDetail(){
                   )}
 
                   <h6>Descripción:</h6>
-                  <p>{product.descripcion || 'Sin descripción disponible'}</p>
+                  <p className="text-muted">{product.descripcion || 'Sin descripción disponible'}</p>
 
                   {product.notas && (
                     <>
                       <h6>Notas:</h6>
-                      <p>{product.notas}</p>
+                      <p className="text-muted">{product.notas}</p>
                     </>
                   )}
 
                   {product.perfil && (
                     <>
                       <h6>Perfil:</h6>
-                      <p>{product.perfil}</p>
+                      <p className="text-muted">{product.perfil}</p>
                     </>
                   )}
 
                   <div className="mb-3">
                     <h6>Stock disponible: 
-                      <span className={`ms-2 badge ${product.stock > 10 ? 'bg-success' : product.stock > 0 ? 'bg-warning' : 'bg-danger'}`}>
+                      <span className="text-muted ms-2">
                         {product.stock ?? 0} unidades
                       </span>
                     </h6>
@@ -185,20 +186,24 @@ export default function ProductDetail(){
                           <li className="list-inline-item">
                             <button 
                               type="button" 
-                              className="btn btn-success btn-sm" 
+                              className="btn btn-dark btn-sm" 
                               onClick={() => setQty(Math.max(1, qty - 1))}
                               disabled={qty <= 1}
+                              style={{borderRadius: '4px 0 0 4px'}}
                             >
                               -
                             </button>
                           </li>
-                          <li className="list-inline-item"><span className="badge bg-secondary" style={{ fontSize: '16px', padding: '8px 12px' }}>{qty}</span></li>
+                          <li className="list-inline-item">
+                            <span className="badge bg-dark" style={{ fontSize: '16px', padding: '8px 16px', borderRadius: '0' }}>{qty}</span>
+                          </li>
                           <li className="list-inline-item">
                             <button 
                               type="button" 
-                              className="btn btn-success btn-sm" 
+                              className="btn btn-dark btn-sm" 
                               onClick={() => setQty(qty + 1)}
                               disabled={qty >= (product.stock ?? 0)}
+                              style={{borderRadius: '0 4px 4px 0'}}
                             >
                               +
                             </button>
@@ -252,6 +257,18 @@ export default function ProductDetail(){
           </div>
         </div>
       </section>
+      
+      {modal.isOpen && (
+        <div className="modal-backdrop">
+          <div className="modal-card">
+            <h4 className="mt-0">{modal.title}</h4>
+            <p>{modal.message}</p>
+            <div className="modal-actions">
+              <button className="btn btn-dark" onClick={() => setModal({ ...modal, isOpen: false })}>Continuar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

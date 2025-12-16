@@ -81,10 +81,14 @@ export default function Cart(){
       ) : (
         <>
           {items.map(item => (
-            <div key={item.id} className="cart-item d-flex align-items-center mb-4">
-              <img src={item.img} alt={item.nombre} style={{width:120, marginRight:16}} />
+            <div key={item.id} className="cart-item d-flex align-items-center mb-4 p-3" style={{
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              borderRadius: '8px',
+              backgroundColor: '#fff'
+            }}>
+              <img src={item.img} alt={item.nombre} style={{width:120, marginRight:16, borderRadius: '8px'}} />
               <div className="item-info flex-grow-1">
-                <p className="item-name">{item.nombre}</p>
+                <p className="item-name fw-bold mb-2">{item.nombre}</p>
                 <div className="text-muted small">Precio unitario: ${item.precio.toLocaleString()}</div>
                 {item.stock && (
                   <div className="text-muted small mt-1">Stock disponible: {item.stock}</div>
@@ -92,13 +96,37 @@ export default function Cart(){
               </div>
               <div className="item-controls text-end">
                 <div className="quantity d-inline-flex align-items-center">
-                  <button className="btn btn-sm btn-secondary" onClick={()=> changeQty(item.id, -1)}>-</button>
-                  <input type="number" value={item.qty} min={1} max={item.stock || 999} onChange={e=> setQtyDirect(item.id, e.target.value)} style={{width:60, textAlign:'center', margin:'0 8px'}} />
-                  <button className="btn btn-sm btn-secondary" onClick={()=> changeQty(item.id, +1)} disabled={item.qty >= (item.stock || 999)}>+</button>
+                  <button 
+                    className="btn btn-sm btn-dark" 
+                    onClick={()=> changeQty(item.id, -1)}
+                    style={{borderRadius: '4px 0 0 4px'}}
+                  >-</button>
+                  <input 
+                    type="number" 
+                    value={item.qty} 
+                    min={1} 
+                    max={item.stock || 999} 
+                    onChange={e=> setQtyDirect(item.id, e.target.value)} 
+                    style={{
+                      width:60, 
+                      textAlign:'center', 
+                      margin:'0', 
+                      border: '1px solid #000',
+                      borderLeft: 'none',
+                      borderRight: 'none'
+                    }}
+                    className="form-control form-control-sm"
+                  />
+                  <button 
+                    className="btn btn-sm btn-dark" 
+                    onClick={()=> changeQty(item.id, +1)} 
+                    disabled={item.qty >= (item.stock || 999)}
+                    style={{borderRadius: '0 4px 4px 0'}}
+                  >+</button>
                 </div>
-                <p className="item-total mt-2">${(item.precio * item.qty).toLocaleString()}</p>
+                <p className="item-total mt-2 fw-bold">${(item.precio * item.qty).toLocaleString()}</p>
                 <div className="mt-2">
-                  <button className="btn btn-link text-danger" onClick={()=> removeItem(item.id)}>Eliminar</button>
+                  <button className="btn btn-link text-danger p-0" onClick={()=> removeItem(item.id)}>Eliminar</button>
                 </div>
               </div>
             </div>

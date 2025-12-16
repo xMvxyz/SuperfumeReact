@@ -17,6 +17,7 @@ export default function Register(){
 	const [acceptTerms, setAcceptTerms] = useState(false)
 	const [errors, setErrors] = useState({})
 	const [loading, setLoading] = useState(false)
+	const [modal, setModal] = useState({ isOpen: false, title: '', message: '', onConfirm: null })
 
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -78,15 +79,34 @@ export default function Register(){
 
 			const result = await users.register(payload)
 			console.log('✓ Usuario registrado exitosamente:', result)
+			
+			// Hacer login automático
+			try {
+				const loginResult = await users.login(email.trim(), password)
+				if (loginResult && loginResult.token) {
+					localStorage.setItem('token', loginResult.token)
+					localStorage.setItem('user', JSON.stringify(loginResult.user))
+				}
+			} catch (loginErr) {
+				console.error('Error en login automático:', loginErr)
+			}
+			
 			setLoading(false)
-			alert('¡Registro exitoso! Ahora puedes iniciar sesión.')
-			navigate('/login')
+			setModal({ 
+				isOpen: true, 
+				title: '¡Cuenta creada!', 
+				message: 'Tu cuenta ha sido creada exitosamente. Serás redirigido al inicio.',
+				onConfirm: () => {
+					setModal({ ...modal, isOpen: false })
+					navigate('/')
+				}
+			})
 		}catch(err){
 			setLoading(false)
 			console.error('Error en registro:', err)
 			const errorMsg = err?.response?.data?.message || err?.message || 'Error registrando usuario'
 			setErrors({ form: errorMsg })
-			alert('Error: ' + errorMsg)
+			setModal({ isOpen: true, title: 'Error', message: errorMsg })
 		}
 	}
 
@@ -269,7 +289,23 @@ export default function Register(){
 					</form>
 				</div>
 			</div>
+			
+			{modal.isOpen && (
+				<div className="modal-backdrop">
+					<div className="modal-card">
+						<h4 className="mt-0">{modal.title}</h4>
+						<p>{modal.message}</p>
+						<div className="modal-actions">
+							<button 
+								className="btn btn-dark" 
+								onClick={() => modal.onConfirm ? modal.onConfirm() : setModal({ ...modal, isOpen: false })}
+							>
+								Continuar
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	)
 }
-
