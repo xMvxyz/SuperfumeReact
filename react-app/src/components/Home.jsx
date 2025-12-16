@@ -69,12 +69,12 @@ export default function Home(){
       </div>
       <div className="row">
         <div className="col-12 col-md-4 p-5 mt-3">
-          <Link to="/shop?query=Hombre"><img src="/img/JPGaultier_hombre.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Hombre" /></Link>
+          <Link to="/shop?gender=Hombre"><img src="/img/JPGaultier_hombre.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Hombre" /></Link>
           <h5 className="text-center mt-3 mb-3" style={{ color: '#000' }}>Hombre</h5>
           <p className="text-center">
             <Link 
               className="btn btn-dark" 
-              to="/shop?query=Hombre"
+              to="/shop?gender=Hombre"
               style={{ 
                 borderRadius: '5px',
                 backgroundColor: '#000',
@@ -86,12 +86,12 @@ export default function Home(){
           </p>
         </div>
         <div className="col-12 col-md-4 p-5 mt-3">
-          <Link to="/shop?query=Mujer"><img src="/img/chanel_mujer.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Mujer" /></Link>
+          <Link to="/shop?gender=Mujer"><img src="/img/chanel_mujer.jpg" className="rounded-circle img-fluid border mx-auto d-block" alt="Mujer" /></Link>
           <h2 className="h5 text-center mt-3 mb-3" style={{ color: '#000' }}>Mujer</h2>
           <p className="text-center">
             <Link 
               className="btn btn-dark" 
-              to="/shop?query=Mujer"
+              to="/shop?gender=Mujer"
               style={{ 
                 borderRadius: '5px',
                 backgroundColor: '#000',
@@ -145,12 +145,12 @@ export default function Home(){
               {featuredProducts.map((product) => (
                 <div key={product.id} className="col-12 col-md-4 mb-4">
                   <div className="card h-100" style={{boxShadow: '0 4px 8px rgba(0,0,0,0.08)'}}>
-                    <Link to={`/product/${product.id}`}>
+                    <Link to={`/product/${product.id}`} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '250px', backgroundColor: '#f8f9fa', overflow: 'hidden'}}>
                       <img 
                         src={product.imagenUrl || '/img/destacado_01.jpg'} 
                         className="card-img-top" 
                         alt={product.nombre}
-                        style={{ height: '250px', objectFit: 'cover' }}
+                        style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain', padding: '10px' }}
                       />
                     </Link>
                     <div className="card-body">

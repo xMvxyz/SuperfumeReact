@@ -15,15 +15,15 @@ export default function Carousel({ slides = [], interval = 4000 }){
 
   return (
       <div style={{position:'relative', width: '100%'}}>
-        <div style={{overflow:'hidden', boxShadow:'0 6px 3px -3px rgba(0,0,0,0.15)', height: '500px'}}>
+        <div style={{overflow:'hidden', boxShadow:'0 6px 3px -3px rgba(0,0,0,0.15)', height: '500px', backgroundColor: '#f8f9fa'}}>
           {slides.map((slide, i) => (
-            <div key={i} style={{display: i===idx ? 'block' : 'none', height: '100%'}}>
+            <div key={i} style={{display: i===idx ? 'flex' : 'none', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
               {slide.link ? (
-                <Link to={slide.link} style={{display: 'block', height: '100%'}}>
-                  <img src={slide.image} alt={slide.alt || `slide-${i}`} style={{width:'100%', height:'100%', display:'block', cursor:'pointer', objectFit:'cover'}} />
+                <Link to={slide.link} style={{display: 'flex', height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}}>
+                  <img src={slide.image} alt={slide.alt || `slide-${i}`} style={{maxWidth:'100%', maxHeight:'100%', display:'block', cursor:'pointer', objectFit:'contain'}} />
                 </Link>
               ) : (
-                <img src={slide.image} alt={slide.alt || `slide-${i}`} style={{width:'100%', height:'100%', display:'block', objectFit:'cover'}} />
+                <img src={slide.image} alt={slide.alt || `slide-${i}`} style={{maxWidth:'100%', maxHeight:'100%', display:'block', objectFit:'contain'}} />
               )}
             </div>
           ))}
