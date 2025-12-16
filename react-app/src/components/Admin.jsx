@@ -191,11 +191,11 @@ export default function Admin(){
     }
     
     const newForm = { 
-      name: u.name || '', 
-      email: u.email || '', 
+      name: u.name || u.nombre || '', 
+      email: u.email || u.correo || '', 
       password: '', 
       rut: u.rut || '',
-      phone: u.phone || '',
+      phone: u.phone || u.telefono || '',
       address: addr,
       region: reg,
       comuna: com,
@@ -743,7 +743,7 @@ export default function Admin(){
           </div>
           
           <form onSubmit={addUser} data-user-form className="mb-4 p-3" style={{backgroundColor: editingUserId ? '#fff3cd' : '#f8f9fa', borderRadius: '8px', border: editingUserId ? '2px solid #ffc107' : 'none'}}>
-            <h5 className="mb-3" style={{color: '#333'}}>{editingUserId ? '✏️ Editando Usuario' : 'Crear Nuevo Usuario'}</h5>
+            <h5 className="mb-3" style={{color: '#333'}}>{editingUserId ? 'Editando Usuario' : 'Crear Nuevo Usuario'}</h5>
             <div className="row">
               <div className="col-md-6 mb-3">
                 <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Nombre *</label>
@@ -878,27 +878,37 @@ export default function Admin(){
           <div>
             <h5 className="mb-3" style={{color: '#333'}}>Lista de Usuarios</h5>
             <div className="list-col">
-              {users.filter(u => (u.name || '').toLowerCase().includes(userQuery.toLowerCase())).map(u => (
-                <div key={u.id} className="card p-3 mb-2" style={{borderRadius: '8px', border: '1px solid #e0e0e0'}}>
-                  <div className="d-flex align-items-start gap-3">
-                    <div style={{flex:1}}>
-                      <h6 className="mb-1" style={{color: '#000'}}>{u.name}</h6>
-                      <small className="text-muted d-block">{u.email}</small>
-                    </div>
-                    <div className="d-flex gap-2">
-                      <button 
-                        className="btn btn-sm btn-dark" 
-                        onClick={()=> startEditUser(u)} 
-                        style={{borderRadius: '5px'}}
-                        disabled={editingUserId === u.id}
-                      >
-                        {editingUserId === u.id ? 'Editando' : 'Editar'}
-                      </button>
-                      <button className="btn btn-sm btn-danger" onClick={()=> requestDeleteUser(u.id)} style={{borderRadius: '5px'}}>Eliminar</button>
+              {users.filter(u => {
+                const displayName = u.name || u.nombre || ''
+                return displayName.toLowerCase().includes(userQuery.toLowerCase())
+              }).map(u => {
+                const displayName = u.name || u.nombre || 'Sin nombre'
+                const displayEmail = u.email || u.correo || 'Sin email'
+                const displayRole = u.role || 'cliente'
+                
+                return (
+                  <div key={u.id} className="card p-3 mb-2" style={{borderRadius: '8px', border: '1px solid #e0e0e0'}}>
+                    <div className="d-flex align-items-start gap-3">
+                      <div style={{flex:1}}>
+                        <h6 className="mb-1" style={{color: '#000', fontWeight: '600'}}>{displayName}</h6>
+                        <small className="text-muted d-block">{displayEmail}</small>
+                        <small className="text-muted d-block"><strong>Rol:</strong> {displayRole}</small>
+                      </div>
+                      <div className="d-flex gap-2">
+                        <button 
+                          className="btn btn-sm btn-dark" 
+                          onClick={()=> startEditUser(u)} 
+                          style={{borderRadius: '5px'}}
+                          disabled={editingUserId === u.id}
+                        >
+                          {editingUserId === u.id ? 'Editando' : 'Editar'}
+                        </button>
+                        <button className="btn btn-sm btn-danger" onClick={()=> requestDeleteUser(u.id)} style={{borderRadius: '5px'}}>Eliminar</button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </div>
