@@ -170,19 +170,27 @@ export default function Admin(){
   }
 
   function startEditUser(u){
+    console.log('Editando usuario:', u)
     setEditingUserId(u.id)
+    
     // Parsear la dirección si existe
     let addr = '', reg = '', com = '', postal = ''
     if(u.address){
+      console.log('Dirección original:', u.address)
       const parts = u.address.split(',').map(p => p.trim())
+      console.log('Partes de dirección:', parts)
       if(parts.length >= 4){
         addr = parts[0]
         com = parts[1]
         reg = parts[2]
         postal = parts[3]
+      } else if(parts.length === 1){
+        // Si no hay comas, tomar la dirección completa
+        addr = u.address
       }
     }
-    setUserForm({ 
+    
+    const newForm = { 
       name: u.name || '', 
       email: u.email || '', 
       password: '', 
@@ -193,8 +201,18 @@ export default function Admin(){
       comuna: com,
       postalCode: postal,
       role: u.role || 'cliente' 
-    })
+    }
+    console.log('Formulario actualizado:', newForm)
+    setUserForm(newForm)
     setUserErrors({})
+    
+    // Scroll al formulario
+    setTimeout(() => {
+      const formElement = document.querySelector('form[data-user-form]')
+      if(formElement){
+        formElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 100)
   }
 
   async function saveUser(id){
@@ -724,8 +742,8 @@ export default function Admin(){
             />
           </div>
           
-          <form onSubmit={addUser} className="mb-4 p-3" style={{backgroundColor: '#f8f9fa', borderRadius: '8px'}}>
-            <h5 className="mb-3" style={{color: '#333'}}>{editingUserId ? 'Editar Usuario' : 'Crear Nuevo Usuario'}</h5>
+          <form onSubmit={addUser} data-user-form className="mb-4 p-3" style={{backgroundColor: editingUserId ? '#fff3cd' : '#f8f9fa', borderRadius: '8px', border: editingUserId ? '2px solid #ffc107' : 'none'}}>
+            <h5 className="mb-3" style={{color: '#333'}}>{editingUserId ? '✏️ Editando Usuario' : 'Crear Nuevo Usuario'}</h5>
             <div className="row">
               <div className="col-md-6 mb-3">
                 <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Nombre *</label>
@@ -860,18 +878,22 @@ export default function Admin(){
           <div>
             <h5 className="mb-3" style={{color: '#333'}}>Lista de Usuarios</h5>
             <div className="list-col">
-              {users.filter(u => (u.name || '').toLowerCase().includes(userQuery.toLowerCase()) || (u.email || '').toLowerCase().includes(userQuery.toLowerCase())).map(u => (
+              {users.filter(u => (u.name || '').toLowerCase().includes(userQuery.toLowerCase())).map(u => (
                 <div key={u.id} className="card p-3 mb-2" style={{borderRadius: '8px', border: '1px solid #e0e0e0'}}>
                   <div className="d-flex align-items-start gap-3">
                     <div style={{flex:1}}>
                       <h6 className="mb-1" style={{color: '#000'}}>{u.name}</h6>
                       <small className="text-muted d-block">{u.email}</small>
-                      {u.rut && <small className="text-muted d-block">RUT: {u.rut}</small>}
-                      {u.phone && <small className="text-muted d-block">Tel: {u.phone}</small>}
-                      {u.address && <small className="text-muted d-block">Dir: {u.address}</small>}
                     </div>
                     <div className="d-flex gap-2">
-                      <button className="btn btn-sm btn-dark" onClick={()=> startEditUser(u)} style={{borderRadius: '5px'}}>Editar</button>
+                      <button 
+                        className="btn btn-sm btn-dark" 
+                        onClick={()=> startEditUser(u)} 
+                        style={{borderRadius: '5px'}}
+                        disabled={editingUserId === u.id}
+                      >
+                        {editingUserId === u.id ? 'Editando' : 'Editar'}
+                      </button>
                       <button className="btn btn-sm btn-danger" onClick={()=> requestDeleteUser(u.id)} style={{borderRadius: '5px'}}>Eliminar</button>
                     </div>
                   </div>
