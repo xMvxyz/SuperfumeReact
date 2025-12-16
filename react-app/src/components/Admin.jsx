@@ -15,10 +15,31 @@ export default function Admin(){
 
   const [users, setUsers] = useState([])
   const [userQuery, setUserQuery] = useState('')
-  const [userForm, setUserForm] = useState({ name:'', email:'', password:'', role:'cliente' })
+  const [userForm, setUserForm] = useState({ name:'', email:'', password:'', rut:'', phone:'', address:'', region:'', comuna:'', postalCode:'', role:'cliente' })
   const [userErrors, setUserErrors] = useState({})
   const [editingUserId, setEditingUserId] = useState(null)
   const [initError, setInitError] = useState(null)
+  const [userModal, setUserModal] = useState({ isOpen: false, title: '', message: '' })
+  const [confirmDeleteUser, setConfirmDeleteUser] = useState({ open: false, id: null, name: '' })
+
+  const CHILE_REGIONS = [
+    { name: 'Región de Arica y Parinacota', comunas: ['Arica','Camarones','Putre','General Lagos'] },
+    { name: 'Región de Tarapacá', comunas: ['Iquique','Alto Hospicio','Pozo Almonte','Pica','Huara','Colchane','Camiña'] },
+    { name: 'Región de Antofagasta', comunas: ['Antofagasta','Mejillones','Calama','Tocopilla','Taltal','Sierra Gorda','María Elena','Ollagüe'] },
+    { name: 'Región de Atacama', comunas: ['Copiapó','Caldera','Vallenar','Chañaral','Diego de Almagro','Tierra Amarilla','Huasco','Freirina','Alto del Carmen'] },
+    { name: 'Región de Coquimbo', comunas: ['La Serena','Coquimbo','Ovalle','Illapel','Vicuña','Andacollo','Monte Patria','Combarbalá','Paihuano'] },
+    { name: 'Región de Valparaíso', comunas: ['Valparaíso','Viña del Mar','Quilpué','Villa Alemana','Concón','Quintero','Puchuncaví','Casablanca','San Antonio','Cartagena','El Quisco','Algarrobo','Santo Domingo'] },
+    { name: 'Región Metropolitana de Santiago', comunas: ['Santiago','Providencia','Las Condes','Maipú','Puente Alto','La Florida','Ñuñoa','Vitacura','Lo Barnechea','Peñalolén','Macul','La Reina','Quilicura','Huechuraba','Recoleta','Independencia','Conchalí','Renca','Quinta Normal','Estación Central','Cerrillos','Pedro Aguirre Cerda','Lo Espejo','San Miguel','San Joaquín','La Cisterna','El Bosque','La Granja','La Pintana','San Ramón','Lo Prado','Cerro Navia','Pudahuel','Colina','Lampa','Tiltil','San Bernardo','Calera de Tango','Buin','Paine','Melipilla','Alhué','Curacaví','María Pinto','San Pedro','Talagante','El Monte','Isla de Maipo','Padre Hurtado','Peñaflor'] },
+    { name: "Región del Libertador General Bernardo O'Higgins", comunas: ['Rancagua','Machalí','San Fernando','Rengo','San Vicente','Pichilemu','Santa Cruz','Chimbarongo','Nancagua','Placilla','Graneros','Codegua'] },
+    { name: 'Región del Maule', comunas: ['Talca','Curicó','Linares','Constitución','Cauquenes','Parral','Molina','San Clemente','San Javier','Villa Alegre','Maule'] },
+    { name: 'Región de Ñuble', comunas: ['Chillán','Chillán Viejo','Bulnes','San Carlos','Quirihue','Coihueco','Pinto','El Carmen','Pemuco','Yungay','San Nicolás','Ninhue'] },
+    { name: 'Región del Biobío', comunas: ['Concepción','Talcahuano','Chiguayante','San Pedro de la Paz','Hualpén','Penco','Tomé','Coronel','Lota','Los Ángeles','Cabrero','Nacimiento','Cañete','Lebu','Arauco','Curanilahue'] },
+    { name: 'Región de La Araucanía', comunas: ['Temuco','Villarrica','Pucón','Angol','Victoria','Lautaro','Nueva Imperial','Carahue','Pitrufquén','Loncoche','Collipulli','Traiguén','Curacautín','Lonquimay','Melipeuco','Curarrehue','Cunco'] },
+    { name: 'Región de Los Ríos', comunas: ['Valdivia','La Unión','Río Bueno','Panguipulli','Paillaco','Lanco','Los Lagos','Corral','Máfil','Mariquina','Futrono','Lago Ranco'] },
+    { name: 'Región de Los Lagos', comunas: ['Puerto Montt','Osorno','Castro','Ancud','Puerto Varas','Frutillar','Llanquihue','Fresia','Los Muermos','Maullín','Calbuco','Cochamó','Purranque','Río Negro','San Pablo','Puerto Octay','Quellón','Quemchi','Dalcahue','Curaco de Vélez','Quinchao','Puqueldón','Chonchi'] },
+    { name: 'Región de Aysén del General Carlos Ibáñez del Campo', comunas: ['Coyhaique','Aysén','Puerto Aysén','Chile Chico','Cochrane','Río Ibáñez','Cisnes','Guaitecas','Lago Verde','Tortel'] },
+    { name: 'Región de Magallanes y de la Antártica Chilena', comunas: ['Punta Arenas','Puerto Natales','Porvenir','Puerto Williams','Cabo de Hornos','Primavera','Timaukel','Torres del Paine','Laguna Blanca','San Gregorio','Río Verde'] }
+  ]
 
   // Verificar autenticación y rol de administrador
   useEffect(()=>{
@@ -118,30 +139,123 @@ export default function Admin(){
     if(!userForm.name || userForm.name.trim().length < 2) errs.name = 'Nombre requerido'
     if(!userForm.email || !userForm.email.includes('@')) errs.email = 'Email inválido'
     if(!userForm.password || userForm.password.length < 6) errs.password = 'Mínimo 6 caracteres'
+    if(!userForm.rut || userForm.rut.trim().length < 8) errs.rut = 'RUT requerido'
+    if(!userForm.phone || !/^[0-9]{8,9}$/.test(userForm.phone.trim())) errs.phone = 'Teléfono inválido (8-9 dígitos)'
+    if(!userForm.address || userForm.address.trim().length < 5) errs.address = 'Dirección requerida'
+    if(!userForm.region) errs.region = 'Región requerida'
+    if(!userForm.comuna) errs.comuna = 'Comuna requerida'
+    if(!userForm.postalCode || !/^\d{4,6}$/.test(userForm.postalCode)) errs.postalCode = 'Código postal inválido'
     if(Object.keys(errs).length){ setUserErrors(errs); return }
+    
     try{
-      const created = await usersApi.create(userForm)
-      setUserForm({ name:'', email:'', password:'', role:'cliente' })
+      const direccionCompleta = `${userForm.address.trim()}, ${userForm.comuna}, ${userForm.region}, ${userForm.postalCode.trim()}`
+      const payload = {
+        name: userForm.name.trim(),
+        email: userForm.email.trim(),
+        password: userForm.password,
+        rut: userForm.rut.trim(),
+        phone: userForm.phone.trim(),
+        address: direccionCompleta,
+        role: userForm.role
+      }
+      const created = await usersApi.create(payload)
+      setUserForm({ name:'', email:'', password:'', rut:'', phone:'', address:'', region:'', comuna:'', postalCode:'', role:'cliente' })
       setUserErrors({})
       await loadUsers()
-    }catch(err){ console.error('create user', err) }
+      setUserModal({ isOpen: true, title: 'Usuario creado', message: 'Usuario creado correctamente' })
+    }catch(err){ 
+      console.error('create user', err)
+      setUserModal({ isOpen: true, title: 'Error', message: 'Error al crear usuario: ' + (err.message || 'Error desconocido') })
+    }
   }
 
   function startEditUser(u){
     setEditingUserId(u.id)
-    setUserForm({ name: u.name || '', email: u.email || '', password: '', role: u.role || 'cliente' })
+    // Parsear la dirección si existe
+    let addr = '', reg = '', com = '', postal = ''
+    if(u.address){
+      const parts = u.address.split(',').map(p => p.trim())
+      if(parts.length >= 4){
+        addr = parts[0]
+        com = parts[1]
+        reg = parts[2]
+        postal = parts[3]
+      }
+    }
+    setUserForm({ 
+      name: u.name || '', 
+      email: u.email || '', 
+      password: '', 
+      rut: u.rut || '',
+      phone: u.phone || '',
+      address: addr,
+      region: reg,
+      comuna: com,
+      postalCode: postal,
+      role: u.role || 'cliente' 
+    })
     setUserErrors({})
   }
 
   async function saveUser(id){
-    const updates = { name: userForm.name, email: userForm.email, role: userForm.role }
-    if(userForm.password && userForm.password.length >= 6) updates.password = userForm.password
-    try{ await usersApi.update(id, updates); setEditingUserId(null); setUserForm({ name:'', email:'', password:'', role:'cliente' }); await loadUsers() }catch(e){ console.error(e) }
+    const errs = {}
+    if(!userForm.name || userForm.name.trim().length < 2) errs.name = 'Nombre requerido'
+    if(!userForm.email || !userForm.email.includes('@')) errs.email = 'Email inválido'
+    if(userForm.password && userForm.password.length < 6) errs.password = 'Mínimo 6 caracteres'
+    if(!userForm.rut || userForm.rut.trim().length < 8) errs.rut = 'RUT requerido'
+    if(!userForm.phone || !/^[0-9]{8,9}$/.test(userForm.phone.trim())) errs.phone = 'Teléfono inválido'
+    if(!userForm.address || userForm.address.trim().length < 5) errs.address = 'Dirección requerida'
+    if(!userForm.region) errs.region = 'Región requerida'
+    if(!userForm.comuna) errs.comuna = 'Comuna requerida'
+    if(!userForm.postalCode || !/^\d{4,6}$/.test(userForm.postalCode)) errs.postalCode = 'Código postal inválido'
+    if(Object.keys(errs).length){ setUserErrors(errs); return }
+
+    try{
+      const direccionCompleta = `${userForm.address.trim()}, ${userForm.comuna}, ${userForm.region}, ${userForm.postalCode.trim()}`
+      const updates = { 
+        name: userForm.name.trim(), 
+        email: userForm.email.trim(), 
+        rut: userForm.rut.trim(),
+        phone: userForm.phone.trim(),
+        address: direccionCompleta,
+        role: userForm.role 
+      }
+      if(userForm.password && userForm.password.length >= 6) updates.password = userForm.password
+      
+      await usersApi.update(id, updates)
+      setEditingUserId(null)
+      setUserForm({ name:'', email:'', password:'', rut:'', phone:'', address:'', region:'', comuna:'', postalCode:'', role:'cliente' })
+      setUserErrors({})
+      await loadUsers()
+      setUserModal({ isOpen: true, title: 'Usuario actualizado', message: 'Usuario actualizado correctamente' })
+    }catch(e){ 
+      console.error(e)
+      setUserModal({ isOpen: true, title: 'Error', message: 'Error al actualizar usuario: ' + (e.message || 'Error desconocido') })
+    }
   }
 
-  async function deleteUser(id){
-    if(!confirm('Eliminar usuario?')) return
-    try{ await usersApi.remove(id); await loadUsers() }catch(e){ console.error(e) }
+  function requestDeleteUser(id){
+    const u = users.find(x => x.id === id)
+    setConfirmDeleteUser({ open: true, id, name: u ? u.name : '' })
+  }
+
+  async function confirmDeleteUserAction(){
+    const id = confirmDeleteUser.id
+    if(id == null) return
+    try{ 
+      await usersApi.remove(id)
+      await loadUsers()
+      setConfirmDeleteUser({ open: false, id: null, name: '' })
+      setUserModal({ isOpen: true, title: 'Usuario eliminado', message: 'Usuario eliminado correctamente' })
+    }catch(e){ 
+      console.error(e)
+      setConfirmDeleteUser({ open: false, id: null, name: '' })
+      setUserModal({ isOpen: true, title: 'Error', message: 'Error al eliminar usuario' })
+    }
+  }
+
+  function cancelDeleteUser(){
+    setConfirmDeleteUser({ open: false, id: null, name: '' })
   }
 
   const [confirmState, setConfirmState] = useState({ open:false, id:null, nombre:'' })
@@ -611,7 +725,7 @@ export default function Admin(){
           </div>
           
           <form onSubmit={addUser} className="mb-4 p-3" style={{backgroundColor: '#f8f9fa', borderRadius: '8px'}}>
-            <h5 className="mb-3" style={{color: '#333'}}>Crear Nuevo Usuario</h5>
+            <h5 className="mb-3" style={{color: '#333'}}>{editingUserId ? 'Editar Usuario' : 'Crear Nuevo Usuario'}</h5>
             <div className="row">
               <div className="col-md-6 mb-3">
                 <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Nombre *</label>
@@ -636,7 +750,78 @@ export default function Admin(){
                 {userErrors.email && <small className="text-danger d-block mt-1">{userErrors.email}</small>}
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Contraseña *</label>
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>RUT *</label>
+                <input 
+                  className="form-control"
+                  placeholder="12345678-9" 
+                  value={userForm.rut} 
+                  onChange={e=>setUserForm(f=>({...f, rut: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {userErrors.rut && <small className="text-danger d-block mt-1">{userErrors.rut}</small>}
+              </div>
+              <div className="col-md-6 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Teléfono *</label>
+                <input 
+                  className="form-control"
+                  placeholder="912345678" 
+                  value={userForm.phone} 
+                  onChange={e=>setUserForm(f=>({...f, phone: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {userErrors.phone && <small className="text-danger d-block mt-1">{userErrors.phone}</small>}
+              </div>
+              <div className="col-md-12 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Dirección *</label>
+                <input 
+                  className="form-control"
+                  placeholder="Calle y número" 
+                  value={userForm.address} 
+                  onChange={e=>setUserForm(f=>({...f, address: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {userErrors.address && <small className="text-danger d-block mt-1">{userErrors.address}</small>}
+              </div>
+              <div className="col-md-4 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Región *</label>
+                <select 
+                  className="form-select"
+                  value={userForm.region} 
+                  onChange={e=>setUserForm(f=>({...f, region: e.target.value, comuna: ''}))}
+                  style={{borderRadius: '5px'}}
+                >
+                  <option value="">Seleccionar región</option>
+                  {CHILE_REGIONS.map(r => <option key={r.name} value={r.name}>{r.name}</option>)}
+                </select>
+                {userErrors.region && <small className="text-danger d-block mt-1">{userErrors.region}</small>}
+              </div>
+              <div className="col-md-4 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Comuna *</label>
+                <select 
+                  className="form-select"
+                  value={userForm.comuna} 
+                  onChange={e=>setUserForm(f=>({...f, comuna: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                  disabled={!userForm.region}
+                >
+                  <option value="">Seleccionar comuna</option>
+                  {userForm.region && CHILE_REGIONS.find(r => r.name === userForm.region)?.comunas.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                {userErrors.comuna && <small className="text-danger d-block mt-1">{userErrors.comuna}</small>}
+              </div>
+              <div className="col-md-4 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Código Postal *</label>
+                <input 
+                  className="form-control"
+                  placeholder="8320000" 
+                  value={userForm.postalCode} 
+                  onChange={e=>setUserForm(f=>({...f, postalCode: e.target.value}))}
+                  style={{borderRadius: '5px'}}
+                />
+                {userErrors.postalCode && <small className="text-danger d-block mt-1">{userErrors.postalCode}</small>}
+              </div>
+              <div className="col-md-6 mb-3">
+                <label className="form-label" style={{fontWeight: '500', color: '#333'}}>Contraseña {editingUserId && '(dejar vacío para no cambiar)'}</label>
                 <input 
                   className="form-control"
                   placeholder="Mínimo 6 caracteres" 
@@ -661,9 +846,13 @@ export default function Admin(){
               </div>
             </div>
             <div className="d-flex justify-content-end gap-2">
-              <button className="btn btn-success px-4" type="submit" style={{borderRadius: '5px'}}>Crear Usuario</button>
-              {editingUserId && (
-                <button type="button" className="btn btn-dark px-4" onClick={()=> saveUser(editingUserId)} style={{borderRadius: '5px'}}>Guardar Cambios</button>
+              {editingUserId ? (
+                <>
+                  <button type="button" className="btn btn-dark px-4" onClick={()=> saveUser(editingUserId)} style={{borderRadius: '5px'}}>Guardar Cambios</button>
+                  <button type="button" className="btn btn-secondary px-4" onClick={()=> { setEditingUserId(null); setUserForm({ name:'', email:'', password:'', rut:'', phone:'', address:'', region:'', comuna:'', postalCode:'', role:'cliente' }); setUserErrors({}) }} style={{borderRadius: '5px'}}>Cancelar</button>
+                </>
+              ) : (
+                <button className="btn btn-success px-4" type="submit" style={{borderRadius: '5px'}}>Crear Usuario</button>
               )}
             </div>
           </form>
@@ -671,16 +860,21 @@ export default function Admin(){
           <div>
             <h5 className="mb-3" style={{color: '#333'}}>Lista de Usuarios</h5>
             <div className="list-col">
-              {users.filter(u => (u.name || '').toLowerCase().includes(userQuery.toLowerCase())).map(u => (
-                <div key={u.id} className="card p-3 mb-2 d-flex flex-row align-items-center" style={{borderRadius: '8px', border: '1px solid #e0e0e0'}}>
-                  <div style={{flex:1}}>
-                    <h6 className="mb-1" style={{color: '#000'}}>{u.name}</h6>
-                    <small className="text-muted d-block">{u.email}</small>
-                    <small><span className="badge bg-secondary mt-1">Rol: {u.role || 'cliente'}</span></small>
-                  </div>
-                  <div className="d-flex gap-2">
-                    <button className="btn btn-sm btn-dark" onClick={()=> startEditUser(u)} style={{borderRadius: '5px'}}>Editar</button>
-                    <button className="btn btn-sm btn-danger" onClick={()=> deleteUser(u.id)} style={{borderRadius: '5px'}}>Eliminar</button>
+              {users.filter(u => (u.name || '').toLowerCase().includes(userQuery.toLowerCase()) || (u.email || '').toLowerCase().includes(userQuery.toLowerCase())).map(u => (
+                <div key={u.id} className="card p-3 mb-2" style={{borderRadius: '8px', border: '1px solid #e0e0e0'}}>
+                  <div className="d-flex align-items-start gap-3">
+                    <div style={{flex:1}}>
+                      <h6 className="mb-1" style={{color: '#000'}}>{u.name}</h6>
+                      <small className="text-muted d-block">{u.email}</small>
+                      {u.rut && <small className="text-muted d-block">RUT: {u.rut}</small>}
+                      {u.phone && <small className="text-muted d-block">Tel: {u.phone}</small>}
+                      {u.address && <small className="text-muted d-block">Dir: {u.address}</small>}
+                      <small><span className="badge bg-secondary mt-1">Rol: {u.role || 'cliente'}</span></small>
+                    </div>
+                    <div className="d-flex gap-2">
+                      <button className="btn btn-sm btn-dark" onClick={()=> startEditUser(u)} style={{borderRadius: '5px'}}>Editar</button>
+                      <button className="btn btn-sm btn-danger" onClick={()=> requestDeleteUser(u.id)} style={{borderRadius: '5px'}}>Eliminar</button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -688,6 +882,31 @@ export default function Admin(){
           </div>
         </div>
       </div>
+
+      {confirmDeleteUser.open && (
+        <div className="modal-backdrop">
+          <div className="modal-card">
+            <h4 className="mt-0">Confirmar eliminación de usuario</h4>
+            <p>¿Estás seguro de que deseas eliminar al usuario <strong>{confirmDeleteUser.name}</strong>?</p>
+            <div className="modal-actions">
+              <button className="btn btn-dark" onClick={cancelDeleteUser}>Cancelar</button>
+              <button className="btn btn-danger" onClick={confirmDeleteUserAction}>Eliminar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {userModal.isOpen && (
+        <div className="modal-backdrop">
+          <div className="modal-card">
+            <h4 className="mt-0">{userModal.title}</h4>
+            <p>{userModal.message}</p>
+            <div className="modal-actions">
+              <button className="btn btn-dark" onClick={() => setUserModal({ ...userModal, isOpen: false })}>Continuar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
