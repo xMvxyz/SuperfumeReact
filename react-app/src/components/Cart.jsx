@@ -97,9 +97,9 @@ export default function Cart(){
               <div className="item-controls text-end">
                 <div className="quantity d-inline-flex align-items-center">
                   <button 
-                    className="btn btn-sm btn-dark" 
+                    className="btn btn-sm" 
                     onClick={()=> changeQty(item.id, -1)}
-                    style={{borderRadius: '4px 0 0 4px'}}
+                    style={{backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px 0 0 4px', padding: '8px 16px'}}
                   >-</button>
                   <input 
                     type="number" 
@@ -111,17 +111,19 @@ export default function Cart(){
                       width:60, 
                       textAlign:'center', 
                       margin:'0', 
-                      border: '1px solid #000',
-                      borderLeft: 'none',
-                      borderRight: 'none'
+                      border: 'none',
+                      backgroundColor: 'transparent',
+                      color: '#000',
+                      fontWeight: '500',
+                      fontSize: '16px'
                     }}
                     className="form-control form-control-sm"
                   />
                   <button 
-                    className="btn btn-sm btn-dark" 
+                    className="btn btn-sm" 
                     onClick={()=> changeQty(item.id, +1)} 
                     disabled={item.qty >= (item.stock || 999)}
-                    style={{borderRadius: '0 4px 4px 0'}}
+                    style={{backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '0 4px 4px 0', padding: '8px 16px'}}
                   >+</button>
                 </div>
                 <p className="item-total mt-2 fw-bold">${(item.precio * item.qty).toLocaleString()}</p>

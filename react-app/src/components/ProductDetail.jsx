@@ -186,24 +186,24 @@ export default function ProductDetail(){
                           <li className="list-inline-item">
                             <button 
                               type="button" 
-                              className="btn btn-dark btn-sm" 
+                              className="btn btn-sm" 
                               onClick={() => setQty(Math.max(1, qty - 1))}
                               disabled={qty <= 1}
-                              style={{borderRadius: '4px 0 0 4px'}}
+                              style={{backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px 0 0 4px', padding: '8px 16px'}}
                             >
                               -
                             </button>
                           </li>
                           <li className="list-inline-item">
-                            <span className="badge bg-dark" style={{ fontSize: '16px', padding: '8px 16px', borderRadius: '0' }}>{qty}</span>
+                            <span style={{ fontSize: '16px', padding: '8px 16px', color: '#000', fontWeight: '500' }}>{qty}</span>
                           </li>
                           <li className="list-inline-item">
                             <button 
                               type="button" 
-                              className="btn btn-dark btn-sm" 
+                              className="btn btn-sm" 
                               onClick={() => setQty(qty + 1)}
                               disabled={qty >= (product.stock ?? 0)}
-                              style={{borderRadius: '0 4px 4px 0'}}
+                              style={{backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '0 4px 4px 0', padding: '8px 16px'}}
                             >
                               +
                             </button>

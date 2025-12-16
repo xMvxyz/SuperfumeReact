@@ -39,7 +39,7 @@ export default function Home(){
   <div style={{backgroundColor: '#fff', width: '100%'}}>
     <Carousel slides={[
       { 
-        image: "https://mseuhoqwkeqlniuyfpsr.supabase.co/storage/v1/object/public/Imagenes/DiorBanner.jpg", 
+        image: "https://mseuhoqwkeqlniuyfpsr.supabase.co/storage/v1/object/public/Imagenes/DiorBanner2.jpg", 
         link: "/product/17",
         alt: "Dior Sauvage" 
       },
