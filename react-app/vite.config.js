@@ -3,9 +3,17 @@ import react from '@vitejs/plugin-react'
 
 
 export default defineConfig({
-  // GitHub Pages base URL (nombre del repositorio) - solo en producción
-  base: process.env.NODE_ENV === 'production' ? '/SuperfumeReact/' : '/',
+  // Base URL dinámica: '/SuperfumeReact/' para GH Pages, '/' para producción en AWS/Spring Boot
+  base: process.env.VITE_BASE_PATH || '/',
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true
+      }
+    }
+  },
   publicDir: 'public/assets',
   build: {
     outDir: 'dist',
@@ -17,4 +25,3 @@ export default defineConfig({
     globals: true,       
   },
 })
-

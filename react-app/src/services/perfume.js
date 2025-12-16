@@ -2,15 +2,6 @@ import api from './api'
 
 const STORAGE_KEY = 'superfume_products_v1'
 
-async function fetchPublicSamples(){
-  try{
-    const res = await fetch('/sample-products.json')
-    if(!res.ok) return []
-    const data = await res.json()
-    return data
-  }catch(e){ return [] }
-}
-
 export async function list(){
   // Intentar conectar con el backend
   try{
@@ -35,21 +26,8 @@ export async function list(){
   }catch(e){ 
     console.error('Error al cargar perfumes del backend:', e)
     console.error('Detalles del error:', e.response?.data || e.message)
+    return []
   }
-
-  // Fallback: localStorage o samples públicos
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if(raw){
-      const cached = JSON.parse(raw)
-      console.log('✓ Perfumes cargados desde cache local:', cached.length)
-      return cached
-    }
-  }catch(e){}
-
-  const samples = await fetchPublicSamples()
-  console.log('✓ Perfumes cargados desde samples:', samples.length)
-  return samples
 }
 
 export async function get(id){

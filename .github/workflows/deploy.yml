@@ -37,6 +37,7 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+          VITE_BASE_PATH: /SuperfumeReact/
 
       - name: Create .nojekyll file
         working-directory: ./react-app
