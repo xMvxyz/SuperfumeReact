@@ -1,56 +1,98 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import * as perfumeService from '../services/perfume'
 
 export default function Quiz() {
   const navigate = useNavigate()
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState({})
   const [showQuiz, setShowQuiz] = useState(false)
+  const [questions, setQuestions] = useState([])
+  const [loading, setLoading] = useState(false)
 
-  const questions = [
-    {
-      id: 1,
-      question: '¿Qué tipo de fragancia estás buscando?',
-      options: [
-        { value: 'feminine', label: 'FEMENINO', image: '/img/quiz-feminine.jpg' },
-        { value: 'masculine', label: 'MASCULINO', image: '/img/quiz-masculine.jpg' }
-      ]
-    },
-    {
-      id: 2,
-      question: '¿Qué familia de fragancias prefieres?',
-      options: [
-        { value: 'floral', label: 'FLORAL' },
-        { value: 'woody', label: 'AMADERADO' },
-        { value: 'fresh', label: 'FRESCO' },
-        { value: 'oriental', label: 'ORIENTAL' }
-      ]
-    },
-    {
-      id: 3,
-      question: '¿Cuándo usarías este perfume?',
-      options: [
-        { value: 'day', label: 'DÍA' },
-        { value: 'night', label: 'NOCHE' },
-        { value: 'both', label: 'AMBOS' }
-      ]
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true)
+      try {
+        const products = await perfumeService.list()
+        
+        // Extraer valores únicos
+        const generos = [...new Set(products.map(p => p.genero || p.gender).filter(Boolean))]
+        const fragancias = [...new Set(products.map(p => p.fragancia).filter(Boolean))]
+        const notas = [...new Set(products.map(p => p.notas).filter(Boolean))]
+        const perfiles = [...new Set(products.map(p => p.perfil).filter(Boolean))]
+
+        const newQuestions = []
+
+        if (generos.length > 0) {
+          newQuestions.push({
+            id: 'gender',
+            question: '¿Para quién es el perfume?',
+            options: generos.map(g => ({ value: g, label: g.toUpperCase() }))
+          })
+        }
+
+        if (fragancias.length > 0) {
+          newQuestions.push({
+            id: 'fragancia',
+            question: '¿Qué familia olfativa prefieres?',
+            options: fragancias.map(f => ({ value: f, label: f.toUpperCase() }))
+          })
+        }
+
+        if (notas.length > 0) {
+          // Si hay muchas notas, tomamos solo algunas o las agrupamos, aquí mostramos todas las únicas
+          // Limitamos a 8 para no saturar
+          const limitedNotas = notas.slice(0, 8)
+          newQuestions.push({
+            id: 'notas',
+            question: '¿Qué notas te gustan más?',
+            options: limitedNotas.map(n => ({ value: n, label: n.toUpperCase() }))
+          })
+        }
+
+        if (perfiles.length > 0) {
+           const limitedPerfiles = perfiles.slice(0, 8)
+           newQuestions.push({
+            id: 'perfil',
+            question: '¿Qué perfil buscas?',
+            options: limitedPerfiles.map(p => ({ value: p, label: p.toUpperCase() }))
+          })
+        }
+
+        setQuestions(newQuestions)
+      } catch (error) {
+        console.error("Error loading quiz data", error)
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+
+    if (showQuiz) {
+      loadData()
+    }
+  }, [showQuiz])
 
   const handleStartQuiz = () => {
     setShowQuiz(true)
   }
 
   const handleAnswer = (value) => {
-    const newAnswers = { ...answers, [currentQuestion]: value }
+    const currentQ = questions[currentQuestion]
+    const newAnswers = { ...answers, [currentQ.id]: value }
     setAnswers(newAnswers)
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     } else {
-      // Quiz completado - redirigir a shop con filtros
-      const gender = newAnswers[0] === 'feminine' ? 'Mujer' : 'Hombre'
-      navigate(`/shop?gender=${gender}`)
+      // Quiz completado - construir query string
+      const params = new URLSearchParams()
+      if (newAnswers.gender) params.append('gender', newAnswers.gender)
+      if (newAnswers.fragancia) params.append('fragancia', newAnswers.fragancia)
+      if (newAnswers.notas) params.append('notas', newAnswers.notas)
+      if (newAnswers.perfil) params.append('perfil', newAnswers.perfil)
+      
+      navigate(`/shop?${params.toString()}`)
     }
   }
 
@@ -106,6 +148,26 @@ export default function Quiz() {
     )
   }
 
+  if (loading) {
+    return (
+      <div className="text-center py-5">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+        <p className="mt-3">Preparando tu quiz personalizado...</p>
+      </div>
+    )
+  }
+
+  if (questions.length === 0) {
+    return (
+      <div className="text-center py-5">
+        <p>No hay suficientes datos para generar el quiz en este momento.</p>
+        <button className="btn btn-dark" onClick={() => navigate('/shop')}>Ir a la tienda</button>
+      </div>
+    )
+  }
+
   const currentQ = questions[currentQuestion]
 
   return (
@@ -128,7 +190,7 @@ export default function Quiz() {
 
         <div className="row justify-content-center g-4">
           {currentQ.options.map((option, idx) => (
-            <div key={idx} className={currentQ.options.length === 2 ? 'col-md-5' : 'col-md-3 col-6'}>
+            <div key={idx} className="col-md-4 col-6">
               <button
                 className="btn w-100 border-0 overflow-hidden position-relative quiz-option"
                 onClick={() => handleAnswer(option.value)}
@@ -139,8 +201,11 @@ export default function Quiz() {
                   cursor: 'pointer',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                   border: '1px solid #dee2e6',
-                  padding: '2.5rem 1.5rem',
-                  minHeight: '150px'
+                  padding: '2rem 1rem',
+                  minHeight: '120px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-4px)'
@@ -155,7 +220,7 @@ export default function Quiz() {
                   e.currentTarget.querySelector('h5').style.color = '#000'
                 }}
               >
-                <h5 className="fw-bold mb-0" style={{ letterSpacing: '1px', color: '#000', transition: 'color 0.3s' }}>{option.label}</h5>
+                <h5 className="fw-bold mb-0" style={{ letterSpacing: '1px', color: '#000', transition: 'color 0.3s', fontSize: '1rem' }}>{option.label}</h5>
               </button>
             </div>
           ))}

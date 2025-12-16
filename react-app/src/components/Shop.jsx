@@ -81,12 +81,21 @@ export default function Shop(){
 
   const [searchParams, setSearchParams] = useSearchParams()
   const initialQuery = searchParams.get('query') || ''
+  const initialGender = searchParams.get('gender') || 'Todos'
+  const initialFragancia = searchParams.get('fragancia') || 'Todos'
+  const initialNotas = searchParams.get('notas') || ''
+  const initialPerfil = searchParams.get('perfil') || ''
+
   const [query, setQuery] = useState(initialQuery)
-  const [gender, setGender] = useState('Todos')
+  const [gender, setGender] = useState(initialGender)
+  const [fragancia, setFragancia] = useState(initialFragancia)
+  const [notas, setNotas] = useState(initialNotas)
+  const [perfil, setPerfil] = useState(initialPerfil)
   const [brand, setBrand] = useState('Todos')
   const [sortBy, setSortBy] = useState('featured')
 
   const brands = useMemo(()=>['Todos', ...Array.from(new Set(products.map(p=>p.marca || p.brand)))], [products])
+  const fragancias = useMemo(()=>['Todos', ...Array.from(new Set(products.map(p=>p.fragancia).filter(Boolean)))], [products])
 
   const filtered = useMemo(()=>{
     let list = products.slice()
@@ -96,6 +105,9 @@ export default function Shop(){
     }
     if(gender !== 'Todos') list = list.filter(p => (p.genero || p.gender) === gender)
     if(brand !== 'Todos') list = list.filter(p => (p.marca || p.brand) === brand)
+    if(fragancia !== 'Todos') list = list.filter(p => p.fragancia === fragancia)
+    if(notas) list = list.filter(p => p.notas && p.notas.toLowerCase().includes(notas.toLowerCase()))
+    if(perfil) list = list.filter(p => p.perfil && p.perfil.toLowerCase().includes(perfil.toLowerCase()))
 
     switch(sortBy){
       case 'price-asc': list.sort((a,b)=> (a.precio ?? a.price) - (b.precio ?? b.price)); break
@@ -105,14 +117,19 @@ export default function Shop(){
       default: break
     }
     return list
-  },[products, query, gender, brand, sortBy])
+  },[products, query, gender, brand, fragancia, notas, perfil, sortBy])
 
   const getProductImage = (p) => p?.imagenUrl || p?.image || p?.img || '/img/producto_01.jpg'
 
   useEffect(()=>{
-    if(query) setSearchParams({ query })
-    else setSearchParams({})
-  },[query, setSearchParams])
+    const params = {}
+    if(query) params.query = query
+    if(gender !== 'Todos') params.gender = gender
+    if(fragancia !== 'Todos') params.fragancia = fragancia
+    if(notas) params.notas = notas
+    if(perfil) params.perfil = perfil
+    setSearchParams(params)
+  },[query, gender, fragancia, notas, perfil, setSearchParams])
 
   return (
     <div className="container py-5">
@@ -140,6 +157,28 @@ export default function Shop(){
         </aside>
 
         <section className="col-lg-9">
+          {/* Barra de búsqueda */}
+          <div className="mb-4">
+            <div className="input-group">
+              <input 
+                type="text" 
+                className="form-control" 
+                placeholder="Buscar perfumes..." 
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                style={{borderColor: '#000'}}
+              />
+              <button 
+                className="btn btn-outline-dark" 
+                type="button"
+                onClick={() => setQuery('')}
+                disabled={!query}
+              >
+                Limpiar
+              </button>
+            </div>
+          </div>
+
           <div className="d-flex mb-3 align-items-center justify-content-between">
             <div>
               <strong>Mostrando {filtered.length} productos</strong>
