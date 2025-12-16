@@ -869,7 +869,6 @@ export default function Admin(){
                       {u.rut && <small className="text-muted d-block">RUT: {u.rut}</small>}
                       {u.phone && <small className="text-muted d-block">Tel: {u.phone}</small>}
                       {u.address && <small className="text-muted d-block">Dir: {u.address}</small>}
-                      <small><span className="badge bg-secondary mt-1">Rol: {u.role || 'cliente'}</span></small>
                     </div>
                     <div className="d-flex gap-2">
                       <button className="btn btn-sm btn-dark" onClick={()=> startEditUser(u)} style={{borderRadius: '5px'}}>Editar</button>
